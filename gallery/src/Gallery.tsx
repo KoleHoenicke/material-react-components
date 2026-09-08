@@ -1,3 +1,4 @@
+import { MotionExamples } from './MotionExamples'
 import { IconButtonExamples } from './IconButtonExamples'
 import { useEffect, useState, type ReactNode } from 'react'
 import {
@@ -179,10 +180,12 @@ function Eyebrow({ children }: { children: ReactNode }) {
 }
 
 const componentPages = [
-  ['actions', 'Buttons'], ['icon-controls', 'Icon buttons'], ['fabs', 'FABs'], ['menus', 'Menus'], ['app-bars', 'App bars'], ['cards', 'Cards'],
-  ['chips', 'Chips'], ['dialogs', 'Dialogs'], ['dividers', 'Dividers'],
-  ['selection', 'Selection'], ['lists', 'Lists'], ['status', 'Progress & status'],
+  ['app-bars', 'App bars'], ['badges', 'Badges'], ['actions', 'Buttons'],
+  ['cards', 'Cards'], ['chips', 'Chips'], ['dialogs', 'Dialogs'],
+  ['dividers', 'Dividers'], ['lists', 'Lists'], ['status', 'Loading & progress'],
+  ['menus', 'Menus'], ['ripple', 'Ripple'], ['selection', 'Selection'],
 ] as const
+const foundationPages = [['motion', 'Motion'], ['typography', 'Typography']] as const
 const destinations = [
   { id: 'components', label: 'Components', icon: 'grid' },
   { id: 'typography', label: 'Foundations', icon: 'code' },
@@ -190,13 +193,13 @@ const destinations = [
 ] as const
 function currentPage() {
   const hash = window.location.hash.slice(1)
-  if (hash === 'icon-buttons') return 'icon-controls'
-  return [...componentPages.map(([id]) => id), 'typography', 'theme'].includes(hash) ? hash : 'actions'
+  if (['icon-buttons', 'icon-controls', 'fabs'].includes(hash)) return 'actions'
+  return [...componentPages.map(([id]) => id), 'motion', 'typography', 'theme'].includes(hash) ? hash : 'actions'
 }
 
 export function Gallery() {
   const [page, setPage] = useState(currentPage)
-  const destination = page === 'theme' || page === 'typography' ? page : 'components'
+  const destination = page === 'theme' ? 'theme' : page === 'typography' || page === 'motion' ? 'typography' : 'components'
   useEffect(() => {
     const sync = () => setPage(currentPage())
     window.addEventListener('hashchange', sync)
@@ -357,11 +360,18 @@ export function Gallery() {
         <main className="gallery-content" id="top">
           <header className="page-heading">
             <Text as="h1" id="gallery-title" tabIndex={-1} variant="displaySmall">{destination === 'components' ? 'Components' : destination === 'typography' ? 'Foundations' : 'Theme'}</Text>
-            <Text as="p" variant="bodyLarge">{destination === 'components' ? 'Explore Material 3 components. Try each example to see how it works.' : destination === 'typography' ? 'A shared type scale brings structure and clarity to every screen.' : 'Choose a source color, appearance, and motion scheme for the gallery.'}</Text>
+            <Text as="p" variant="bodyLarge">{destination === 'components' ? 'Explore Material 3 components. Try each example to see how it works.' : destination === 'typography' ? 'Explore the typography and motion used throughout the library.' : 'Choose a source color, appearance, and motion scheme for the gallery.'}</Text>
           </header>
           {destination === 'components' && <ChipSet className="component-picker" aria-label="Component categories">
             {componentPages.map(([id, label]) => <FilterChip key={id} selected={page === id} onClick={() => navigate(id)}>{label}</FilterChip>)}
           </ChipSet>}
+
+          {destination === 'typography' && <ChipSet className="component-picker" aria-label="Foundation categories">
+            {foundationPages.map(([id, label]) => <FilterChip key={id} selected={page === id} onClick={() => navigate(id)}>{label}</FilterChip>)}
+          </ChipSet>}
+          <section hidden={page !== 'motion'} className="component-section" aria-label="Motion">
+            <MotionExamples scheme={motionScheme} onSchemeChange={setMotionScheme} />
+          </section>
 
           <section hidden={page !== 'theme'} className="theme-panel" aria-labelledby="theme-title">
             <div className="theme-panel__title">
@@ -742,7 +752,13 @@ export function Gallery() {
               <h2 id="actions-title" data-material-typography="headlineMedium">Buttons</h2>
             </div>
             <div className="specimen-grid">
-              <Specimen title="Button" description="Five variants share one component and one motion model." wide>
+              <Specimen title="Button group" api="ButtonGroup" description="Press a segment to see its width push into its neighbors.">
+                <StageLabel>Connected</StageLabel>
+                <ButtonGroup ariaLabel="Time range" options={intervalOptions} value={interval} onChange={setInterval} variant="connected" buttonVariant="tonal" />
+                <StageLabel>Standard</StageLabel>
+                <ButtonGroup ariaLabel="Time range standard" options={intervalOptions} value={interval} onChange={setInterval} variant="standard" buttonVariant="outlined" />
+              </Specimen>
+<Specimen title="Button" description="Five variants share one component and one motion model." wide>
                 <div className="stage-toolbar">
                   <label>Size
                     <select value={buttonSize} onChange={(event) => setButtonSize(event.currentTarget.value as MaterialButtonSize)}>
@@ -763,34 +779,10 @@ export function Gallery() {
                 </div>
               </Specimen>
 
-              <Specimen title="Button group" api="ButtonGroup" description="Press a segment to see its width push into its neighbors.">
-                <StageLabel>Connected</StageLabel>
-                <ButtonGroup ariaLabel="Time range" options={intervalOptions} value={interval} onChange={setInterval} variant="connected" buttonVariant="tonal" />
-                <StageLabel>Standard</StageLabel>
-                <ButtonGroup ariaLabel="Time range standard" options={intervalOptions} value={interval} onChange={setInterval} variant="standard" buttonVariant="outlined" />
-              </Specimen>
 
-              <Specimen title="Ripple" description="A reusable state layer for custom interactive controls.">
-                <button className="ripple-tile" type="button" onClick={() => setMessage('Custom ripple pressed')}>
-                  <MaterialRipple />
-                  <span className="ripple-tile__icon"><Icon name="code" /></span>
-                  <span><strong data-material-typography="titleMediumEmphasized">Press anywhere</strong><small data-material-typography="bodyMedium">Pointer and keyboard feedback</small></span>
-                </button>
-              </Specimen>
-            </div>
-          </section>
 
-          <section hidden={page !== 'icon-controls'} className="component-section" id="icon-controls-panel" aria-labelledby="icon-controls-title">
-            <div className="section-heading"><Text as="h2" id="icon-controls-title" variant="headlineMedium">Icon buttons</Text></div>
-            <div className="specimen-grid">              <Specimen title="Icon buttons" api="IconButton · IconToggleButton" description="AndroidX size, width, color, and shape configurations with 48px minimum targets." wide>
-                <IconButtonExamples />
-              </Specimen>
 
-</div>
-          </section>
-          <section hidden={page !== 'fabs'} className="component-section" id="fabs-panel" aria-labelledby="fabs-title">
-            <div className="section-heading"><Text as="h2" id="fabs-title" variant="headlineMedium">Floating action buttons</Text></div>
-            <div className="specimen-grid">              <Specimen
+            <Specimen
                 title="Floating action buttons"
                 api="FloatingActionButton · ExtendedFloatingActionButton"
                 description="Current Expressive sizes and colors, plus AndroidX expansion, visibility, elevation, and baseline compatibility."
@@ -878,8 +870,7 @@ export function Gallery() {
                   ))}
                 </div>
               </Specimen>
-
-              <Specimen
+<Specimen
                 title="FAB menu"
                 api="FloatingActionButtonMenu · FloatingActionButtonMenuItem · ToggleFloatingActionButton"
                 description="Two to six actions, three color sets, every launcher size, staggered reveal, close-button morph, scroll containment, and web-native menu navigation."
@@ -926,7 +917,9 @@ export function Gallery() {
                   </div>
                 </div>
               </Specimen>
-
+<Specimen title="Icon buttons" api="IconButton · IconToggleButton" description="AndroidX size, width, color, and shape configurations with 48px minimum targets." wide>
+                <IconButtonExamples />
+              </Specimen>
 </div>
           </section>
           <section hidden={page !== 'menus'} className="component-section" id="menus-panel" aria-labelledby="menus-title">
@@ -1090,7 +1083,13 @@ export function Gallery() {
                   <label className="slider-demo" data-material-typography="labelLarge"><span>Centered <output>{centeredValue > 0 ? `+${centeredValue}` : centeredValue}</output></span><Slider aria-label="Centered slider" min={-50} max={50} origin={0} value={centeredValue} valueIndicator="always" stops={[-50, -25, 0, 25, 50]} onChange={(event) => setCenteredValue(event.currentTarget.valueAsNumber)} /></label>
                 </div>
               </Specimen>
-            </div>
+            <Specimen title="Quantity stepper" api="QuantityStepper" description="Buttons collapse at the minimum and maximum values.">
+                <div className="quantity-demo">
+                  <span><strong data-material-typography="titleMediumEmphasized">Guests</strong><small data-material-typography="bodyMedium">Maximum 12</small></span>
+                  <QuantityStepper label="Guests" min={0} max={12} value={quantity} onChange={setQuantity} decrementIcon={<Icon name="minus" />} incrementIcon={<Icon name="add" />} />
+                </div>
+              </Specimen>
+</div>
           </section>
 
           <section hidden={page !== 'lists'} className="component-section" id="lists-panel" aria-labelledby="lists-title">
@@ -1229,37 +1228,33 @@ export function Gallery() {
               <Specimen title="Segmented action list" api="SegmentedActionList" description="Actions, counts, selection marks, and trailing switches.">
                 <SegmentedActionList ariaLabel="Library sections" actions={actions} activeId={activeAction} onAction={(action) => setActiveAction(action.id)} />
               </Specimen>
-            </div>
+            <Specimen title="Trailing action" api="ListTrailingAction" description="Compact icon actions sized for a 48 pixel touch target.">
+                <div className="demo-list-row">
+                  <span><strong data-material-typography="titleMediumEmphasized">Draft component</strong><small data-material-typography="bodyMedium">Edited two minutes ago</small></span>
+                  <ListTrailingAction aria-label="Edit draft" variant="filled-tonal" onClick={() => setMessage('Edit action pressed')}><Icon name="edit" /></ListTrailingAction>
+                  <ListTrailingAction aria-label="Delete draft" onClick={() => setMessage('Delete action pressed')}><Icon name="delete" /></ListTrailingAction>
+                </div>
+              </Specimen>
+</div>
           </section>
 
           <section hidden={page !== 'status'} className="component-section" id="status-panel" aria-labelledby="status-title">
             <div className="section-heading">
               <Eyebrow>Status and input</Eyebrow>
-              <h2 id="status-title" data-material-typography="headlineMedium">Progress, counts, and quantity</h2>
+              <h2 id="status-title" data-material-typography="headlineMedium">Loading &amp; progress</h2>
             </div>
             <div className="specimen-grid">
-              <Specimen title="Badge and list count" api="Badge · ListCount" description="Small and large badges with semantic color roles.">
-                <div className="badge-showcase">
-                  <button type="button" className="badged-icon" aria-label={`${badgeCount} notifications`} onClick={() => setBadgeCount((count) => count + 1)}>
-                    <Icon name="grid" />
-                    <Badge value={badgeCount} max={99} />
-                  </button>
-                  <Badge value={12} tone="primary" />
-                  <Badge value="New" tone="secondary" />
-                  <Badge variant="small" />
-                  <ListCount value={1234} />
-                </div>
-                <Button variant="text" leadingIcon={<Icon name="add" />} onClick={() => setBadgeCount((count) => count + 1)}>Add notification</Button>
-              </Specimen>
 
-              <Specimen title="Quantity stepper" api="QuantityStepper" description="Buttons collapse at the minimum and maximum values.">
-                <div className="quantity-demo">
-                  <span><strong data-material-typography="titleMediumEmphasized">Guests</strong><small data-material-typography="bodyMedium">Maximum 12</small></span>
-                  <QuantityStepper label="Guests" min={0} max={12} value={quantity} onChange={setQuantity} decrementIcon={<Icon name="minus" />} incrementIcon={<Icon name="add" />} />
+
+
+
+              <Specimen title="Loading indicator" api="LoadingIndicator" description="Contained and standard morphing indicators.">
+                <div className="loading-showcase" data-material-typography="labelMedium">
+                  <div><LoadingIndicator label="Contained loading indicator" /><span>Contained</span></div>
+                  <div><LoadingIndicator label="Standard loading indicator" variant="standard" /><span>Standard</span></div>
                 </div>
               </Specimen>
-
-              <Specimen title="Progress indicators" api="LinearProgressIndicator · CircularProgressIndicator" description="Standard and Expressive shapes, each with determinate and indeterminate modes." wide>
+<Specimen title="Progress indicators" api="LinearProgressIndicator · CircularProgressIndicator" description="Standard and Expressive shapes, each with determinate and indeterminate modes." wide>
                 <div className="progress-demo">
                   <div className="progress-demo__label" data-material-typography="labelLarge"><span>Gallery progress</span><output>{sliderValue}%</output></div>
                   <div className="progress-demo__linear-grid">
@@ -1280,21 +1275,36 @@ export function Gallery() {
                 </div>
               </Specimen>
 
-              <Specimen title="Loading indicator" api="LoadingIndicator" description="Contained and standard morphing indicators.">
-                <div className="loading-showcase" data-material-typography="labelMedium">
-                  <div><LoadingIndicator label="Contained loading indicator" /><span>Contained</span></div>
-                  <div><LoadingIndicator label="Standard loading indicator" variant="standard" /><span>Standard</span></div>
-                </div>
-              </Specimen>
 
-              <Specimen title="Trailing action" api="ListTrailingAction" description="Compact icon actions sized for a 48 pixel touch target.">
-                <div className="demo-list-row">
-                  <span><strong data-material-typography="titleMediumEmphasized">Draft component</strong><small data-material-typography="bodyMedium">Edited two minutes ago</small></span>
-                  <ListTrailingAction aria-label="Edit draft" variant="filled-tonal" onClick={() => setMessage('Edit action pressed')}><Icon name="edit" /></ListTrailingAction>
-                  <ListTrailingAction aria-label="Delete draft" onClick={() => setMessage('Delete action pressed')}><Icon name="delete" /></ListTrailingAction>
-                </div>
-              </Specimen>
+
+
             </div>
+          </section>
+          <section hidden={page !== 'ripple'} className="component-section" id="ripple-panel" aria-labelledby="ripple-title">
+            <div className="section-heading"><Text as="h2" id="ripple-title" variant="headlineMedium">Ripple</Text></div>
+            <div className="specimen-grid"><Specimen title="Ripple" description="A reusable state layer for custom interactive controls.">
+                <button className="ripple-tile" type="button" onClick={() => setMessage('Custom ripple pressed')}>
+                  <MaterialRipple />
+                  <span className="ripple-tile__icon"><Icon name="code" /></span>
+                  <span><strong data-material-typography="titleMediumEmphasized">Press anywhere</strong><small data-material-typography="bodyMedium">Pointer and keyboard feedback</small></span>
+                </button>
+              </Specimen></div>
+          </section>
+          <section hidden={page !== 'badges'} className="component-section" id="badges-panel" aria-labelledby="badges-title">
+            <div className="section-heading"><Text as="h2" id="badges-title" variant="headlineMedium">Badges</Text></div>
+            <div className="specimen-grid"><Specimen title="Badge and list count" api="Badge · ListCount" description="Small and large badges with semantic color roles.">
+                <div className="badge-showcase">
+                  <button type="button" className="badged-icon" aria-label={`${badgeCount} notifications`} onClick={() => setBadgeCount((count) => count + 1)}>
+                    <Icon name="grid" />
+                    <Badge value={badgeCount} max={99} />
+                  </button>
+                  <Badge value={12} tone="primary" />
+                  <Badge value="New" tone="secondary" />
+                  <Badge variant="small" />
+                  <ListCount value={1234} />
+                </div>
+                <Button variant="text" leadingIcon={<Icon name="add" />} onClick={() => setBadgeCount((count) => count + 1)}>Add notification</Button>
+              </Specimen></div>
           </section>
         </main>
 

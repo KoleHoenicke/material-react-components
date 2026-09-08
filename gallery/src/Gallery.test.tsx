@@ -72,11 +72,11 @@ describe('interactive gallery', () => {
     expect(root).toHaveAttribute('data-motion-scheme', 'standard')
 
     fireEvent.click(screen.getByRole('link', { name: 'Components' }))
-    fireEvent.click(screen.getByRole('button', { name: 'Progress & status' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Selection' }))
     fireEvent.click(screen.getByRole('button', { name: 'Increase Guests' }))
     expect(screen.getByRole('textbox', { name: 'Guests value' })).toHaveValue('4')
 
-    fireEvent.click(screen.getByRole('button', { name: 'FABs' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Buttons' }))
     fireEvent.click(screen.getByRole('switch', { name: 'Expand extended FAB' }))
     expect(screen.getByRole('button', { name: 'Compose' })).toHaveAttribute(
       'data-expanded',
@@ -103,4 +103,39 @@ it('opens deep links and keeps only the selected family accessible', () => {
   window.location.hash = 'dialogs'
   fireEvent(window, new HashChangeEvent('hashchange'))
   expect(screen.getByRole('heading', { name: 'Dialogs', level: 2 })).toBeVisible()
+})
+
+it('alphabetizes categories, groups buttons, and separates loading and ripple', () => {
+  window.location.hash = 'fabs'
+  render(<Gallery />)
+  const categories = screen.getByRole('toolbar', { name: 'Component categories' })
+  const labels = Array.from(categories.querySelectorAll('button')).map(button => button.textContent)
+  expect(labels).toEqual(['App bars', 'Badges', 'Buttons', 'Cards', 'Chips', 'Dialogs', 'Dividers', 'Lists', 'Loading & progress', 'Menus', 'Ripple', 'Selection'])
+  for (const name of ['Button', 'Button group', 'Floating action buttons', 'FAB menu', 'Icon buttons']) {
+    expect(screen.getByRole('heading', { name, level: 3 })).toBeVisible()
+  }
+  expect(screen.queryByRole('heading', { name: 'Ripple', level: 3 })).not.toBeInTheDocument()
+  fireEvent.click(screen.getByRole('button', { name: 'Loading & progress' }))
+  expect(screen.getByRole('heading', { name: 'Loading indicator', level: 3 })).toBeVisible()
+  expect(screen.getByRole('heading', { name: 'Progress indicators', level: 3 })).toBeVisible()
+  expect(screen.queryByRole('heading', { name: 'Quantity stepper', level: 3 })).not.toBeInTheDocument()
+  fireEvent.click(screen.getByRole('button', { name: 'Ripple' }))
+  expect(screen.getByRole('button', { name: /Press anywhere/ })).toBeVisible()
+})
+
+it('shows motion under foundations and updates previews and the shared scheme', () => {
+  window.location.hash = 'motion'
+  const { container } = render(<Gallery />)
+  expect(screen.getByRole('link', { name: 'Foundations' })).toHaveAttribute('aria-current', 'page')
+  expect(screen.getByRole('toolbar', { name: 'Foundation categories' })).toBeVisible()
+  fireEvent.click(screen.getByRole('button', { name: 'Toggle positions' }))
+  expect(container.querySelector('.motion-tracks')).toHaveAttribute('data-moved', 'true')
+  fireEvent.click(screen.getByRole('button', { name: 'Toggle emphasis' }))
+  expect(container.querySelector('.motion-effects')).toHaveAttribute('data-highlighted', 'true')
+  fireEvent.click(screen.getByRole('switch', { name: 'Use expressive motion preview' }))
+  expect(container.querySelector('.material-react-root')).toHaveAttribute('data-motion-scheme', 'standard')
+  expect(screen.getByText('Slow · 750 ms')).toBeVisible()
+  fireEvent.click(screen.getByRole('button', { name: 'Typography' }))
+  expect(screen.getByRole('heading', { name: 'Typography', level: 2 })).toBeVisible()
+  expect(screen.queryByRole('button', { name: 'Toggle positions' })).not.toBeInTheDocument()
 })

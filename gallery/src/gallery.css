@@ -1224,3 +1224,19 @@ svg {
   .gallery-toast { bottom: calc(96px + env(safe-area-inset-bottom)); }
   .skip-link { left: 16px; }
 }
+
+.motion-examples { display: grid; gap: 24px; }
+.motion-examples > p, .motion-heading h2 { margin: 0; }
+.motion-examples > p { color: var(--md-sys-color-on-surface-variant); }
+.motion-heading { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; }
+.motion-heading .mode-control { gap: 16px; }
+.motion-tracks { gap: 24px; }
+.motion-row { display: grid; gap: 12px; width: 100%; min-width: 0; }
+.motion-track { position: relative; height: 72px; margin-inline: 12px; }
+.motion-track::before { content: ''; position: absolute; inset: 34px 0; background: var(--md-sys-color-outline-variant); }
+.motion-marker { position: absolute; top: 12px; left: 0; width: 48px; height: 48px; border-radius: var(--md-sys-shape-corner-large); background: var(--md-sys-color-primary); }
+[data-moved='true'] .motion-marker { left: calc(100% - 48px); }
+.motion-effects { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+.motion-effect { height: 96px; border-radius: var(--md-sys-shape-corner-large); background: var(--md-sys-color-secondary-container); opacity: 0.45; }
+[data-highlighted='true'] .motion-effect { background: var(--md-sys-color-primary); opacity: 1; }
+@media (max-width: 599px) { .motion-effects { grid-template-columns: 1fr; } }
