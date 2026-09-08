@@ -205,3 +205,6 @@ export function getMaterialTransitionPair(
 ) {
   return MATERIAL_TRANSITION_PAIRS[easingSet][phase]
 }
+
+/** Rest time between repeated motion demonstrations. */
+export const MATERIAL_MOTION_DEMONSTRATION_HOLD_MS = 1000

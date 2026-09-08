@@ -1240,3 +1240,8 @@ svg {
 .motion-effect { height: 96px; border-radius: var(--md-sys-shape-corner-large); background: var(--md-sys-color-secondary-container); opacity: 0.45; }
 [data-highlighted='true'] .motion-effect { background: var(--md-sys-color-primary); opacity: 1; }
 @media (max-width: 599px) { .motion-effects { grid-template-columns: 1fr; } }
+
+.gallery-select { display: inline-flex; align-items: center; gap: 12px; }
+.gallery-symbol { font-family: 'Material Symbols Rounded'; font-weight: 400; font-style: normal; font-size: 1em; line-height: 1; letter-spacing: normal; text-transform: none; display: inline-block; white-space: nowrap; word-wrap: normal; direction: ltr; font-feature-settings: 'liga'; -webkit-font-smoothing: antialiased; }
+.button-group-showcase { display: flex; flex-wrap: wrap; align-items: start; gap: 32px; width: 100%; }
+.button-group-showcase > div { display: grid; gap: 12px; }

@@ -1,3 +1,5 @@
+import { GallerySelect } from './GallerySelect'
+import { GallerySymbol } from './GallerySymbol'
 import { MotionExamples } from './MotionExamples'
 import { IconButtonExamples } from './IconButtonExamples'
 import { useEffect, useState, type ReactNode } from 'react'
@@ -117,29 +119,12 @@ const themePresets = [
 ]
 
 function Icon({ name }: { name: IconName }) {
-  const paths: Record<IconName, ReactNode> = {
-    add: <path d="M12 5v14M5 12h14" />,
-    back: <path d="m15 18-6-6 6-6" />,
-    check: <path d="m5 12 4.2 4.2L19 6.5" />,
-    close: <path d="m6 6 12 12M18 6 6 18" />,
-    code: <path d="m8 9-3 3 3 3m8-6 3 3-3 3m-2-9-4 12" />,
-    delete: <path d="M5 7h14M9 7V4h6v3m2 0-1 13H8L7 7m3 4v5m4-5v5" />,
-    edit: <path d="m14.5 5.5 4 4M4 20l3.5-.8L19 7.7 16.3 5 4.8 16.5 4 20Z" />,
-    github: <path d="M9 19c-4.5 1.4-4.5-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.7-1.4 5.7-6.2 0-1.4-.5-2.5-1.3-3.4.1-.3.6-1.6-.1-3.3 0 0-1.1-.3-3.5 1.3a12.2 12.2 0 0 0-6.3 0C6.6 2.3 5.5 2.6 5.5 2.6c-.7 1.7-.2 3-.1 3.3A4.8 4.8 0 0 0 4 9.3c0 4.8 3 5.9 5.8 6.2-.5.5-.6 1-.6 2V21" />,
-    grid: <><rect x="4" y="4" width="6" height="6" rx="2" /><rect x="14" y="4" width="6" height="6" rx="2" /><rect x="4" y="14" width="6" height="6" rx="2" /><rect x="14" y="14" width="6" height="6" rx="2" /></>,
-    minus: <path d="M5 12h14" />,
-    more: <path d="M5 12h.01M12 12h.01M19 12h.01" />,
-    moon: <path d="M20 15.3A8.5 8.5 0 0 1 8.7 4a8.5 8.5 0 1 0 11.3 11.3Z" />,
-    palette: <path d="M12 3a9 9 0 0 0 0 18h1.5a2 2 0 0 0 0-4H12a1.5 1.5 0 0 1 0-3h2.3A6.7 6.7 0 0 0 21 7.3C21 4.9 17 3 12 3Z" />,
-    search: <><circle cx="11" cy="11" r="6" /><path d="m16 16 4 4" /></>,
-    star: <path d="m12 3 2.7 5.5 6 .9-4.4 4.3 1 6-5.3-2.8-5.3 2.8 1-6-4.4-4.3 6-.9L12 3Z" />,
+  const symbols: Record<IconName, string> = {
+    add: 'add', back: 'arrow_back', check: 'check', close: 'close', code: 'code',
+    delete: 'delete', edit: 'edit', github: 'code', grid: 'grid_view', minus: 'remove',
+    more: 'more_horiz', moon: 'dark_mode', palette: 'palette', search: 'search', star: 'star',
   }
-
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      {paths[name]}
-    </svg>
-  )
+  return <GallerySymbol name={symbols[name]} />
 }
 
 function Specimen({
@@ -239,7 +224,6 @@ export function Gallery() {
   const [chipFilters, setChipFilters] = useState(() => new Set(['recent']))
   const [chipPeople, setChipPeople] = useState(['Avery', 'Sam'])
   const [exportFormats, setExportFormats] = useState(() => new Set(['photos']))
-  const [favorite, setFavorite] = useState(false)
   const [interval, setInterval] = useState('week')
   const [notifications, setNotifications] = useState(true)
   const [compact, setCompact] = useState(false)
@@ -338,7 +322,7 @@ export function Gallery() {
   ]
 
   return (
-    <MaterialThemeProvider mode={mode} motionScheme={motionScheme} seed={{ primary: seed }}>
+    <MaterialThemeProvider fidelity={false} mode={mode} motionScheme={motionScheme} seed={{ primary: seed }}>
       <div className="gallery-shell" data-material-typography="bodyLarge">
         <a className="skip-link" href="#gallery-title" onClick={(event) => { event.preventDefault(); document.getElementById('gallery-title')?.focus() }}>Skip to content</a>
         <nav className="gallery-navigation" aria-label="Gallery navigation">
@@ -370,7 +354,7 @@ export function Gallery() {
             {foundationPages.map(([id, label]) => <FilterChip key={id} selected={page === id} onClick={() => navigate(id)}>{label}</FilterChip>)}
           </ChipSet>}
           <section hidden={page !== 'motion'} className="component-section" aria-label="Motion">
-            <MotionExamples scheme={motionScheme} onSchemeChange={setMotionScheme} />
+            <MotionExamples active={page === 'motion'} scheme={motionScheme} onSchemeChange={setMotionScheme} />
           </section>
 
           <section hidden={page !== 'theme'} className="theme-panel" aria-labelledby="theme-title">
@@ -752,31 +736,23 @@ export function Gallery() {
               <h2 id="actions-title" data-material-typography="headlineMedium">Buttons</h2>
             </div>
             <div className="specimen-grid">
-              <Specimen title="Button group" api="ButtonGroup" description="Press a segment to see its width push into its neighbors.">
-                <StageLabel>Connected</StageLabel>
+              <Specimen title="Button group" api="ButtonGroup" wide description="Press a segment to see its width push into its neighbors.">
+                <div className="button-group-showcase"><div><StageLabel>Connected</StageLabel>
                 <ButtonGroup ariaLabel="Time range" options={intervalOptions} value={interval} onChange={setInterval} variant="connected" buttonVariant="tonal" />
-                <StageLabel>Standard</StageLabel>
-                <ButtonGroup ariaLabel="Time range standard" options={intervalOptions} value={interval} onChange={setInterval} variant="standard" buttonVariant="outlined" />
+                </div><div><StageLabel>Standard</StageLabel>
+                <ButtonGroup ariaLabel="Time range standard" options={intervalOptions} value={interval} onChange={setInterval} variant="standard" buttonVariant="tonal" />
+                </div></div>
               </Specimen>
 <Specimen title="Button" description="Five variants share one component and one motion model." wide>
                 <div className="stage-toolbar">
-                  <label>Size
-                    <select value={buttonSize} onChange={(event) => setButtonSize(event.currentTarget.value as MaterialButtonSize)}>
-                      {buttonSizes.map((size) => <option key={size} value={size}>{size}</option>)}
-                    </select>
-                  </label>
+                  <GallerySelect label="Size" value={buttonSize} options={buttonSizes} onChange={setButtonSize} />
                 </div>
                 <div className="button-showcase">
                   {buttonVariants.map((variant) => (
                     <Button key={variant} variant={variant} size={buttonSize} onClick={() => setMessage(`${variant} button pressed`)}>{variant}</Button>
                   ))}
                 </div>
-                <div className="button-showcase">
-                  <Button variant="filled" size={buttonSize} leadingIcon={<Icon name="add" />}>Create</Button>
-                  <Button variant="tonal" size={buttonSize} trailingIcon={<Icon name="edit" />}>Edit</Button>
-                  <Button variant="outlined" size={buttonSize} disabled>Disabled</Button>
-                  <Button variant="tonal" size={buttonSize} toggle selected={favorite} leadingIcon={<Icon name="star" />} onClick={() => setFavorite((value) => !value)}>Favorite</Button>
-                </div>
+
               </Specimen>
 
 
@@ -789,16 +765,8 @@ export function Gallery() {
                 wide
               >
                 <div className="stage-toolbar fab-toolbar">
-                  <label>Size
-                    <select value={fabSize} onChange={(event) => setFabSize(event.currentTarget.value as MaterialFabSize)}>
-                      {fabSizes.map((size) => <option key={size} value={size}>{size}</option>)}
-                    </select>
-                  </label>
-                  <label>Color
-                    <select value={fabColor} onChange={(event) => setFabColor(event.currentTarget.value as MaterialFabColor)}>
-                      {fabColors.map((color) => <option key={color} value={color}>{color}</option>)}
-                    </select>
-                  </label>
+                  <GallerySelect label="Size" value={fabSize} options={fabSizes} onChange={setFabSize} />
+                  <GallerySelect label="Color" value={fabColor} options={fabColors} onChange={setFabColor} />
                   <label>Extended
                     <Switch aria-label="Expand extended FAB" checked={fabExpanded} onChange={(event) => setFabExpanded(event.currentTarget.checked)} />
                   </label>
@@ -877,16 +845,8 @@ export function Gallery() {
                 wide
               >
                 <div className="stage-toolbar fab-toolbar">
-                  <label>Launcher
-                    <select value={fabMenuSize} onChange={(event) => setFabMenuSize(event.currentTarget.value as MaterialFabMenuTriggerSize)}>
-                      {fabMenuSizes.map((size) => <option key={size} value={size}>{size}</option>)}
-                    </select>
-                  </label>
-                  <label>Color set
-                    <select value={fabMenuColor} onChange={(event) => setFabMenuColor(event.currentTarget.value as MaterialFabMenuColor)}>
-                      {fabMenuColors.map((color) => <option key={color} value={color}>{color}</option>)}
-                    </select>
-                  </label>
+                  <GallerySelect label="Launcher" value={fabMenuSize} options={fabMenuSizes} onChange={setFabMenuSize} />
+                  <GallerySelect label="Color set" value={fabMenuColor} options={fabMenuColors} onChange={setFabMenuColor} />
                   <label>Expanded
                     <Switch aria-label="Expand FAB menu" checked={fabMenuExpanded} onChange={(event) => setFabMenuExpanded(event.currentTarget.checked)} />
                   </label>
@@ -931,18 +891,8 @@ export function Gallery() {
                 wide
               >
                 <div className="stage-toolbar menu-toolbar">
-                  <label>Variant
-                    <select value={menuVariant} onChange={(event) => setMenuVariant(event.currentTarget.value as MaterialMenuVariant)}>
-                      <option value="expressive">expressive</option>
-                      <option value="baseline">baseline</option>
-                    </select>
-                  </label>
-                  <label>Color
-                    <select value={menuColor} onChange={(event) => setMenuColor(event.currentTarget.value as MaterialMenuColor)}>
-                      <option value="standard">standard</option>
-                      <option value="vibrant">vibrant</option>
-                    </select>
-                  </label>
+                  <GallerySelect label="Variant" value={menuVariant} options={['expressive', 'baseline'] as const} onChange={setMenuVariant} />
+                  <GallerySelect label="Color" value={menuColor} options={['standard', 'vibrant'] as const} onChange={setMenuColor} />
                   <label>Open
                     <Switch aria-label="Open Material menu" checked={menuOpen} onChange={(event) => setMenuOpen(event.currentTarget.checked)} />
                   </label>
