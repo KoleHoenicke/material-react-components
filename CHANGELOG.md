@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.16.0
+
+- Added the AndroidX-aligned icon-button family with standard, filled, tonal, and outlined actions and controlled toggles; five sizes; three widths; round and square shapes; selected icon slots; per-state color and shape overrides; and Android-style named exports.
+- Preserved 48px minimum targets around smaller visual containers, added bounded state layers, native hover tooltips, keyboard focus, reduced-motion and forced-color behavior, and the current non-bouncing DefaultEffects shape transition.
+- Migrated AppBarIconButton to the shared implementation with inherited content color. Added an interactive configuration matrix, focused tests, pinned source references, full token documentation, and explicit web adaptations.
+
 ## 0.15.0
 
 - Added baseline and expressive `Menu` components with standard and vibrant grouped treatments, checkable and selectable items, submenus, dividers, supporting and trailing content, links, context-point anchoring, viewport-aware placement, precision-pointer density, typeahead, complete keyboard behavior, and public CSS tokens.

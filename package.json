@@ -1,6 +1,6 @@
 {
   "name": "@kolehoenicke/material-react-components",
-  "version": "0.15.0",
+  "version": "0.16.0",
   "description": "Independent Material Design components for React on the web, currently implementing Material 3 Expressive.",
   "license": "Apache-2.0",
   "packageManager": "pnpm@11.24.0",
@@ -22,7 +22,8 @@
     "CHANGELOG.md",
     "LICENSE",
     "NOTICE",
-    "THIRD_PARTY_NOTICES.md"
+    "THIRD_PARTY_NOTICES.md",
+    "docs/icon-buttons.md"
   ],
   "sideEffects": [
     "**/*.css"

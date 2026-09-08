@@ -17,6 +17,7 @@ Included now:
 
 - App bars, including small, center-aligned, medium, large, flexible, bottom, FAB, and scroll-aware variants
 - Badge
+- Icon buttons and controlled icon toggles, with all four color styles, five sizes, three widths, and round/square shape morphing
 - Button and button group
 - Card, including filled, elevated, outlined, checked, and dragged states
 - Divider, including horizontal, vertical, full-width, inset, one-sided, heavy, and custom styles
@@ -165,6 +166,26 @@ The dialog keeps confirm last visually in a horizontal action row, then places c
 Every component-level value can be overridden through `MaterialDialogStyle`, including container width, height, padding, shape, elevation, colors, icon size, action spacing, focus color, and scrim color or opacity.
 
 Sources: [Material 3 dialogs](https://m3.material.io/components/dialogs/overview), [AndroidX `AlertDialog`](https://android.googlesource.com/platform/frameworks/support/+/refs/heads/androidx-main/compose/material3/material3/src/commonMain/kotlin/androidx/compose/material3/AlertDialog.kt), [AndroidX dialog tokens](https://android.googlesource.com/platform/frameworks/support/+/refs/heads/androidx-main/compose/material3/material3/src/commonMain/kotlin/androidx/compose/material3/tokens/DialogTokens.kt), and [Material Components for Android dialogs](https://github.com/material-components/material-components-android/blob/master/docs/components/Dialog.md).
+
+### Icon buttons
+
+`IconButton` and `IconToggleButton` port the current AndroidX icon-button family. Use `variant="standard"`, `"filled"`, `"tonal"`, or `"outlined"`; five sizes from `"extra-small"` to `"extra-large"`; `width="narrow"`, `"uniform"`, or `"wide"`; and `shape="round"` or `"square"`. Small controls retain a 48px minimum target. Press and selection morph the container using AndroidX's non-bouncing shape motion.
+
+```tsx
+<IconToggleButton
+  aria-label="Favorite"
+  variant="tonal"
+  checked={favorite}
+  onCheckedChange={setFavorite}
+  selectedIcon={<FilledStarIcon />}
+>
+  <OutlinedStarIcon />
+</IconToggleButton>
+```
+
+Supply application icons and an accessible label. `title` defaults to `aria-label` for a native hover tooltip. Android-style exports include `FilledIconButton`, `FilledTonalIconButton`, `OutlinedIconButton`, and their `IconToggleButton` counterparts. `colors`, `shapes`, `animated`, `colorMode`, and typed CSS tokens provide explicit overrides. `AppBarIconButton` uses the same implementation with inherited content color.
+
+See the [complete API, token tables, pinned Android sources, and platform adaptations](docs/icon-buttons.md). Use this family for icon buttons; the older `Button iconOnly` prop remains a regular-button configuration.
 
 ### Floating action buttons
 

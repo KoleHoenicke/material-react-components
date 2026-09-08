@@ -1,0 +1,163 @@
+/* Adapted from AndroidX IconButtonDefaults and generated icon-button tokens.
+   See docs/icon-buttons.md for the pinned source and deliberate web adaptations. */
+.material-icon-button {
+  --_icon-square: var(--md-sys-shape-corner-medium);
+  --_icon-pressed: var(--md-sys-shape-corner-small);
+  --_icon-round: calc(min(var(--md-icon-button-container-width), var(--md-icon-button-container-height)) / 2);
+  --_icon-rest: var(--_icon-round);
+  --_icon-selected-shape: var(--_icon-square);
+  --_icon-shape: var(--md-icon-button-shape, var(--_icon-rest));
+  --_icon-container: transparent;
+  --_icon-content: var(--md-sys-color-on-surface-variant);
+  --_icon-selected-container: transparent;
+  --_icon-selected-content: var(--md-sys-color-primary);
+  --_icon-disabled-container: transparent;
+  --_icon-disabled-content: color-mix(in srgb, var(--md-sys-color-on-surface) 38%, transparent);
+  --_icon-outline: transparent;
+  --_icon-disabled-outline: transparent;
+  --_icon-current-container: var(--md-icon-button-container-color, var(--_icon-container));
+  --_icon-current-content: var(--md-icon-button-content-color, var(--_icon-content));
+  --_icon-current-outline: var(--md-icon-button-outline-color, var(--_icon-outline));
+  position: relative;
+  isolation: isolate;
+  display: inline-grid;
+  flex: 0 0 auto;
+  place-items: center;
+  vertical-align: middle;
+  box-sizing: border-box;
+  inline-size: max(var(--md-icon-button-minimum-target-size, 48px), var(--md-icon-button-container-width));
+  block-size: max(var(--md-icon-button-minimum-target-size, 48px), var(--md-icon-button-container-height));
+  padding: 0;
+  border: 0;
+  border-radius: var(--_icon-shape);
+  background: transparent;
+  color: inherit;
+  appearance: none;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  /* AndroidX intentionally uses DefaultEffects for shape, avoiding overshoot. */
+  transition: border-radius var(--m3-motion-icon-button-shape);
+}
+.material-icon-button[data-size='medium'] {
+  --_icon-square: var(--md-sys-shape-corner-large);
+  --_icon-pressed: var(--md-sys-shape-corner-medium);
+}
+.material-icon-button:is([data-size='large'], [data-size='extra-large']) {
+  --_icon-square: var(--md-sys-shape-corner-extra-large);
+  --_icon-pressed: var(--md-sys-shape-corner-large);
+}
+.material-icon-button[data-shape='square'] {
+  --_icon-rest: var(--_icon-square);
+  --_icon-selected-shape: var(--_icon-round);
+}
+.material-icon-button[data-variant='filled'] {
+  --_icon-container: var(--md-sys-color-primary);
+  --_icon-content: var(--md-sys-color-on-primary);
+  --_icon-selected-container: var(--md-sys-color-primary);
+  --_icon-selected-content: var(--md-sys-color-on-primary);
+  --_icon-disabled-container: color-mix(in srgb, var(--md-sys-color-on-surface) 10%, transparent);
+}
+.material-icon-button[data-variant='filled'][data-selected] {
+  --_icon-container: var(--md-sys-color-surface-container);
+  --_icon-content: var(--md-sys-color-on-surface-variant);
+}
+.material-icon-button[data-variant='tonal'] {
+  --_icon-container: var(--md-sys-color-secondary-container);
+  --_icon-content: var(--md-sys-color-on-secondary-container);
+  --_icon-selected-container: var(--md-sys-color-secondary);
+  --_icon-selected-content: var(--md-sys-color-on-secondary);
+  --_icon-disabled-container: color-mix(in srgb, var(--md-sys-color-on-surface) 10%, transparent);
+}
+.material-icon-button[data-variant='outlined'] {
+  --_icon-outline: var(--md-sys-color-outline-variant);
+  --_icon-disabled-outline: color-mix(in srgb, var(--md-sys-color-outline-variant) 38%, transparent);
+  --_icon-selected-container: var(--md-sys-color-inverse-surface);
+  --_icon-selected-content: var(--md-sys-color-inverse-on-surface);
+}
+.material-icon-button[data-color-mode='inherit']:is([data-variant='standard'], [data-variant='outlined']) {
+  --_icon-content: currentColor;
+  --_icon-disabled-content: color-mix(in srgb, currentColor 38%, transparent);
+}
+.material-icon-button[data-color-mode='inherit'][data-variant='outlined'] {
+  --_icon-outline: currentColor;
+  --_icon-disabled-outline: color-mix(in srgb, currentColor 38%, transparent);
+}
+.material-icon-button[data-selected='true'] {
+  --_icon-current-container: var(--md-icon-button-selected-container-color, var(--_icon-selected-container));
+  --_icon-current-content: var(--md-icon-button-selected-content-color, var(--_icon-selected-content));
+}
+.material-icon-button[data-selected='true'][data-variant='outlined'] {
+  --_icon-current-outline: transparent;
+}
+.material-icon-button[data-selected='true'][data-animated='true'] {
+  --_icon-shape: var(--md-icon-button-selected-shape, var(--_icon-selected-shape));
+}
+.material-icon-button[data-animated='true']:not(:disabled):active {
+  --_icon-shape: var(--md-icon-button-pressed-shape, var(--_icon-pressed));
+}
+.material-icon-button:disabled {
+  --_icon-current-container: var(--md-icon-button-disabled-container-color, var(--_icon-disabled-container));
+  --_icon-current-content: var(--md-icon-button-disabled-content-color, var(--_icon-disabled-content));
+  --_icon-current-outline: var(--md-icon-button-disabled-outline-color, var(--_icon-disabled-outline));
+  cursor: default;
+}
+.material-icon-button:disabled[data-selected='true'][data-variant='outlined'] {
+  --_icon-current-outline: transparent;
+}
+.material-icon-button__container,
+.material-icon-button > .material-ripple {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  inline-size: var(--md-icon-button-container-width);
+  block-size: var(--md-icon-button-container-height);
+  border-radius: inherit;
+}
+.material-icon-button__container {
+  box-sizing: border-box;
+  border: var(--md-icon-button-outline-width) solid var(--_icon-current-outline);
+  background: var(--_icon-current-container);
+  pointer-events: none;
+}
+.material-icon-button > .material-ripple {
+  --md-ripple-hover-color: var(--_icon-current-content);
+  --md-ripple-pressed-color: var(--_icon-current-content);
+}
+.material-icon-button__icon {
+  position: relative;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  inline-size: var(--md-icon-button-icon-size);
+  block-size: var(--md-icon-button-icon-size);
+  color: var(--_icon-current-content);
+  font-size: var(--md-icon-button-icon-size);
+  line-height: 1;
+  pointer-events: none;
+}
+.material-icon-button__icon > :is(svg, img) {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+}
+.material-icon-button:focus-visible { outline: none; }
+.material-icon-button:focus-visible > .material-icon-button__container {
+  outline: var(--md-icon-button-focus-ring-width, 3px) solid var(--md-icon-button-focus-ring-color, var(--md-sys-color-secondary));
+  outline-offset: var(--md-icon-button-focus-ring-offset, 2px);
+}
+.material-icon-button:focus-visible > .material-ripple .material-ripple__surface::before {
+  opacity: var(--md-sys-state-focus-state-layer-opacity);
+}
+@media (prefers-reduced-motion: reduce) {
+  .material-icon-button { transition: none; }
+}
+@media (forced-colors: active) {
+  .material-icon-button { --_icon-current-content: ButtonText; }
+  .material-icon-button__container { background: ButtonFace; border-color: ButtonText; }
+  .material-icon-button[data-selected='true'] { --_icon-current-content: HighlightText; }
+  .material-icon-button[data-selected='true'] > .material-icon-button__container { background: Highlight; }
+  .material-icon-button:disabled { --_icon-current-content: GrayText; }
+  .material-icon-button:disabled > .material-icon-button__container { background: ButtonFace; border-color: GrayText; }
+  .material-icon-button:focus-visible > .material-icon-button__container { outline-color: Highlight; }
+}

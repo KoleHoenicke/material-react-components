@@ -202,59 +202,15 @@
   transition: opacity var(--m3-motion-transition-default-effects);
 }
 
-.material-app-bar-icon-button {
-  --material-ripple-state-layer-size: 40px;
-  --md-ripple-hover-color: currentColor;
-  --md-ripple-pressed-color: currentColor;
-  position: relative;
-  isolation: isolate;
-  display: inline-grid;
-  flex: 0 0 auto;
-  inline-size: 48px;
-  block-size: 48px;
-  place-items: center;
-  padding: 0;
-  border: 0;
-  border-radius: var(--md-sys-shape-corner-full, 9999px);
-  appearance: none;
-  background: transparent;
-  color: inherit;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.material-app-bar-icon-button__icon {
-  position: relative;
-  z-index: 3;
-  display: grid;
-  inline-size: 24px;
-  block-size: 24px;
-  place-items: center;
-  font-size: 24px;
-  pointer-events: none;
-}
-
-.material-app-bar-icon-button__icon > svg,
-.material-app-bar-icon-button__icon > img {
-  display: block;
-  inline-size: 100%;
-  block-size: 100%;
-}
-
-.material-app-bar-icon-button:focus-visible,
 .material-app-bar-fab:focus-visible {
   outline: 3px solid var(--md-sys-color-secondary);
   outline-offset: 2px;
 }
 
-.material-app-bar-icon-button:focus-visible
-  > .material-ripple
-  .material-ripple__surface::before,
 .material-app-bar-fab:focus-visible > .material-ripple .material-ripple__surface::before {
   opacity: var(--md-sys-state-focus-state-layer-opacity, 0.1);
 }
 
-.material-app-bar-icon-button:disabled,
 .material-app-bar-fab:disabled {
   cursor: default;
   opacity: 0.38;
@@ -418,7 +374,6 @@
     border: 1px solid CanvasText;
   }
 
-  .material-app-bar-icon-button:focus-visible,
   .material-app-bar-fab:focus-visible {
     outline-color: Highlight;
   }

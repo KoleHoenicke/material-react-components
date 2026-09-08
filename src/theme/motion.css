@@ -475,6 +475,8 @@
     var(--m3-motion-default-effects-easing);
   --m3-motion-transition-slow-effects: var(--m3-motion-slow-effects-duration)
     var(--m3-motion-slow-effects-easing);
+  /* AndroidX IconButton intentionally uses the non-bouncing DefaultEffects spring. */
+  --m3-motion-icon-button-shape: var(--m3-motion-transition-default-effects);
   --m3-motion-transition-fast-shape: var(--m3-motion-transition-fast-spatial);
   --material-ui-motion-emphasized: var(--m3-motion-fast-effects-easing);
 }

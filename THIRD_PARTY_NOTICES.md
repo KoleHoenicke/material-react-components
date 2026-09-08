@@ -28,6 +28,8 @@ The divider geometry, tokens, inset variants, heavy style, and accessibility beh
 
 The baseline and emphasized type scales, typeface roles, weights, line heights, and tracking values in `materialTypography.ts`, `tokens.css`, and `MaterialText.tsx` are adapted from AndroidX Material 3 generated v0.103 typography tokens and the Material Design 3 typography guidance. Copyright 2021-2026 The Android Open Source Project and copyright Google LLC. Licensed under the Apache License 2.0 where applicable.
 
+The icon-button geometry, generated token mappings, color state resolution, and shape interaction rules in `MaterialIconButton.tsx` and `MaterialIconButton.css` are adapted from AndroidX Material 3. Copyright 2021-2026 The Android Open Source Project. Licensed under the Apache License 2.0. Source revision and web adaptations are documented in `docs/icon-buttons.md`.
+
 ## Material Color Utilities
 
 This package uses `@material/material-color-utilities`, copyright Google LLC. Licensed under the Apache License 2.0.

@@ -139,3 +139,15 @@ export { MaterialSlider as Slider } from './components/MaterialSlider'
 export { MaterialSwitch as Switch } from './components/MaterialSwitch'
 export { MaterialText as Text } from './components/MaterialText'
 export { MaterialWavyProgress as WavyProgress } from './components/MaterialWavyProgress'
+
+export * from './components/MaterialIconButton'
+export {
+  MaterialIconButton as IconButton,
+  MaterialIconToggleButton as IconToggleButton,
+  MaterialFilledIconButton as FilledIconButton,
+  MaterialFilledTonalIconButton as FilledTonalIconButton,
+  MaterialOutlinedIconButton as OutlinedIconButton,
+  MaterialFilledIconToggleButton as FilledIconToggleButton,
+  MaterialFilledTonalIconToggleButton as FilledTonalIconToggleButton,
+  MaterialOutlinedIconToggleButton as OutlinedIconToggleButton,
+} from './components/MaterialIconButton'

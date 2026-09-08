@@ -1,3 +1,4 @@
+import { IconButtonExamples } from './IconButtonExamples'
 import { useEffect, useState, type ReactNode } from 'react'
 import {
   AppBarFab,
@@ -334,8 +335,8 @@ export function Gallery() {
               <h1 id="gallery-title" data-material-typography="displayLargeEmphasized">Material controls that move like they should.</h1>
               <p data-material-typography="bodyLarge">Every example is rendered by the package. Change the theme, press the controls, and inspect the current Material 3 Expressive behavior.</p>
               <div className="hero__meta" data-material-typography="labelMediumEmphasized">
-                <span>27 modules</span>
-                <span>218 tests</span>
+                <span>28 modules</span>
+                <span>236 tests</span>
                 <span>React 18 and 19</span>
               </div>
             </div>
@@ -726,6 +727,10 @@ export function Gallery() {
               <h2 id="actions-title" data-material-typography="displayMediumEmphasized">FABs, buttons, and groups</h2>
             </div>
             <div className="specimen-grid">
+              <Specimen title="Icon buttons" api="IconButton · IconToggleButton" description="AndroidX size, width, color, and shape configurations with 48px minimum targets." wide>
+                <IconButtonExamples />
+              </Specimen>
+
               <Specimen
                 title="Floating action buttons"
                 api="FloatingActionButton · ExtendedFloatingActionButton"

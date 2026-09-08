@@ -10,6 +10,7 @@ import {
   type RefObject,
 } from 'react'
 
+import { MaterialIconButton, type MaterialIconButtonProps } from './MaterialIconButton'
 import { MaterialRipple } from './MaterialRipple'
 import { MATERIAL_APP_BAR_TIMING } from '../theme/materialMotion'
 import './MaterialAppBar.css'
@@ -115,9 +116,7 @@ export type MaterialBottomAppBarProps = Omit<
   variant?: MaterialBottomAppBarVariant
 }
 
-export type MaterialAppBarIconButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
-  children: ReactNode
-}
+export type MaterialAppBarIconButtonProps = MaterialIconButtonProps
 
 export type MaterialAppBarFabProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   children: ReactNode
@@ -538,23 +537,17 @@ export const MaterialAppBarIconButton = forwardRef<
   HTMLButtonElement,
   MaterialAppBarIconButtonProps
 >(function MaterialAppBarIconButton(
-  { children, className, disabled = false, type = 'button', ...buttonProps },
+  { className, ...buttonProps },
   ref,
 ) {
   return (
-    <button
+    <MaterialIconButton
+      colorMode="inherit"
       {...buttonProps}
       ref={ref}
       className={['material-app-bar-icon-button', className].filter(Boolean).join(' ')}
       data-material-app-bar-icon-button=""
-      disabled={disabled}
-      type={type}
-    >
-      <MaterialRipple disabled={disabled} unbounded />
-      <span className="material-app-bar-icon-button__icon" aria-hidden="true">
-        {children}
-      </span>
-    </button>
+    />
   )
 })
 
