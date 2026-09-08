@@ -178,7 +178,40 @@ function Eyebrow({ children }: { children: ReactNode }) {
   return <span className="eyebrow" data-material-typography="labelLargeEmphasized">{children}</span>
 }
 
+const componentPages = [
+  ['actions', 'Buttons'], ['icon-controls', 'Icon buttons'], ['fabs', 'FABs'], ['menus', 'Menus'], ['app-bars', 'App bars'], ['cards', 'Cards'],
+  ['chips', 'Chips'], ['dialogs', 'Dialogs'], ['dividers', 'Dividers'],
+  ['selection', 'Selection'], ['lists', 'Lists'], ['status', 'Progress & status'],
+] as const
+const destinations = [
+  { id: 'components', label: 'Components', icon: 'grid' },
+  { id: 'typography', label: 'Foundations', icon: 'code' },
+  { id: 'theme', label: 'Theme', icon: 'palette' },
+] as const
+function currentPage() {
+  const hash = window.location.hash.slice(1)
+  if (hash === 'icon-buttons') return 'icon-controls'
+  return [...componentPages.map(([id]) => id), 'typography', 'theme'].includes(hash) ? hash : 'actions'
+}
+
 export function Gallery() {
+  const [page, setPage] = useState(currentPage)
+  const destination = page === 'theme' || page === 'typography' ? page : 'components'
+  useEffect(() => {
+    const sync = () => setPage(currentPage())
+    window.addEventListener('hashchange', sync)
+    return () => window.removeEventListener('hashchange', sync)
+  }, [])
+  function navigate(next: string) {
+    setPage(next)
+    window.history.pushState(null, '', `#${next}`)
+    window.scrollTo({ top: 0, behavior: 'instant' })
+  }
+  useEffect(() => {
+    const picker = document.querySelector<HTMLElement>('.component-picker')
+    const selected = picker?.querySelector<HTMLElement>('[aria-pressed="true"]')
+    if (picker && selected) picker.scrollLeft = selected.offsetLeft - picker.offsetLeft
+  }, [page])
   const [mode, setMode] = useState<'light' | 'dark'>('light')
   const [motionScheme, setMotionScheme] = useState<MaterialMotionScheme>('expressive')
   const [seed, setSeed] = useState('#6750a4')
@@ -304,56 +337,38 @@ export function Gallery() {
   return (
     <MaterialThemeProvider mode={mode} motionScheme={motionScheme} seed={{ primary: seed }}>
       <div className="gallery-shell" data-material-typography="bodyLarge">
-        <header className="topbar" data-material-typography="labelMedium">
-          <a className="wordmark" href="#top" aria-label="Material React Components home" data-material-typography="titleSmallEmphasized">
-            <span className="wordmark__mark"><Icon name="grid" /></span>
-            <span>Material React Components</span>
-          </a>
-          <nav aria-label="Gallery navigation">
-            <a href="#typography">Typography</a>
-            <a href="#app-bars">App bars</a>
-            <a href="#cards">Cards</a>
-            <a href="#dialogs">Dialogs</a>
-            <a href="#dividers">Dividers</a>
-            <a href="#chips">Chips</a>
-            <a href="#actions">Actions</a>
-            <a href="#menus">Menus</a>
-            <a href="#selection">Selection</a>
-            <a href="#lists">Lists</a>
-            <a href="#status">Status</a>
-          </nav>
-          <a className="github-link" href="https://github.com/KoleHoenicke/material-react-components" aria-label="View source on GitHub" data-material-typography="labelMediumEmphasized">
-            <Icon name="github" />
-            <span>GitHub</span>
-          </a>
-        </header>
-
+        <a className="skip-link" href="#gallery-title" onClick={(event) => { event.preventDefault(); document.getElementById('gallery-title')?.focus() }}>Skip to content</a>
+        <nav className="gallery-navigation" aria-label="Gallery navigation">
+          <span className="gallery-navigation__brand" aria-label="Material React">M</span>
+          {destinations.map((item) => (
+            <a key={item.id} href={`#${item.id === 'components' ? 'actions' : item.id}`}
+              aria-current={destination === item.id ? 'page' : undefined}
+              onClick={(event) => { event.preventDefault(); navigate(item.id === 'components' ? 'actions' : item.id) }}
+              data-material-typography="labelMedium">
+              <span className="gallery-navigation__indicator"><Icon name={item.icon} /></span>
+              <span>{item.label}</span>
+              <MaterialRipple />
+            </a>
+          ))}
+        </nav>
+        <div className="gallery-workspace">
+        <TopAppBar className="gallery-app-bar" title={<Text variant="titleMedium">Material React Components</Text>}
+          actions={<a href="https://github.com/KoleHoenicke/material-react-components" aria-label="View source on GitHub"><Icon name="github" /><Text variant="labelLarge">GitHub</Text><MaterialRipple /></a>} />
         <main className="gallery-content" id="top">
-          <section className="hero" aria-labelledby="gallery-title">
-            <div className="hero__copy">
-              <Eyebrow>Interactive component gallery</Eyebrow>
-              <h1 id="gallery-title" data-material-typography="displayLargeEmphasized">Material controls that move like they should.</h1>
-              <p data-material-typography="bodyLarge">Every example is rendered by the package. Change the theme, press the controls, and inspect the current Material 3 Expressive behavior.</p>
-              <div className="hero__meta" data-material-typography="labelMediumEmphasized">
-                <span>28 modules</span>
-                <span>236 tests</span>
-                <span>React 18 and 19</span>
-              </div>
-            </div>
-            <div className="hero__art" aria-hidden="true">
-              <span className="hero-shape hero-shape--one" />
-              <span className="hero-shape hero-shape--two" />
-              <span className="hero-shape hero-shape--three" />
-              <span className="hero-art__switch"><Switch checked readOnly /></span>
-            </div>
-          </section>
+          <header className="page-heading">
+            <Text as="h1" id="gallery-title" tabIndex={-1} variant="displaySmall">{destination === 'components' ? 'Components' : destination === 'typography' ? 'Foundations' : 'Theme'}</Text>
+            <Text as="p" variant="bodyLarge">{destination === 'components' ? 'Explore Material 3 components. Try each example to see how it works.' : destination === 'typography' ? 'A shared type scale brings structure and clarity to every screen.' : 'Choose a source color, appearance, and motion scheme for the gallery.'}</Text>
+          </header>
+          {destination === 'components' && <ChipSet className="component-picker" aria-label="Component categories">
+            {componentPages.map(([id, label]) => <FilterChip key={id} selected={page === id} onClick={() => navigate(id)}>{label}</FilterChip>)}
+          </ChipSet>}
 
-          <section className="theme-panel" aria-labelledby="theme-title">
+          <section hidden={page !== 'theme'} className="theme-panel" aria-labelledby="theme-title">
             <div className="theme-panel__title">
               <span className="theme-panel__icon"><Icon name="palette" /></span>
               <div>
                 <h2 id="theme-title" data-material-typography="titleLargeEmphasized">Theme playground</h2>
-                <p data-material-typography="bodyMedium">These controls change the color roles and motion scheme for every specimen below.</p>
+                <p data-material-typography="bodyMedium">Changes apply to the whole gallery, including these controls.</p>
               </div>
             </div>
             <div className="theme-panel__controls">
@@ -390,10 +405,10 @@ export function Gallery() {
             </div>
           </section>
 
-          <section className="component-section" id="typography" aria-labelledby="typography-title">
+          <section hidden={page !== 'typography'} className="component-section" id="typography-panel" aria-labelledby="typography-title">
             <div className="section-heading">
               <Eyebrow>Type scale and text</Eyebrow>
-              <h2 id="typography-title" data-material-typography="displayMediumEmphasized">Typography</h2>
+              <h2 id="typography-title" data-material-typography="headlineMedium">Typography</h2>
             </div>
             <div className="specimen-grid">
               <Specimen
@@ -432,10 +447,10 @@ export function Gallery() {
             </div>
           </section>
 
-          <section className="component-section" id="app-bars" aria-labelledby="app-bars-title">
+          <section hidden={page !== 'app-bars'} className="component-section" id="app-bars-panel" aria-labelledby="app-bars-title">
             <div className="section-heading">
               <Eyebrow>Navigation and actions</Eyebrow>
-              <h2 id="app-bars-title" data-material-typography="displayMediumEmphasized">App bars</h2>
+              <h2 id="app-bars-title" data-material-typography="headlineMedium">App bars</h2>
             </div>
             <div className="specimen-grid">
               <Specimen
@@ -496,10 +511,10 @@ export function Gallery() {
             </div>
           </section>
 
-          <section className="component-section" id="cards" aria-labelledby="cards-title">
+          <section hidden={page !== 'cards'} className="component-section" id="cards-panel" aria-labelledby="cards-title">
             <div className="section-heading">
               <Eyebrow>Content</Eyebrow>
-              <h2 id="cards-title" data-material-typography="displayMediumEmphasized">Cards</h2>
+              <h2 id="cards-title" data-material-typography="headlineMedium">Cards</h2>
             </div>
             <div className="specimen-grid">
               <Specimen
@@ -558,10 +573,10 @@ export function Gallery() {
             </div>
           </section>
 
-          <section className="component-section" id="dialogs" aria-labelledby="dialogs-title">
+          <section hidden={page !== 'dialogs'} className="component-section" id="dialogs-panel" aria-labelledby="dialogs-title">
             <div className="section-heading">
               <Eyebrow>Focused tasks and decisions</Eyebrow>
-              <h2 id="dialogs-title" data-material-typography="displayMediumEmphasized">Dialogs</h2>
+              <h2 id="dialogs-title" data-material-typography="headlineMedium">Dialogs</h2>
             </div>
             <div className="specimen-grid">
               <Specimen
@@ -643,10 +658,10 @@ export function Gallery() {
             </div>
           </section>
 
-          <section className="component-section" id="dividers" aria-labelledby="dividers-title">
+          <section hidden={page !== 'dividers'} className="component-section" id="dividers-panel" aria-labelledby="dividers-title">
             <div className="section-heading">
               <Eyebrow>Content grouping</Eyebrow>
-              <h2 id="dividers-title" data-material-typography="displayMediumEmphasized">Dividers</h2>
+              <h2 id="dividers-title" data-material-typography="headlineMedium">Dividers</h2>
             </div>
             <div className="specimen-grid">
               <Specimen
@@ -674,10 +689,10 @@ export function Gallery() {
             </div>
           </section>
 
-          <section className="component-section" id="chips" aria-labelledby="chips-title">
+          <section hidden={page !== 'chips'} className="component-section" id="chips-panel" aria-labelledby="chips-title">
             <div className="section-heading">
               <Eyebrow>Compact actions and choices</Eyebrow>
-              <h2 id="chips-title" data-material-typography="displayMediumEmphasized">Chips</h2>
+              <h2 id="chips-title" data-material-typography="headlineMedium">Chips</h2>
             </div>
             <div className="specimen-grid">
               <Specimen
@@ -721,17 +736,61 @@ export function Gallery() {
             </div>
           </section>
 
-          <section className="component-section" id="actions" aria-labelledby="actions-title">
+          <section hidden={page !== 'actions'} className="component-section" id="actions-panel" aria-labelledby="actions-title">
             <div className="section-heading">
               <Eyebrow>Actions</Eyebrow>
-              <h2 id="actions-title" data-material-typography="displayMediumEmphasized">FABs, buttons, and groups</h2>
+              <h2 id="actions-title" data-material-typography="headlineMedium">Buttons</h2>
             </div>
             <div className="specimen-grid">
-              <Specimen title="Icon buttons" api="IconButton · IconToggleButton" description="AndroidX size, width, color, and shape configurations with 48px minimum targets." wide>
+              <Specimen title="Button" description="Five variants share one component and one motion model." wide>
+                <div className="stage-toolbar">
+                  <label>Size
+                    <select value={buttonSize} onChange={(event) => setButtonSize(event.currentTarget.value as MaterialButtonSize)}>
+                      {buttonSizes.map((size) => <option key={size} value={size}>{size}</option>)}
+                    </select>
+                  </label>
+                </div>
+                <div className="button-showcase">
+                  {buttonVariants.map((variant) => (
+                    <Button key={variant} variant={variant} size={buttonSize} onClick={() => setMessage(`${variant} button pressed`)}>{variant}</Button>
+                  ))}
+                </div>
+                <div className="button-showcase">
+                  <Button variant="filled" size={buttonSize} leadingIcon={<Icon name="add" />}>Create</Button>
+                  <Button variant="tonal" size={buttonSize} trailingIcon={<Icon name="edit" />}>Edit</Button>
+                  <Button variant="outlined" size={buttonSize} disabled>Disabled</Button>
+                  <Button variant="tonal" size={buttonSize} toggle selected={favorite} leadingIcon={<Icon name="star" />} onClick={() => setFavorite((value) => !value)}>Favorite</Button>
+                </div>
+              </Specimen>
+
+              <Specimen title="Button group" api="ButtonGroup" description="Press a segment to see its width push into its neighbors.">
+                <StageLabel>Connected</StageLabel>
+                <ButtonGroup ariaLabel="Time range" options={intervalOptions} value={interval} onChange={setInterval} variant="connected" buttonVariant="tonal" />
+                <StageLabel>Standard</StageLabel>
+                <ButtonGroup ariaLabel="Time range standard" options={intervalOptions} value={interval} onChange={setInterval} variant="standard" buttonVariant="outlined" />
+              </Specimen>
+
+              <Specimen title="Ripple" description="A reusable state layer for custom interactive controls.">
+                <button className="ripple-tile" type="button" onClick={() => setMessage('Custom ripple pressed')}>
+                  <MaterialRipple />
+                  <span className="ripple-tile__icon"><Icon name="code" /></span>
+                  <span><strong data-material-typography="titleMediumEmphasized">Press anywhere</strong><small data-material-typography="bodyMedium">Pointer and keyboard feedback</small></span>
+                </button>
+              </Specimen>
+            </div>
+          </section>
+
+          <section hidden={page !== 'icon-controls'} className="component-section" id="icon-controls-panel" aria-labelledby="icon-controls-title">
+            <div className="section-heading"><Text as="h2" id="icon-controls-title" variant="headlineMedium">Icon buttons</Text></div>
+            <div className="specimen-grid">              <Specimen title="Icon buttons" api="IconButton · IconToggleButton" description="AndroidX size, width, color, and shape configurations with 48px minimum targets." wide>
                 <IconButtonExamples />
               </Specimen>
 
-              <Specimen
+</div>
+          </section>
+          <section hidden={page !== 'fabs'} className="component-section" id="fabs-panel" aria-labelledby="fabs-title">
+            <div className="section-heading"><Text as="h2" id="fabs-title" variant="headlineMedium">Floating action buttons</Text></div>
+            <div className="specimen-grid">              <Specimen
                 title="Floating action buttons"
                 api="FloatingActionButton · ExtendedFloatingActionButton"
                 description="Current Expressive sizes and colors, plus AndroidX expansion, visibility, elevation, and baseline compatibility."
@@ -868,8 +927,11 @@ export function Gallery() {
                 </div>
               </Specimen>
 
-              <Specimen
-                id="menus"
+</div>
+          </section>
+          <section hidden={page !== 'menus'} className="component-section" id="menus-panel" aria-labelledby="menus-title">
+            <div className="section-heading"><Text as="h2" id="menus-title" variant="headlineMedium">Menus</Text></div>
+            <div className="specimen-grid">              <Specimen
                 title="Menu"
                 api="Menu · MenuItem · MenuGroup · MenuSubmenu"
                 description="Baseline and expressive vertical menus with standard or vibrant color, grouped sections, selection, supporting content, submenus, typeahead, and viewport-aware placement."
@@ -949,48 +1011,12 @@ export function Gallery() {
                 </div>
               </Specimen>
 
-              <Specimen title="Button" description="Five variants share one component and one motion model." wide>
-                <div className="stage-toolbar">
-                  <label>Size
-                    <select value={buttonSize} onChange={(event) => setButtonSize(event.currentTarget.value as MaterialButtonSize)}>
-                      {buttonSizes.map((size) => <option key={size} value={size}>{size}</option>)}
-                    </select>
-                  </label>
-                </div>
-                <div className="button-showcase">
-                  {buttonVariants.map((variant) => (
-                    <Button key={variant} variant={variant} size={buttonSize} onClick={() => setMessage(`${variant} button pressed`)}>{variant}</Button>
-                  ))}
-                </div>
-                <div className="button-showcase">
-                  <Button variant="filled" size={buttonSize} leadingIcon={<Icon name="add" />}>Create</Button>
-                  <Button variant="tonal" size={buttonSize} trailingIcon={<Icon name="edit" />}>Edit</Button>
-                  <Button variant="outlined" size={buttonSize} disabled>Disabled</Button>
-                  <Button variant="tonal" size={buttonSize} toggle selected={favorite} leadingIcon={<Icon name="star" />} onClick={() => setFavorite((value) => !value)}>Favorite</Button>
-                </div>
-              </Specimen>
-
-              <Specimen title="Button group" api="ButtonGroup" description="Press a segment to see its width push into its neighbors.">
-                <StageLabel>Connected</StageLabel>
-                <ButtonGroup ariaLabel="Time range" options={intervalOptions} value={interval} onChange={setInterval} variant="connected" buttonVariant="tonal" />
-                <StageLabel>Standard</StageLabel>
-                <ButtonGroup ariaLabel="Time range standard" options={intervalOptions} value={interval} onChange={setInterval} variant="standard" buttonVariant="outlined" />
-              </Specimen>
-
-              <Specimen title="Ripple" description="A reusable state layer for custom interactive controls.">
-                <button className="ripple-tile" type="button" onClick={() => setMessage('Custom ripple pressed')}>
-                  <MaterialRipple />
-                  <span className="ripple-tile__icon"><Icon name="code" /></span>
-                  <span><strong data-material-typography="titleMediumEmphasized">Press anywhere</strong><small data-material-typography="bodyMedium">Pointer and keyboard feedback</small></span>
-                </button>
-              </Specimen>
-            </div>
+</div>
           </section>
-
-          <section className="component-section" id="selection" aria-labelledby="selection-title">
+          <section hidden={page !== 'selection'} className="component-section" id="selection-panel" aria-labelledby="selection-title">
             <div className="section-heading">
               <Eyebrow>Selection</Eyebrow>
-              <h2 id="selection-title" data-material-typography="displayMediumEmphasized">Checkboxes, switches, and sliders</h2>
+              <h2 id="selection-title" data-material-typography="headlineMedium">Checkboxes, switches, and sliders</h2>
             </div>
             <div className="specimen-grid">
               <Specimen
@@ -1067,10 +1093,10 @@ export function Gallery() {
             </div>
           </section>
 
-          <section className="component-section" id="lists" aria-labelledby="lists-title">
+          <section hidden={page !== 'lists'} className="component-section" id="lists-panel" aria-labelledby="lists-title">
             <div className="section-heading">
               <Eyebrow>Lists</Eyebrow>
-              <h2 id="lists-title" data-material-typography="displayMediumEmphasized">Material 3 Expressive lists</h2>
+              <h2 id="lists-title" data-material-typography="headlineMedium">Material 3 Expressive lists</h2>
             </div>
             <div className="specimen-grid specimen-grid--lists">
               <Specimen
@@ -1206,10 +1232,10 @@ export function Gallery() {
             </div>
           </section>
 
-          <section className="component-section" id="status" aria-labelledby="status-title">
+          <section hidden={page !== 'status'} className="component-section" id="status-panel" aria-labelledby="status-title">
             <div className="section-heading">
               <Eyebrow>Status and input</Eyebrow>
-              <h2 id="status-title" data-material-typography="displayMediumEmphasized">Progress, counts, and quantity</h2>
+              <h2 id="status-title" data-material-typography="headlineMedium">Progress, counts, and quantity</h2>
             </div>
             <div className="specimen-grid">
               <Specimen title="Badge and list count" api="Badge · ListCount" description="Small and large badges with semantic color roles.">
@@ -1277,6 +1303,7 @@ export function Gallery() {
           <span>Independent community implementation. Not affiliated with Google.</span>
           <a href="https://github.com/KoleHoenicke/material-react-components" data-material-typography="bodySmallEmphasized">Source and installation</a>
         </footer>
+        </div>
         {message ? <div className="gallery-toast" role="status" aria-live="polite" data-material-typography="bodyMedium">{message}</div> : null}
       </div>
     </MaterialThemeProvider>

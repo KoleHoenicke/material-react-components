@@ -1,8 +1,9 @@
 import { fireEvent, render, screen } from '@testing-library/react'
-import { describe, expect, it } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { Gallery } from './Gallery'
 
 describe('interactive gallery', () => {
+  beforeEach(() => { window.location.hash = ''; window.scrollTo = vi.fn() })
   it('renders the full public component surface', () => {
     const { container } = render(<Gallery />)
 
@@ -40,10 +41,12 @@ describe('interactive gallery', () => {
       '',
     )
 
+    fireEvent.click(screen.getByRole('button', { name: 'Dialogs' }))
     fireEvent.click(screen.getByRole('button', { name: 'Open alert dialog' }))
     expect(screen.getByRole('alertdialog', { name: 'Delete file?' })).toBeInTheDocument()
     fireEvent.click(screen.getByRole('button', { name: 'Cancel' }))
 
+    fireEvent.click(screen.getByRole('button', { name: 'Menus' }))
     fireEvent.click(screen.getByRole('switch', { name: 'Open Material menu' }))
     expect(screen.getByRole('menu', { name: 'View options' })).toHaveAttribute(
       'data-open',
@@ -62,14 +65,18 @@ describe('interactive gallery', () => {
 
     expect(root).toHaveAttribute('data-color-scheme', 'light')
     expect(root).toHaveAttribute('data-motion-scheme', 'expressive')
+    fireEvent.click(screen.getByRole('link', { name: 'Theme' }))
     fireEvent.click(screen.getByRole('switch', { name: 'Use dark theme' }))
     expect(root).toHaveAttribute('data-color-scheme', 'dark')
     fireEvent.click(screen.getByRole('switch', { name: 'Use expressive motion' }))
     expect(root).toHaveAttribute('data-motion-scheme', 'standard')
 
+    fireEvent.click(screen.getByRole('link', { name: 'Components' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Progress & status' }))
     fireEvent.click(screen.getByRole('button', { name: 'Increase Guests' }))
     expect(screen.getByRole('textbox', { name: 'Guests value' })).toHaveValue('4')
 
+    fireEvent.click(screen.getByRole('button', { name: 'FABs' }))
     fireEvent.click(screen.getByRole('switch', { name: 'Expand extended FAB' }))
     expect(screen.getByRole('button', { name: 'Compose' })).toHaveAttribute(
       'data-expanded',
@@ -82,4 +89,18 @@ describe('interactive gallery', () => {
       'false',
     )
   })
+})
+
+it('opens deep links and keeps only the selected family accessible', () => {
+  window.location.hash = 'cards'
+  render(<Gallery />)
+  expect(screen.getByRole('heading', { name: 'Cards', level: 2 })).toBeVisible()
+  expect(screen.queryByRole('heading', { name: 'Typography', level: 2 })).not.toBeInTheDocument()
+  fireEvent.click(screen.getByRole('link', { name: 'Foundations' }))
+  expect(screen.getByRole('heading', { name: 'Typography', level: 2 })).toBeVisible()
+  expect(screen.getByRole('link', { name: 'Foundations' })).toHaveAttribute('aria-current', 'page')
+  expect(screen.queryByRole('heading', { name: 'Cards', level: 2 })).not.toBeInTheDocument()
+  window.location.hash = 'dialogs'
+  fireEvent(window, new HashChangeEvent('hashchange'))
+  expect(screen.getByRole('heading', { name: 'Dialogs', level: 2 })).toBeVisible()
 })
