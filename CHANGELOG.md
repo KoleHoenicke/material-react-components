@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.18.1
+
+- Corrected non-fidelity theme page surfaces and backgrounds to the current AndroidX neutral tones: 98 in light themes and 6 in dark themes. Static fallback tokens now use the same light surface. Container, card, list and interaction tokens retain their existing values.
+
 ## 0.18.0
 
 - Added filled, outlined, secure, and decorator text fields with controlled native editing, multiline sizing, label and slot composition, validation, native date/time pickers, state/color defaults, shared motion, and accessibility tests.

@@ -135,6 +135,8 @@ const FIXED_ROLE_TONES = {
 
 const SURFACE_ROLE_TONES = {
   light: {
+    background: 98,
+    surface: 98,
     surfaceDim: 87,
     surfaceBright: 98,
     surfaceContainerLowest: 100,
@@ -144,6 +146,8 @@ const SURFACE_ROLE_TONES = {
     surfaceContainerHighest: 90,
   },
   dark: {
+    background: 6,
+    surface: 6,
     surfaceDim: 6,
     surfaceBright: 24,
     surfaceContainerLowest: 4,

@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import { argbFromHex, Hct } from '@material/material-color-utilities'
 import {
   createMaterialColorScheme,
   createMaterialFidelityColorScheme,
@@ -22,7 +23,7 @@ describe('Material theme generation', () => {
       primaryContainer: '#b8f38b',
       secondary: '#56624b',
       tertiary: '#386665',
-      surface: '#fdfdf5',
+      surface: '#fafaf2',
       onSurface: '#1a1c18',
       accentSoft: '#3f6919',
       accentSoftContainer: '#bff291',
@@ -39,6 +40,19 @@ describe('Material theme generation', () => {
       tertiary: '#933b75',
     })
     expect(scheme.referencePalettes.tertiary[90]).toBe('#ffd8eb')
+  })
+
+  it.each(['light', 'dark'] as const)('keeps %s page and container surfaces on the current AndroidX tone ladder', (mode) => {
+    const { colors } = createMaterialColorScheme(seed, mode)
+    const tones = mode === 'light'
+      ? { background: 98, surface: 98, surfaceDim: 87, surfaceBright: 98, surfaceContainerLowest: 100, surfaceContainerLow: 96, surfaceContainer: 94, surfaceContainerHigh: 92, surfaceContainerHighest: 90 }
+      : { background: 6, surface: 6, surfaceDim: 6, surfaceBright: 24, surfaceContainerLowest: 4, surfaceContainerLow: 10, surfaceContainer: 12, surfaceContainerHigh: 17, surfaceContainerHighest: 22 }
+    for (const [role, tone] of Object.entries(tones)) {
+      expect(Math.abs(Hct.fromInt(argbFromHex(colors[role])).tone - tone)).toBeLessThan(0.3)
+    }
+    expect(colors.background).toBe(colors.surface)
+    expect(colors.surfaceContainer).not.toBe(colors.surface)
+    expect(colors.surfaceContainerHighest).not.toBe(colors.surfaceContainer)
   })
 
   it('emits public Material and library CSS variables', () => {
