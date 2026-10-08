@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.18.2
+
+- Corrected filled and selected button labels to use the AndroidX size-specific baseline typography role. Selection changes colors and shape without adding an automatic bold text role.
+
 ## 0.18.1
 
 - Corrected non-fidelity theme page surfaces and backgrounds to the current AndroidX neutral tones: 98 in light themes and 6 in dark themes. Static fallback tokens now use the same light surface. Container, card, list and interaction tokens retain their existing values.

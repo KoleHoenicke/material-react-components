@@ -54,7 +54,6 @@ export const MaterialButton = forwardRef<HTMLButtonElement, MaterialButtonProps>
           : size === 'extra-large'
             ? 'headlineLarge'
             : 'labelLarge'
-    const emphasized = variant === 'filled' || selected
 
     return (
       <button
@@ -76,7 +75,7 @@ export const MaterialButton = forwardRef<HTMLButtonElement, MaterialButtonProps>
         data-icon-only={iconOnly ? 'true' : undefined}
         data-material-button
         data-material-typography={
-          iconOnly ? undefined : `${typographyRole}${emphasized ? 'Emphasized' : ''}`
+          iconOnly ? undefined : typographyRole
         }
         data-selected={toggle ? (selected ? 'true' : 'false') : undefined}
         data-shape={shape}
