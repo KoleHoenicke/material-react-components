@@ -225,6 +225,33 @@ describe('MaterialMenu', () => {
     })
   })
 
+  it('clamps using the final popup size while its opening motion is scaled', () => {
+    const width = vi.spyOn(HTMLElement.prototype, 'offsetWidth', 'get').mockReturnValue(280)
+    const height = vi.spyOn(HTMLElement.prototype, 'offsetHeight', 'get').mockReturnValue(420)
+    const bounds = vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockReturnValue(
+      new DOMRect(0, 0, 224, 336),
+    )
+    vi.stubGlobal('innerWidth', 320)
+    vi.stubGlobal('innerHeight', 844)
+    try {
+      render(
+        <MaterialMenu anchorPoint={{ x: 320, y: 700 }} ariaLabel="Scaled popup"
+          onOpenChange={() => undefined} open>
+          <MaterialMenuItem>Action</MaterialMenuItem>
+        </MaterialMenu>,
+      )
+      const menu = screen.getByRole('menu', { name: 'Scaled popup' })
+      expect(menu).toHaveStyle({ left: '32px', top: '280px' })
+      fireEvent(window, new Event('resize'))
+      expect(menu).toHaveStyle({ left: '32px', top: '280px' })
+    } finally {
+      width.mockRestore()
+      height.mockRestore()
+      bounds.mockRestore()
+      vi.unstubAllGlobals()
+    }
+  })
+
   it('opens a side submenu and closes the complete tree after a child selection', () => {
     function SubmenuExample() {
       const [open, setOpen] = useState(true)

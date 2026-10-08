@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.18.3
+
+- Corrected menu viewport placement to measure its final layout size rather than its scaled opening animation, keeping popup edges within the viewport during motion.
+
 ## 0.18.2
 
 - Corrected filled and selected button labels to use the AndroidX size-specific baseline typography role. Selection changes colors and shape without adding an automatic bold text role.

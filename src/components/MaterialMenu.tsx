@@ -319,7 +319,9 @@ function positionSurface(
   placement: MaterialMenuPlacement,
   offset: MaterialMenuOffset,
 ) {
-  const rect = surface.getBoundingClientRect()
+  // Popup motion scales the painted rectangle. Placement must use the final
+  // layout size so opening or interrupted motion cannot move an edge offscreen.
+  const rect = { width: surface.offsetWidth, height: surface.offsetHeight }
   const direction = window.getComputedStyle(surface).direction
   const horizontalMargin = menuLength(surface, '--md-menu-horizontal-margin', 8)
   const verticalMargin = menuLength(surface, '--md-menu-vertical-margin', 48)
