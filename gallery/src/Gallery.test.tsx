@@ -4,6 +4,30 @@ import { Gallery } from './Gallery'
 
 describe('interactive gallery', () => {
   beforeEach(() => { window.location.hash = ''; window.scrollTo = vi.fn() })
+  it('fills only the selected navigation icon as destinations change', () => {
+    render(<Gallery />)
+    const components = screen.getByRole('link', { name: 'Components' })
+    const foundations = screen.getByRole('link', { name: 'Foundations' })
+    const theme = screen.getByRole('link', { name: 'Theme' })
+    const symbol = (link: HTMLElement) => link.querySelector('.gallery-symbol')
+
+    expect(symbol(components)).toHaveStyle({ fontVariationSettings: "'FILL' 1" })
+    expect(symbol(foundations)).toHaveStyle({ fontVariationSettings: "'FILL' 0" })
+    expect(symbol(theme)).toHaveStyle({ fontVariationSettings: "'FILL' 0" })
+
+    fireEvent.click(theme)
+    expect(theme).toHaveAttribute('aria-current', 'page')
+    expect(symbol(theme)).toHaveStyle({ fontVariationSettings: "'FILL' 1" })
+    expect(symbol(components)).toHaveStyle({ fontVariationSettings: "'FILL' 0" })
+
+    window.location.hash = 'motion'
+    fireEvent(window, new HashChangeEvent('hashchange'))
+    expect(foundations).toHaveAttribute('aria-current', 'page')
+    expect(symbol(foundations)).toHaveStyle({ fontVariationSettings: "'FILL' 1" })
+    expect(symbol(theme)).toHaveStyle({ fontVariationSettings: "'FILL' 0" })
+    expect(symbol(components)).toHaveStyle({ fontVariationSettings: "'FILL' 0" })
+  })
+
   it('renders the full public component surface', () => {
     const { container } = render(<Gallery />)
 

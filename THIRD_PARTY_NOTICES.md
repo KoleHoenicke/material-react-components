@@ -30,6 +30,8 @@ The baseline and emphasized type scales, typeface roles, weights, line heights, 
 
 The icon-button geometry, generated token mappings, color state resolution, and shape interaction rules in `MaterialIconButton.tsx` and `MaterialIconButton.css` are adapted from AndroidX Material 3. Copyright 2021-2026 The Android Open Source Project. Licensed under the Apache License 2.0. Source revision and web adaptations are documented in `docs/icon-buttons.md`.
 
+The navigation bar layout and tokens in `MaterialNavigationBar.tsx` and `MaterialNavigationBar.css` are adapted from AndroidX Material 3 `NavigationBar.kt`, `NavigationBarTokens.kt`, and `NavigationBarVerticalItemTokens.kt` on `androidx-main`. Copyright 2021-2026 The Android Open Source Project. Licensed under the Apache License 2.0. The web implementation uses navigation semantics, native buttons, focus navigation, and the package ripple and motion system.
+
 ## Material Color Utilities
 
 This package uses `@material/material-color-utilities`, copyright Google LLC. Licensed under the Apache License 2.0.

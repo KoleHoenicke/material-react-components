@@ -29,6 +29,7 @@ Included now:
 - Lists, including standard, segmented, selectable, expandable, swipe-reveal, media, dividers, counts, and trailing actions
 - Loading indicator
 - Menus, including baseline and expressive vertical styles, standard and vibrant colors, groups, selection, and submenus
+- Navigation bar with controlled destinations, selected icons, and safe-area support
 - Quantity stepper
 - Rich option list
 - Ripple and state layers
@@ -45,7 +46,7 @@ Included now:
 Until the first npm release, install the package directly from GitHub:
 
 ```sh
-npm install github:KoleHoenicke/material-react-components#v0.15.0
+npm install github:KoleHoenicke/material-react-components#v0.17.0
 ```
 
 React and React DOM are peer dependencies. React 18 and 19 are supported.
@@ -186,6 +187,22 @@ Sources: [Material 3 dialogs](https://m3.material.io/components/dialogs/overview
 Supply application icons and an accessible label. `title` defaults to `aria-label` for a native hover tooltip. Android-style exports include `FilledIconButton`, `FilledTonalIconButton`, `OutlinedIconButton`, and their `IconToggleButton` counterparts. `colors`, `shapes`, `animated`, `colorMode`, and typed CSS tokens provide explicit overrides. `AppBarIconButton` uses the same implementation with inherited content color.
 
 See the [complete API, token tables, pinned Android sources, and platform adaptations](docs/icon-buttons.md). Use this family for icon buttons; the older `Button iconOnly` prop remains a regular-button configuration.
+
+### Button groups
+
+`ButtonGroup` keeps content-sized buttons by default. Set `fullWidth` to distribute the available row width among the buttons, or add `itemSizing="equal"` for equal resting widths. Both layouts retain the expressive neighbor compression on press. Use each option's `leadingIcon` for Material's horizontal icon-and-label layout, and `content` for the label.
+
+```tsx
+<ButtonGroup
+  ariaLabel="View"
+  fullWidth
+  itemSizing="equal"
+  variant="connected"
+  options={viewOptions}
+  value={view}
+  onChange={setView}
+/>
+```
 
 ### Floating action buttons
 
@@ -494,6 +511,8 @@ export function FileLists() {
 
 Selectable lists render `listbox` and `option` semantics, expose single- or multi-selection state, and use a roving tab stop with wrapping arrow-key, Home, and End navigation. Independent controls in either slot join the same keyboard order without creating invalid nested buttons. `ExpandableList` is controlled and removes collapsed content from the focus order. `ListSwipeActions` supports start or end reveal, RTL, pointer snap and overshoot, and a visible button alternative for keyboard and screen-reader users. Set `keyboardNavigation={false}` only when a surrounding composite owns focus.
 
+Automatic list alignment follows rendered content height: short rows center their slots, while tall rows align them to the top. Wrapping supporting text selects the three-line minimum height unless `lines` is explicit. `verticalAlignment="center"` or `"top"` overrides automatic alignment. Trailing text stays accessible and describes an interactive row even when the row has an explicit accessible name; decorative trailing icons stay hidden. Use `trailingDescription="Added 1 hour ago"` to expand abbreviated trailing text such as `1h` for an interactive row.
+
 Every dimension and color is configurable through typed `--md-list-*` properties on `MaterialListStyle`. Short names such as `List`, `ListItem`, `ListDivider`, `ListAvatar`, `ListMedia`, `ExpandableList`, and `ListSwipeActions` have matching explicit `Material*` exports.
 
 ### Chips
@@ -539,6 +558,33 @@ export function SearchFilters() {
 ```
 
 All chips keep a 32px visual container and a 48px interaction target by default. Use `touchTarget="none"` only when a parent supplies the accessible target. Flat and elevated surfaces, controlled `selected` state, `selectedIcon`, `leadingIcon`, `trailingIcon`, input avatars, removable actions, links, drag state, disabled state, and focusable `softDisabled` state are configurable. Every visual token is available through `--md-chip-*` custom properties.
+
+Counts belong in the chip label, such as `<FilterChip selected={selected}>Photos 24</FilterChip>`. Material filter chips do not define a separate count slot. When composing a label and count from separate elements, supply spacing in the application wrapper and include the count in any explicit accessible name. Reserve `trailingIcon` for an icon.
+
+### Navigation bar
+
+`NavigationBar` provides the AndroidX Material 3 tall bottom navigation layout for three to five destinations. `NavigationBarItem` uses a 56 by 32 active indicator around its 24 pixel icon and keeps the item hit target transparent. Supply icons, labels, and controlled selection; the bar handles RTL arrow-key focus, disabled items, safe areas, and reduced motion.
+
+```tsx
+import { NavigationBar, NavigationBarItem } from '@kolehoenicke/material-react-components'
+
+<NavigationBar aria-label="Main navigation">
+  {destinations.map(destination => (
+    <NavigationBarItem
+      key={destination.id}
+      icon={destination.icon}
+      selectedIcon={destination.selectedIcon}
+      label={destination.label}
+      selected={selected === destination.id}
+      onClick={() => setSelected(destination.id)}
+    />
+  ))}
+</NavigationBar>
+```
+
+Position the bar with an application layout wrapper.
+
+Use an outlined variant for `icon` and a filled variant for `selectedIcon` when the icon set provides both. If `selectedIcon` is omitted, the item keeps `icon` in both states; the component does not convert arbitrary icons into filled variants.
 
 ### App bars
 

@@ -30,6 +30,18 @@
     color var(--m3-motion-transition-fast-effects);
 }
 
+.material-button-group[data-full-width='true'] {
+  width: 100%;
+}
+
+.material-button-group[data-full-width='true'] > .material-button-group__button {
+  flex: 1 1 auto;
+}
+
+.material-button-group[data-full-width='true'][data-item-sizing='equal'] > .material-button-group__button {
+  flex-basis: 0;
+}
+
 .material-button-group--standard[data-size='extra-small'] {
   --m3-button-group-space: 18px;
 }

@@ -8,6 +8,46 @@ const options = [
 ] as const
 
 describe('MaterialButtonGroup', () => {
+  it('renders an optional leading icon separately from the label without changing its accessible name', () => {
+    render(<MaterialButtonGroup ariaLabel="View" onChange={() => undefined} options={[{ ...options[0], leadingIcon: <svg data-testid="leading" /> }]} value="board" />)
+    expect(screen.getByRole('radio', { name: 'Show board' })).toContainElement(screen.getByTestId('leading'))
+    expect(screen.getByTestId('leading').closest('.material-button__icon')).toHaveAttribute('aria-hidden', 'true')
+    expect(screen.getByText('Board')).toHaveClass('material-button-group__content')
+  })
+
+  it('keeps compact sizing by default and supports equal-width filled rows without changing selection', () => {
+    const { rerender } = render(<MaterialButtonGroup ariaLabel="View" onChange={() => undefined} options={options} value="board" />)
+    const group = screen.getByRole('radiogroup', { name: 'View' })
+    expect(group).toHaveAttribute('data-full-width', 'false')
+    expect(group).toHaveAttribute('data-item-sizing', 'content')
+    rerender(<MaterialButtonGroup ariaLabel="View" onChange={() => undefined} options={options} value="board" fullWidth itemSizing="equal" />)
+    expect(group).toHaveAttribute('data-full-width', 'true')
+    expect(group).toHaveAttribute('data-item-sizing', 'equal')
+    expect(screen.getByRole('radio', { name: 'Show board' })).toHaveAttribute('aria-checked', 'true')
+  })
+
+  it('conserves a stretched row width during a press and restores flexible sizing after release', () => {
+    render(<MaterialButtonGroup ariaLabel="View" onChange={() => undefined} options={options} value="board" fullWidth itemSizing="equal" />)
+    const board = screen.getByRole('radio', { name: 'Show board' })
+    const collection = screen.getByRole('radio', { name: 'Show collection' })
+    const boardRect = vi.spyOn(board, 'getBoundingClientRect').mockReturnValue({ width: 150 } as DOMRect)
+    vi.spyOn(collection, 'getBoundingClientRect').mockReturnValue({ width: 150 } as DOMRect)
+    fireEvent.pointerDown(board, { button: 0, isPrimary: true, pointerId: 1 })
+    expect(board.style.width).toBe('166px')
+    expect(collection.style.width).toBe('134px')
+    boardRect.mockReturnValue({ width: 166 } as DOMRect)
+    fireEvent.pointerUp(board, { button: 0, isPrimary: true, pointerId: 1 })
+    expect(board.style.width).toBe('150px')
+    expect(collection.style.width).toBe('150px')
+    const event = new Event('transitionend', { bubbles: true })
+    Object.defineProperty(event, 'propertyName', { value: 'width' })
+    fireEvent(board, event)
+    expect(board.style.width).toBe('')
+    expect(board.style.flexGrow).toBe('')
+    expect(collection.style.flexBasis).toBe('')
+    vi.restoreAllMocks()
+  })
+
   it('renders a single-select connected group as a radio group', () => {
     render(
       <MaterialButtonGroup

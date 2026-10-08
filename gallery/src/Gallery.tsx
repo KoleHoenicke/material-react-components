@@ -118,13 +118,13 @@ const themePresets = [
   { color: '#825500', label: 'Amber' },
 ]
 
-function Icon({ name }: { name: IconName }) {
+function Icon({ name, filled = false }: { name: IconName; filled?: boolean }) {
   const symbols: Record<IconName, string> = {
     add: 'add', back: 'arrow_back', check: 'check', close: 'close', code: 'code',
     delete: 'delete', edit: 'edit', github: 'code', grid: 'grid_view', minus: 'remove',
     more: 'more_horiz', moon: 'dark_mode', palette: 'palette', search: 'search', star: 'star',
   }
-  return <GallerySymbol name={symbols[name]} />
+  return <GallerySymbol name={symbols[name]} filled={filled} />
 }
 
 function Specimen({
@@ -332,7 +332,7 @@ export function Gallery() {
               aria-current={destination === item.id ? 'page' : undefined}
               onClick={(event) => { event.preventDefault(); navigate(item.id === 'components' ? 'actions' : item.id) }}
               data-material-typography="labelMedium">
-              <span className="gallery-navigation__indicator"><Icon name={item.icon} /></span>
+              <span className="gallery-navigation__indicator"><Icon name={item.icon} filled={destination === item.id} /></span>
               <span>{item.label}</span>
               <MaterialRipple />
             </a>
@@ -708,7 +708,7 @@ export function Gallery() {
                   <StageLabel>Filter</StageLabel>
                   <ChipSet aria-label="Content filters">
                     <FilterChip selected={chipFilters.has('recent')} onSelectedChange={(selected) => setChipFilter('recent', selected)}>Recent</FilterChip>
-                    <FilterChip selected={chipFilters.has('photos')} leadingIcon={<Icon name="grid" />} onSelectedChange={(selected) => setChipFilter('photos', selected)}>Photos</FilterChip>
+                    <FilterChip selected={chipFilters.has('photos')} leadingIcon={<Icon name="grid" />} onSelectedChange={(selected) => setChipFilter('photos', selected)}>Photos 24</FilterChip>
                     <FilterChip elevated selected={chipFilters.has('favorites')} onSelectedChange={(selected) => setChipFilter('favorites', selected)}>Favorites</FilterChip>
                     <FilterChip shapeMode="expressive" selected={chipFilters.has('shared')} leadingIcon={<Icon name="check" />} trailingIcon={<Icon name="more" />} onSelectedChange={(selected) => setChipFilter('shared', selected)}>Shared</FilterChip>
                   </ChipSet>
@@ -741,6 +741,8 @@ export function Gallery() {
                 <ButtonGroup ariaLabel="Time range" options={intervalOptions} value={interval} onChange={setInterval} variant="connected" buttonVariant="tonal" />
                 </div><div><StageLabel>Standard</StageLabel>
                 <ButtonGroup ariaLabel="Time range standard" options={intervalOptions} value={interval} onChange={setInterval} variant="standard" buttonVariant="tonal" />
+                </div><div className="button-group-showcase__full"><StageLabel>Full width · equal items</StageLabel>
+                <ButtonGroup ariaLabel="Time range full width" options={intervalOptions} value={interval} onChange={setInterval} variant="connected" buttonVariant="tonal" fullWidth itemSizing="equal" />
                 </div></div>
               </Specimen>
 <Specimen title="Button" description="Five variants share one component and one motion model." wide>

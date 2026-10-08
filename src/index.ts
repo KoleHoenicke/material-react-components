@@ -20,6 +20,7 @@ export * from './components/MaterialListSwipeActions'
 export * from './components/MaterialListTrailingAction'
 export * from './components/MaterialLoadingIndicator'
 export * from './components/MaterialMenu'
+export * from './components/MaterialNavigationBar'
 export * from './components/MaterialProgressIndicator'
 export * from './components/MaterialQuantityStepper'
 export * from './components/MaterialRichOptionList'
@@ -49,6 +50,7 @@ export {
 export { MaterialButton as Button } from './components/MaterialButton'
 export { MaterialButtonGroup as ButtonGroup } from './components/MaterialButtonGroup'
 export { MaterialCard as Card } from './components/MaterialCard'
+export { MaterialNavigationBar as NavigationBar, MaterialNavigationBarItem as NavigationBarItem } from './components/MaterialNavigationBar'
 export {
   MaterialDivider as Divider,
   MaterialHorizontalDivider as HorizontalDivider,

@@ -32,6 +32,7 @@ export type MaterialButtonGroupOption<TValue extends string> = {
   content: ReactNode
   disabled?: boolean
   iconOnly?: boolean
+  leadingIcon?: ReactNode
   selected?: boolean
   title?: string
   value: TValue
@@ -47,6 +48,8 @@ export type MaterialButtonGroupProps<TValue extends string> = {
   ariaLabel: string
   buttonVariant?: Exclude<MaterialButtonVariant, 'text'>
   className?: string
+  fullWidth?: boolean
+  itemSizing?: 'content' | 'equal'
   onActiveClick?: (value: TValue) => void
   onChange: (value: TValue) => void
   onOptionClickCapture?: (
@@ -128,6 +131,8 @@ export function MaterialButtonGroup<TValue extends string>({
   ariaLabel,
   buttonVariant = 'filled',
   className,
+  fullWidth = false,
+  itemSizing = 'content',
   onActiveClick,
   onChange,
   onOptionClickCapture,
@@ -220,7 +225,7 @@ export function MaterialButtonGroup<TValue extends string>({
       resizeObserver.disconnect()
       scheduledFrames.forEach((frame) => cancelAnimationFrame(frame))
     }
-  }, [options.length, size, variant])
+  }, [options.length, size, variant, fullWidth, itemSizing])
 
   useEffect(
     () => () => {
@@ -641,6 +646,8 @@ export function MaterialButtonGroup<TValue extends string>({
       data-size={size}
       data-variant={variant}
       data-width-interaction={widthInteraction}
+      data-full-width={fullWidth}
+      data-item-sizing={itemSizing}
       style={{ '--m3-button-group-item-count': options.length } as CSSProperties}
     >
       {options.map((option, index) => {
@@ -684,6 +691,7 @@ export function MaterialButtonGroup<TValue extends string>({
             data-rapid-press={rapidPressIndex === index ? 'true' : undefined}
             disabled={option.disabled}
             iconOnly={option.iconOnly}
+            leadingIcon={option.leadingIcon}
             selected={active}
             shape={shape}
             size={size}

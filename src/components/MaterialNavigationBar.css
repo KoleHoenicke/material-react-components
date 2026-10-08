@@ -1,0 +1,82 @@
+/* AndroidX NavigationBar.kt and NavigationBarVerticalItemTokens.kt, androidx-main.
+   Tall container 80dp; active indicator 56x32dp; icon 24dp; label gap 4dp.
+   https://github.com/androidx/androidx/blob/androidx-main/compose/material3/material3/src/commonMain/kotlin/androidx/compose/material3/NavigationBar.kt */
+.material-navigation-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 80px;
+  padding: 0 env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
+  background: var(--md-sys-color-surface-container);
+  color: var(--md-sys-color-on-surface-variant);
+}
+.material-navigation-bar[data-safe-area='false'] { padding: 0; }
+.material-navigation-bar-item {
+  position: relative;
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  box-sizing: border-box;
+  min-width: 0;
+  min-height: 80px;
+  margin: 0;
+  border: 0;
+  padding: 12px 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.material-navigation-bar-item__indicator {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 56px;
+  height: 32px;
+  border-radius: var(--md-sys-shape-corner-full);
+  color: var(--md-sys-color-on-surface-variant);
+}
+.material-navigation-bar-item__indicator::before {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--md-sys-color-secondary-container);
+  content: '';
+  opacity: 0;
+  transform: scaleX(0);
+  transition:
+    transform var(--m3-motion-transition-fast-spatial),
+    opacity var(--m3-motion-transition-default-effects);
+}
+.material-navigation-bar-item[data-selected='true'] .material-navigation-bar-item__indicator { color: var(--md-sys-color-on-secondary-container); }
+.material-navigation-bar-item[data-selected='true'] .material-navigation-bar-item__indicator::before { opacity: 1; transform: scaleX(1); }
+.material-navigation-bar-item__icon { position: relative; display: grid; place-items: center; width: 24px; height: 24px; }
+.material-navigation-bar-item__icon > svg { width: 24px; height: 24px; }
+.material-navigation-bar-item > .material-ripple { inset: auto; top: calc(50% - 26px); left: calc(50% - 28px); width: 56px; height: 32px; border-radius: var(--md-sys-shape-corner-full); }
+.material-navigation-bar-item[data-label-visible='false'] > .material-ripple { top: calc(50% - 16px); }
+.material-navigation-bar-item__label {
+  color: var(--md-sys-color-on-surface-variant);
+  font-family: var(--md-sys-typescale-label-medium-font);
+  font-size: var(--md-sys-typescale-label-medium-size);
+  font-weight: var(--md-sys-typescale-label-medium-weight);
+  line-height: var(--md-sys-typescale-label-medium-line-height);
+  letter-spacing: var(--md-sys-typescale-label-medium-tracking);
+  text-align: center;
+}
+.material-navigation-bar-item[data-selected='true'] .material-navigation-bar-item__label { color: var(--md-sys-color-secondary); }
+.material-navigation-bar-item[data-label-visible='false'] .material-navigation-bar-item__label { display: none; }
+.material-navigation-bar-item:disabled { cursor: default; opacity: 0.38; }
+.material-navigation-bar-item:focus-visible { outline: none; }
+.material-navigation-bar-item:focus-visible .material-navigation-bar-item__indicator { outline: 3px solid var(--md-sys-color-secondary); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { .material-navigation-bar-item__indicator::before { transition: none; } }
+@media (forced-colors: active) {
+  .material-navigation-bar-item[data-selected='true'] .material-navigation-bar-item__indicator { outline: 2px solid Highlight; }
+  .material-navigation-bar-item:disabled { color: GrayText; opacity: 1; }
+}

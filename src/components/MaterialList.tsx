@@ -8,7 +8,9 @@ import {
   useContext,
   useId,
   useImperativeHandle,
+  useLayoutEffect,
   useRef,
+  useState,
   type AnchorHTMLAttributes,
   type CSSProperties,
   type DragEventHandler,
@@ -42,6 +44,7 @@ export type MaterialListItemLeadingType =
 export type MaterialListItemTrailingType = 'control' | 'custom' | 'icon' | 'text'
 
 export type MaterialListStyle = CSSProperties & {
+  '--md-list-auto-alignment-breakpoint'?: string
   '--md-list-between-space'?: string
   '--md-list-container-color'?: string
   '--md-list-content-padding-block'?: string
@@ -290,6 +293,8 @@ export type MaterialListItemProps = MaterialListItemBaseProps & {
   supportingText?: ReactNode
   target?: AnchorHTMLAttributes<HTMLAnchorElement>['target']
   trailing?: ReactNode
+  /** Spoken description for abbreviated trailing text on an interactive row. */
+  trailingDescription?: string
   trailingType?: MaterialListItemTrailingType
   type?: 'button' | 'reset' | 'submit'
   verticalAlignment?: MaterialListItemAlignment
@@ -355,6 +360,7 @@ export const MaterialListItem = forwardRef<HTMLDivElement, MaterialListItemProps
       tabIndex,
       target,
       trailing,
+      trailingDescription,
       trailingType = 'custom',
       type = 'button',
       verticalAlignment = 'auto',
@@ -363,13 +369,58 @@ export const MaterialListItem = forwardRef<HTMLDivElement, MaterialListItemProps
     ref,
   ) {
     const inheritedSelectionMode = useContext(MaterialListSelectionContext)
+    const itemRef = useRef<HTMLDivElement>(null)
+    useImperativeHandle(ref, () => itemRef.current!, [])
+    const trailingId = useId()
+    const trailingDescriptionId = useId()
+    const describedBy = [
+      ariaDescribedBy,
+      trailing != null && trailingType === 'text'
+        ? trailingDescription ? trailingDescriptionId : trailingId
+        : undefined,
+    ].filter(Boolean).join(' ') || undefined
+    const [supportingMultiline, setSupportingMultiline] = useState(false)
+    const [autoAlignment, setAutoAlignment] = useState<'center' | 'top' | undefined>()
     const selectionMode = selectionModeOverride ?? inheritedSelectionMode
     const interactive = href !== undefined || onClick !== undefined || selectionMode !== 'none'
     const explicitAccessibleLabel = ariaLabel ?? nativeAriaLabel
     const accessibleLabel = explicitAccessibleLabel ?? [nodeText(headline), nodeText(supportingText)]
       .filter(Boolean)
       .join(' ')
-    const lineCount = lines ?? defaultItemLines(overline, supportingText)
+    const lineCount = lines ?? (supportingMultiline ? 3 : defaultItemLines(overline, supportingText))
+    useLayoutEffect(() => {
+      const item = itemRef.current
+      if (!item) return
+      const measure = () => {
+        // Hidden panels have no layout; the observer measures them when they become visible.
+        const height = item.clientHeight
+        if (height === 0) return
+        const style = getComputedStyle(item)
+        const support = item.querySelector<HTMLElement>('.material-list-item__supporting')
+        if (lines == null && support) {
+          const lineHeight = Number.parseFloat(getComputedStyle(support).lineHeight)
+          setSupportingMultiline(Number.isFinite(lineHeight) && support.offsetHeight > lineHeight * 1.5)
+        } else {
+          setSupportingMultiline(false)
+        }
+        // Layout dimensions exclude any scale transform on an entering dialog or parent.
+        if (height > 0 && verticalAlignment === 'auto' && item.closest('.material-list')?.getAttribute('data-variant') !== 'baseline') {
+          const contentHeight = height
+            - Number.parseFloat(style.paddingTop || '0')
+            - Number.parseFloat(style.paddingBottom || '0')
+          const breakpoint = Number.parseFloat(style.getPropertyValue('--md-list-auto-alignment-breakpoint')) || 60
+          setAutoAlignment(contentHeight < breakpoint ? 'center' : 'top')
+        } else {
+          setAutoAlignment(undefined)
+        }
+      }
+      measure()
+      const observer = new ResizeObserver(measure)
+      observer.observe(item)
+      const content = item.querySelector('.material-list-item__content')
+      if (content) observer.observe(content)
+      return () => observer.disconnect()
+    }, [lines, overline, supportingText, verticalAlignment])
     const longPressTimer = useRef<number | null>(null)
     const longPressTriggered = useRef(false)
     const pointerOrigin = useRef<{ x: number; y: number } | null>(null)
@@ -430,7 +481,7 @@ export const MaterialListItem = forwardRef<HTMLDivElement, MaterialListItemProps
       'aria-disabled': href !== undefined && disabled ? true : undefined,
       'aria-controls': ariaControls,
       'aria-current': ariaCurrent,
-      'aria-describedby': ariaDescribedBy,
+      'aria-describedby': describedBy,
       'aria-details': ariaDetails,
       'aria-expanded': expanded,
       'aria-haspopup': ariaHasPopup,
@@ -469,7 +520,7 @@ export const MaterialListItem = forwardRef<HTMLDivElement, MaterialListItemProps
     return (
       <div
         {...divProps}
-        ref={ref}
+        ref={itemRef}
         aria-controls={interactive ? undefined : ariaControls}
         aria-current={interactive ? undefined : ariaCurrent}
         aria-describedby={interactive ? undefined : ariaDescribedBy}
@@ -487,7 +538,7 @@ export const MaterialListItem = forwardRef<HTMLDivElement, MaterialListItemProps
         data-lines={lineCount}
         data-material-list-item=""
         data-selected={selected ? 'true' : undefined}
-        data-vertical-alignment={verticalAlignment}
+        data-vertical-alignment={verticalAlignment === 'auto' ? autoAlignment ?? 'auto' : verticalAlignment}
         draggable={draggable && !disabled}
         role={role ?? (selectionMode === 'none' ? 'listitem' : 'presentation')}
         onDragEnd={handleDragEnd}
@@ -533,13 +584,17 @@ export const MaterialListItem = forwardRef<HTMLDivElement, MaterialListItemProps
         </span>
         {trailing != null ? (
           <span
-            aria-hidden={trailingType === 'control' ? undefined : true}
+            id={trailingId}
+            aria-hidden={trailingType === 'icon' ? true : undefined}
             className="material-list-item__trailing"
             data-type={trailingType}
             data-material-typography={trailingType === 'text' ? 'labelSmall' : undefined}
           >
             {trailing}
           </span>
+        ) : null}
+        {interactive && trailing != null && trailingType === 'text' && trailingDescription ? (
+          <span id={trailingDescriptionId} hidden>{trailingDescription}</span>
         ) : null}
       </div>
     )

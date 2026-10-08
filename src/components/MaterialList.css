@@ -36,6 +36,8 @@
   --md-list-trailing-space: 16px;
   --md-list-item-top-space: 10px;
   --md-list-item-bottom-space: 10px;
+  /* AndroidX: midpoint of the 72/88dp rows, minus 10dp top and bottom padding. */
+  --md-list-auto-alignment-breakpoint: 60px;
   --md-list-between-space: 12px;
   --md-list-segment-gap: 2px;
   --md-list-leading-icon-size: 20px;

@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.17.0
+
+- Added reusable Material navigation bars with controlled destination selection, supplied selected icons, safe-area support, RTL keyboard navigation, reduced motion, and focused tests. Gallery navigation now fills only the active destination icon.
+- Added optional full-width and equal-width button-group layouts plus a leading-icon slot while retaining content-sized defaults and expressive neighbor compression on press.
+- Corrected automatic list alignment using rendered content height, inferred wrapped supporting text, exposed meaningful trailing metadata to assistive technology, and added expanded spoken descriptions for abbreviated trailing text.
+- Documented chip counts as label content and added correctly spaced count and full-width group examples to the gallery.
+
 ## 0.16.0
 
 - Added the AndroidX-aligned icon-button family with standard, filled, tonal, and outlined actions and controlled toggles; five sizes; three widths; round and square shapes; selected icon slots; per-state color and shape overrides; and Android-style named exports.

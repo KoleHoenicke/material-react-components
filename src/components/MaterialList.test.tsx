@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react'
+import { act, fireEvent, render, screen } from '@testing-library/react'
 import { useState } from 'react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
@@ -14,9 +14,61 @@ import { MaterialListTrailingAction } from './MaterialListTrailingAction'
 
 afterEach(() => {
   vi.useRealTimers()
+  vi.restoreAllMocks()
+  vi.unstubAllGlobals()
 })
 
 describe('MaterialList', () => {
+  it('exposes trailing metadata as a description while keeping decorative icons hidden', () => {
+    const { rerender } = render(<MaterialList>
+      <span id="hint">Opens details</span>
+      <MaterialListItem headline="Contact" ariaLabel="Open contact" aria-describedby="hint" onClick={() => undefined}
+        trailing={<time dateTime="2026-10-07">1h</time>} trailingDescription="Added 1 hour ago" trailingType="text" />
+    </MaterialList>)
+    const button = screen.getByRole('button', { name: 'Open contact' })
+    expect(button).toHaveAccessibleDescription('Opens details Added 1 hour ago')
+    expect(screen.getByText('1h').parentElement).not.toHaveAttribute('aria-hidden')
+    rerender(<MaterialList><MaterialListItem headline="Contact" onClick={() => undefined} trailing="Yesterday" trailingType="text" /></MaterialList>)
+    expect(screen.getByRole('button', { name: 'Contact' })).toHaveAccessibleDescription('Yesterday')
+    rerender(<MaterialList><MaterialListItem headline="Contact" onClick={() => undefined} trailing={<svg data-testid="icon" />} trailingType="icon" /></MaterialList>)
+    expect(screen.getByTestId('icon').parentElement).toHaveAttribute('aria-hidden', 'true')
+    expect(screen.getByRole('button', { name: 'Contact' })).not.toHaveAttribute('aria-describedby')
+  })
+
+  it('updates automatic alignment and inferred line count after content resizes, while honoring overrides', () => {
+    let notify: ResizeObserverCallback = () => undefined
+    vi.stubGlobal('ResizeObserver', class {
+      constructor(callback: ResizeObserverCallback) { notify = callback }
+      observe() {}
+      disconnect() {}
+    })
+    const { container, rerender } = render(<MaterialList><MaterialListItem headline="Contact" supportingText="Details" /></MaterialList>)
+    const item = container.querySelector<HTMLElement>('[data-material-list-item]')!
+    const support = screen.getByText('Details')
+    Object.assign(item.style, { paddingTop: '10px', paddingBottom: '10px', borderTopWidth: '0px', borderBottomWidth: '0px' })
+    support.style.lineHeight = '20px'
+    const height = vi.spyOn(item, 'clientHeight', 'get').mockReturnValue(72)
+    const supportHeight = vi.spyOn(support, 'offsetHeight', 'get').mockReturnValue(20)
+    act(() => notify([], {} as ResizeObserver))
+    expect(item).toHaveAttribute('data-vertical-alignment', 'center')
+    height.mockReturnValue(88)
+    supportHeight.mockReturnValue(40)
+    vi.spyOn(item, 'getBoundingClientRect').mockReturnValue({ height: 79.2 } as DOMRect)
+    act(() => notify([], {} as ResizeObserver))
+    expect(item).toHaveAttribute('data-vertical-alignment', 'top')
+    expect(item).toHaveAttribute('data-lines', '3')
+    height.mockReturnValue(72)
+    supportHeight.mockReturnValue(20)
+    act(() => notify([], {} as ResizeObserver))
+    expect(item).toHaveAttribute('data-vertical-alignment', 'center')
+    expect(item).toHaveAttribute('data-lines', '2')
+    rerender(<MaterialList><MaterialListItem headline="Contact" supportingText="Details" lines={3} verticalAlignment="center" /></MaterialList>)
+    height.mockReturnValue(100)
+    act(() => notify([], {} as ResizeObserver))
+    expect(item).toHaveAttribute('data-lines', '3')
+    expect(item).toHaveAttribute('data-vertical-alignment', 'center')
+  })
+
   it('renders standard one, two, and three-line slot layouts', () => {
     const { container } = render(
       <MaterialList ariaLabel="Recent files">
