@@ -390,3 +390,38 @@
     transition-delay: 0ms;
   }
 }
+
+/* Avatar actions use the list avatar dimensions and the app bar's 48px action target.
+   Photos remain centered and have no icon-button container or hover state layer. */
+.material-app-bar-avatar-button {
+  box-sizing: border-box;
+  display: inline-grid;
+  flex: 0 0 48px;
+  inline-size: 48px;
+  block-size: 48px;
+  padding: 4px;
+  border: 0;
+  border-radius: var(--md-sys-shape-corner-full, 999px);
+  background: transparent;
+  color: inherit;
+  place-items: center;
+  appearance: none;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+.material-app-bar-avatar-button__avatar {
+  display: grid;
+  inline-size: 40px;
+  block-size: 40px;
+  place-items: center;
+  pointer-events: none;
+}
+.material-app-bar-avatar-button:focus-visible {
+  outline: 3px solid var(--md-sys-color-secondary);
+  outline-offset: 2px;
+}
+.material-app-bar-avatar-button:disabled {
+  cursor: default;
+  opacity: 0.38;
+}

@@ -208,3 +208,6 @@ export function getMaterialTransitionPair(
 
 /** Rest time between repeated motion demonstrations. */
 export const MATERIAL_MOTION_DEMONSTRATION_HOLD_MS = 1000
+
+/** AndroidX Dp spring visibility threshold and its derived velocity threshold. */
+export const MATERIAL_TAB_MOTION = { visibilityThreshold: 0.1, velocityThreshold: 6.25 } as const

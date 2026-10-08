@@ -1,0 +1,10 @@
+.text-field-examples { display: grid; gap: 24px; }
+.text-field-examples__config { display: grid; grid-template-columns: minmax(0, 1fr) minmax(260px, 1fr); gap: 32px; padding: 32px; }
+.text-field-examples__preview { display: grid; align-content: center; padding: 32px 0; }
+.text-field-examples__controls { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 24px; }
+.text-field-examples__switch { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 48px; font-size: 14px; }
+.text-field-examples__grid, .text-field-examples__matrix { display: grid; gap: 32px 24px; padding: 32px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.text-field-examples__matrix { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.text-field-examples__column { display: grid; gap: 24px; align-content: start; }
+@media (max-width: 1200px) { .text-field-examples__matrix { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 700px) { .text-field-examples__config, .text-field-examples__grid, .text-field-examples__matrix { grid-template-columns: minmax(0, 1fr); padding: 20px; } }

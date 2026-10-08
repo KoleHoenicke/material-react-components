@@ -5,13 +5,23 @@ import {
   Checkbox,
   IconButton,
   IconToggleButton,
+  FilledIconButton,
+  FilledTonalIconButton,
+  OutlinedIconButton,
+  FilledIconToggleButton,
+  FilledTonalIconToggleButton,
+  OutlinedIconToggleButton,
   type MaterialIconButtonSize,
-  type MaterialIconButtonVariant,
   type MaterialIconButtonWidth,
 } from '../../src'
 
 const sizes: MaterialIconButtonSize[] = ['extra-small', 'small', 'medium', 'large', 'extra-large']
-const variants: MaterialIconButtonVariant[] = ['standard', 'filled', 'tonal', 'outlined']
+const variants = [
+  ['standard', IconButton, IconToggleButton],
+  ['filled', FilledIconButton, FilledIconToggleButton],
+  ['tonal', FilledTonalIconButton, FilledTonalIconToggleButton],
+  ['outlined', OutlinedIconButton, OutlinedIconToggleButton],
+] as const
 const widths: MaterialIconButtonWidth[] = ['narrow', 'uniform', 'wide']
 function Star({ filled = false }: { filled?: boolean }) {
   return <GallerySymbol name="star" filled={filled} />
@@ -57,23 +67,21 @@ export function IconButtonExamples() {
           <div key={size}>
             <h3 data-material-typography="titleMedium">{size}</h3>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 24, alignItems: 'start' }}>
-              {variants.map((variant) => (
+              {variants.map(([variant, ActionButton, ToggleButton]) => (
                 <div key={variant} style={{ display: 'grid', gap: 8 }}>
                   <span data-material-typography="labelMedium">{variant}</span>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-                    <IconButton
+                    <ActionButton
                       aria-label={`${size} ${variant} action`}
-                      variant={variant}
                       size={size}
                       width={width}
                       shape={square ? 'square' : 'round'}
                       disabled={disabled}
                     >
                       <Star filled />
-                    </IconButton>
-                    <IconToggleButton
+                    </ActionButton>
+                    <ToggleButton
                       aria-label={`${size} ${variant} favorite`}
-                      variant={variant}
                       size={size}
                       width={width}
                       shape={square ? 'square' : 'round'}
@@ -83,7 +91,7 @@ export function IconButtonExamples() {
                       selectedIcon={<Star filled />}
                     >
                       <Star />
-                    </IconToggleButton>
+                    </ToggleButton>
                   </div>
                 </div>
               ))}

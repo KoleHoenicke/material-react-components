@@ -52,6 +52,7 @@ export type MaterialMenuPoint = {
 }
 
 export type MaterialMenuStyle = CSSProperties & {
+  '--md-menu-z-index'?: number | string
   '--md-menu-container-color'?: string
   '--md-menu-container-elevation'?: string
   '--md-menu-container-max-width'?: string
@@ -217,6 +218,7 @@ type MenuTreeContextValue = {
 
 type MenuContextValue = {
   color: MaterialMenuColor
+  depth: number
   closeMenu: (reason: MaterialMenuDismissReason) => void
   closeTree: (reason: MaterialMenuDismissReason) => void
   open: boolean
@@ -451,6 +453,8 @@ export const MaterialMenu = forwardRef<HTMLSpanElement, MaterialMenuProps>(
     const menuId = `material-menu-${id.replaceAll(':', '')}`
     const generatedTreeId = `material-menu-tree-${id.replaceAll(':', '')}`
     const inheritedTree = useContext(MenuTreeContext)
+    const parentMenu = useContext(MenuContext)
+    const depth = (parentMenu?.depth ?? -1) + 1
     const anchorWrapperRef = useRef<HTMLSpanElement | null>(null)
     const surfaceRef = useRef<HTMLDivElement | null>(null)
     const previousFocusRef = useRef<HTMLElement | null>(null)
@@ -690,10 +694,11 @@ export const MaterialMenu = forwardRef<HTMLSpanElement, MaterialMenuProps>(
         closeMenu: closeThisMenu,
         closeTree: treeValue.closeTree,
         color,
+        depth,
         open,
         variant,
       }),
-      [color, open, treeValue.closeTree, variant],
+      [color, depth, open, treeValue.closeTree, variant],
     )
 
     const surface = typeof document === 'undefined' ? null : createPortal(
@@ -708,6 +713,7 @@ export const MaterialMenu = forwardRef<HTMLSpanElement, MaterialMenuProps>(
           className={joinClassNames('material-menu-surface', surfaceClassName)}
           data-color={color}
           data-density={densityAttribute(density)}
+          data-menu-depth={depth}
           data-material-menu-surface=""
           data-material-menu-tree={treeValue.treeId}
           data-motion={motion}
@@ -719,10 +725,12 @@ export const MaterialMenu = forwardRef<HTMLSpanElement, MaterialMenuProps>(
           onFocusCapture={handleFocusCapture}
           onKeyDown={handleSurfaceKeyDown}
           role="menu"
-          style={surfaceStyle}
+          style={{ zIndex: `calc(var(--md-menu-z-index, 1000) + ${depth})`, ...surfaceStyle }}
           tabIndex={initialFocus === 'menu' ? 0 : -1}
         >
-          <MaterialMenuBody variant={variant}>{children}</MaterialMenuBody>
+          <div className="material-menu-surface__scroll">
+            <MaterialMenuBody variant={variant}>{children}</MaterialMenuBody>
+          </div>
         </div>
       </MenuContext.Provider>,
       portalContainer ?? document.body,
@@ -819,8 +827,10 @@ export const MaterialMenuItem = forwardRef<MaterialMenuItemElement, MaterialMenu
       'data-disabled': disabled ? 'true' : 'false',
       'data-material-menu-item': '',
       'data-selected': selected ? 'true' : 'false',
+      'data-supporting-text': supportingText != null ? 'true' : undefined,
       'data-shape-position': resolvedPosition,
       'data-text-value': textValue,
+      'data-token-scope': !menu && !inferredPosition ? 'true' : undefined,
       'data-variant': resolvedVariant,
       onClick: activate,
       onKeyDown: handleKeyDown,
@@ -977,6 +987,7 @@ export const MaterialMenuGroup = forwardRef<HTMLDivElement, MaterialMenuGroupPro
         data-color={resolvedColor}
         data-hovered-once={hoveredOnce ? 'true' : 'false'}
         data-material-menu-group=""
+        data-token-scope={menu ? undefined : 'true'}
         data-position={resolvedPosition}
         data-variant={resolvedVariant}
         onPointerEnter={(event) => {

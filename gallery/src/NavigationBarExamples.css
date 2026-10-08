@@ -1,0 +1,6 @@
+.navigation-bar-examples { display: grid; gap: 24px; width: 100%; }
+.navigation-bar-examples__direction { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 48px; width: 100%; margin-bottom: 24px; }
+.navigation-bar-examples__preview { min-width: 0; overflow-x: auto; border: 1px solid var(--md-sys-color-outline-variant); border-radius: var(--md-sys-shape-corner-large); }
+.navigation-bar-examples__preview[data-destinations='5'] .material-navigation-bar { min-width: 312px; }
+.navigation-bar-examples__preview > .stage-label { display: block; padding: 12px 16px; margin: 0; background: var(--md-sys-color-surface-container-low); }
+.navigation-bar-examples .gallery-symbol { font-size: 24px; }

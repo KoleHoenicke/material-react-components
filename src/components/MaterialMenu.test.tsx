@@ -290,4 +290,42 @@ describe('MaterialMenu', () => {
     expect(css).toContain("[data-color='vibrant']")
     expect(css).toContain('@media (forced-colors: active)')
   })
+
+  it('stacks every submenu above its ancestors and returns focus one level at a time', () => {
+    render(
+      <MaterialMenu anchor={<button>Nested actions</button>} ariaLabel="Root actions"
+        onOpenChange={() => undefined} open>
+        <MaterialMenuSubmenu itemChildren="More" submenuLabel="More actions">
+          <MaterialMenuSubmenu itemChildren="Advanced" submenuLabel="Advanced actions">
+            <MaterialMenuItem>Leaf action</MaterialMenuItem>
+          </MaterialMenuSubmenu>
+        </MaterialMenuSubmenu>
+      </MaterialMenu>,
+    )
+    fireEvent.click(screen.getByRole('menuitem', { name: 'More' }))
+    fireEvent.click(screen.getByRole('menuitem', { name: 'Advanced' }))
+    const menus = ['Root actions', 'More actions', 'Advanced actions'].map(name =>
+      screen.getByRole('menu', { name }))
+    menus.forEach((menu, depth) => {
+      expect(menu).toHaveAttribute('data-menu-depth', String(depth))
+      expect(menu.style.zIndex).toBe(`calc(var(--md-menu-z-index, 1000) + ${depth})`)
+    })
+    fireEvent.keyDown(screen.getByRole('menuitem', { name: 'Leaf action' }), { key: 'ArrowLeft' })
+    expect(screen.queryByRole('menu', { name: 'Advanced actions' })).not.toBeInTheDocument()
+    expect(screen.getByRole('menuitem', { name: 'Advanced' })).toHaveFocus()
+    expect(screen.getByRole('menu', { name: 'More actions' })).toBeInTheDocument()
+  })
+
+  it('marks supporting-text rows for the native outer inset without spacing plain rows', () => {
+    render(<>
+      <MaterialMenuItem supportingText="Details">Two lines</MaterialMenuItem>
+      <MaterialMenuItem>One line</MaterialMenuItem>
+    </>)
+    expect(screen.getByRole('menuitem', { name: 'Two lines Details' }))
+      .toHaveAttribute('data-supporting-text', 'true')
+    expect(screen.getByRole('menuitem', { name: 'One line' }))
+      .not.toHaveAttribute('data-supporting-text')
+    const styles = readFileSync(resolve(process.cwd(), 'src/components/MaterialMenu.css'), 'utf8')
+    expect(styles).toMatch(/data-variant='expressive'\]\[data-supporting-text='true'\]\s*\{\s*margin-block: 2px;/)
+  })
 })

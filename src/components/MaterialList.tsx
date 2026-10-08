@@ -629,11 +629,14 @@ export type MaterialListAvatarProps = Omit<
   'children'
 > & {
   children: ReactNode
+  /** Standard list avatars are 40px; large profile-summary avatars are 64px. */
+  size?: 'standard' | 'large'
 }
 
 export function MaterialListAvatar({
   children,
   className,
+  size = 'standard',
   ...spanProps
 }: MaterialListAvatarProps) {
   return (
@@ -642,6 +645,7 @@ export function MaterialListAvatar({
       className={['material-list-avatar', className].filter(Boolean).join(' ')}
       data-material-typography="titleMedium"
       data-material-list-avatar=""
+      data-size={size}
     >
       {children}
     </span>

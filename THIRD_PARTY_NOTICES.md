@@ -32,6 +32,14 @@ The icon-button geometry, generated token mappings, color state resolution, and 
 
 The navigation bar layout and tokens in `MaterialNavigationBar.tsx` and `MaterialNavigationBar.css` are adapted from AndroidX Material 3 `NavigationBar.kt`, `NavigationBarTokens.kt`, and `NavigationBarVerticalItemTokens.kt` on `androidx-main`. Copyright 2021-2026 The Android Open Source Project. Licensed under the Apache License 2.0. The web implementation uses navigation semantics, native buttons, focus navigation, and the package ripple and motion system.
 
+The text-field geometry, complete state color defaults, slot layout, label placement, motion roles, and secure reveal timing in `MaterialTextField.tsx`, `MaterialTextField.css`, and `MaterialTextFieldDefaults.ts` are adapted from AndroidX Material 3 and Foundation. Copyright 2022-2026 The Android Open Source Project. Licensed under the Apache License 2.0. The pinned revision and browser adaptations are documented in `docs/text-fields.md`.
+
+The shared polygon helpers, circular rounded-star progress geometry, and FAB count spring in `src/internal/` are adapted from AndroidX graphics-shapes, Material 3, and animation-core. Copyright 2022-2026 The Android Open Source Project. Licensed under the Apache License 2.0. The pinned source revision is documented in `docs/component-fidelity.md`.
+
+The tab geometry, baseline placement, indicators, token mappings and spring equations in `MaterialTabs.tsx`, `MaterialTabs.css` and `src/internal/materialSpring.ts` are adapted from AndroidX Material 3 and animation-core. Copyright 2022-2026 The Android Open Source Project. Licensed under Apache License 2.0. Source revision and web adaptations are documented in `docs/tabs.md`.
+
+The SVG Material Symbols in `gallery/src/TabExampleIcons.tsx` are gallery-only assets from [Material Design Icons](https://github.com/google/material-design-icons). Copyright Google LLC. Licensed under Apache License 2.0.
+
 ## Material Color Utilities
 
 This package uses `@material/material-color-utilities`, copyright Google LLC. Licensed under the Apache License 2.0.

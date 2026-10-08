@@ -36,6 +36,7 @@ Included now:
 - Segmented action list
 - Slider, including centered ranges and stops
 - Switch
+- Text fields: filled, outlined, secure, and expressive tonal configurations
 - Progress indicators, including standard and Expressive linear and circular variants
 - Dynamic Material color themes
 - Typography with all 15 baseline and 15 Expressive emphasized roles
@@ -162,7 +163,7 @@ export function DeleteDialog({ open, setOpen }: {
 
 The dialog keeps confirm last visually in a horizontal action row, then places confirm before dismiss when the actions wrap vertically, matching AndroidX. `closeOnEscape` and `closeOnBackdropClick` control platform dismissal requests. The component traps focus through the native modal, restores focus when it closes, prevents scroll chaining inside long content, and keeps the surface mounted for the 400ms enter and 150ms exit motion. Reduced-motion and forced-color modes have dedicated treatments.
 
-`BasicAlertDialog` provides the same controlled modal behavior, width constraints, focus handling, and dismissal policy around arbitrary content. The caller owns the inner surface and semantics. `FullScreenDialog` implements Material's second dialog variant with a 64px safe-area-aware header, required close affordance, headline, optional trailing action and divider, and independently scrolling body content.
+`BasicAlertDialog` provides the same controlled modal behavior, width constraints, focus handling, and dismissal policy around arbitrary content. The caller owns the inner surface and semantics. `FullScreenDialog` implements Material's second dialog variant with a 64px safe-area-aware header, required close affordance, headline, optional trailing action and divider, and independently scrolling body content. Set `transition="slide"` for a page that enters from the trailing edge and returns to that edge on dismissal. This uses shared Material entrance/exit motion tokens, reverses from its current position when interrupted, supports RTL, and removes spatial motion for reduced-motion users.
 
 Every component-level value can be overridden through `MaterialDialogStyle`, including container width, height, padding, shape, elevation, colors, icon size, action spacing, focus color, and scrim color or opacity.
 
@@ -184,7 +185,7 @@ Sources: [Material 3 dialogs](https://m3.material.io/components/dialogs/overview
 </IconToggleButton>
 ```
 
-Supply application icons and an accessible label. `title` defaults to `aria-label` for a native hover tooltip. Android-style exports include `FilledIconButton`, `FilledTonalIconButton`, `OutlinedIconButton`, and their `IconToggleButton` counterparts. `colors`, `shapes`, `animated`, `colorMode`, and typed CSS tokens provide explicit overrides. `AppBarIconButton` uses the same implementation with inherited content color.
+Supply application icons and an accessible label. `title` defaults to `aria-label` for a native hover tooltip. Android-style exports include `FilledIconButton`, `FilledTonalIconButton`, `OutlinedIconButton`, and their `IconToggleButton` counterparts. `colors`, `shapes`, `animated`, `colorMode`, and typed CSS tokens provide explicit overrides. `AppBarIconButton` uses the same implementation with inherited content color. For profile photos or initials, `AppBarAvatarButton` provides a centered 40px avatar slot inside a 48px touch target. It has no hover background or ripple container and retains a keyboard focus indicator.
 
 See the [complete API, token tables, pinned Android sources, and platform adaptations](docs/icon-buttons.md). Use this family for icon buttons; the older `Button iconOnly` prop remains a regular-button configuration.
 
@@ -286,6 +287,8 @@ The `primary`, `secondary`, and `tertiary` color sets pair a solid close button 
 The launcher keeps focus when it opens. Tab moves from the close button to the top item, arrow keys move through the visible actions, Escape closes the menu, and collapsed items are inert and removed from the accessibility tree. Outside pointer interactions and item selection close the menu by default. `closeOnOutsideClick` and `closeOnItemClick` can disable those behaviors. Use `ToggleFloatingActionButton` separately when you need the controlled launcher without the menu layout. All component tokens are typed through `MaterialFabMenuStyle` and `MaterialToggleFabStyle`.
 
 ### Menus
+
+The [component fidelity audit](docs/component-fidelity.md) records the pinned AndroidX sources, repaired geometry and motion, and browser adaptations.
 
 `Menu` is the web counterpart to AndroidX `DropdownMenu` and `DropdownMenuPopup`. The default `expressive` variant implements the newer vertical menu. Set `variant="baseline"` for the original M3 menu. Standard menus use surface colors; vibrant menus use the tertiary palette and should be reserved for higher-emphasis choices.
 
@@ -513,6 +516,8 @@ Selectable lists render `listbox` and `option` semantics, expose single- or mult
 
 Automatic list alignment follows rendered content height: short rows center their slots, while tall rows align them to the top. Wrapping supporting text selects the three-line minimum height unless `lines` is explicit. `verticalAlignment="center"` or `"top"` overrides automatic alignment. Trailing text stays accessible and describes an interactive row even when the row has an explicit accessible name; decorative trailing icons stay hidden. Use `trailingDescription="Added 1 hour ago"` to expand abbreviated trailing text such as `1h` for an interactive row.
 
+For profile summaries, use `ListAvatar size="large"` for a 64px portrait and `leadingType="custom"` on the containing list item. Ordinary avatars stay at 40px. Compose an `ExpandableList` summary with `IconButton size="medium" width="narrow"` in its control slot to create an account disclosure without app-specific component styles.
+
 Every dimension and color is configurable through typed `--md-list-*` properties on `MaterialListStyle`. Short names such as `List`, `ListItem`, `ListDivider`, `ListAvatar`, `ListMedia`, `ExpandableList`, and `ListSwipeActions` have matching explicit `Material*` exports.
 
 ### Chips
@@ -582,11 +587,19 @@ import { NavigationBar, NavigationBarItem } from '@kolehoenicke/material-react-c
 </NavigationBar>
 ```
 
-Position the bar with an application layout wrapper.
+Position the bar with an application layout wrapper. No component style overrides are required. `ListAvatar` can also be used on its own in an app-bar account action, with its default 40 pixel size and theme colors.
 
 Use an outlined variant for `icon` and a filled variant for `selectedIcon` when the icon set provides both. If `selectedIcon` is omitted, the item keeps `icon` in both states; the component does not convert arbitrary icons into filled variants.
 
-### App bars
+### Tabs
+
+The tabs family includes fixed and scrollable primary and secondary rows, text-only and icon-only tabs, stacked icon/text tabs, leading icons, custom content, badges, custom indicators, and controlled web panels. Dimensions, typography and colors follow the pinned AndroidX implementation. Indicator movement and scrolling use the active Material spring scheme; keyboard navigation supports RTL, disabled tabs and automatic or manual activation.
+
+Use `PrimaryTabRow`, `SecondaryTabRow`, `PrimaryScrollableTabRow`, `SecondaryScrollableTabRow`, `Tab`, `LeadingIconTab`, and `TabPanel`. `TabRow`, `ScrollableTabRow`, `TabRowDefaults`, `PrimaryTabIndicator`, and `SecondaryTabIndicator` cover AndroidX's legacy and customization APIs. Every name also has a `Material`-prefixed export.
+
+See [tabs configuration and source audit](docs/tabs.md) for controlled examples, exact dimensions, source/token discrepancies, motion and browser differences.
+
+## App bars
 
 The app-bar family follows the current AndroidX Material 3 API and tokens. It includes `TopAppBar`, `CenterAlignedTopAppBar`, `MediumTopAppBar`, `LargeTopAppBar`, `MediumFlexibleTopAppBar`, `LargeFlexibleTopAppBar`, and `BottomAppBar`. Pass `collapseProgress` for controlled rendering, or connect `scrollTarget` with `pinned`, `enter-always`, `exit-until-collapsed`, or `exit-always` behavior.
 
@@ -753,3 +766,20 @@ Run the gallery locally with `pnpm gallery:dev`.
 ## License
 
 Apache License 2.0. See `NOTICE` and `THIRD_PARTY_NOTICES.md` for attribution.
+
+
+## Text fields
+
+The text-field family follows the current AndroidX Material 3 implementation, including filled and outlined containers, secure inputs, expressive tonal colors, rounded shapes, inside/cutout/above labels, icons, prefix/suffix content, supporting text, error/disabled/read-only states, and growing multiline input.
+
+```tsx
+import { FilledTextField, OutlinedTextField, SecureTextField } from '@kolehoenicke/material-react-components'
+
+<FilledTextField singleLine label="Name" value={name} onValueChange={setName} autoComplete="name" />
+<OutlinedTextField label="Notes" minLines={3} maxLines={6} supportingText="Additional details" />
+<SecureTextField label="Password" textObfuscationMode="reveal-last-typed" />
+```
+
+Like Compose, ordinary fields default to multiline. Use `singleLine` for a native input. `TextField`, `FilledTextField`, `OutlinedTextField`, `SecureTextField`, `OutlinedSecureTextField`, `TextFieldDecorator`, `TextFieldDefaults`, and `OutlinedTextFieldDefaults` also have `Material`-prefixed exports. All state colors, shape, content padding, indicator widths and editor typography can be configured. Applications own icons, counters, validation feedback and reveal controls.
+
+See [text field configuration and source audit](docs/text-fields.md) for the complete API, pinned AndroidX revision, geometry, colors, motion, and browser adaptations.

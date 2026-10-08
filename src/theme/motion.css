@@ -1,4 +1,8 @@
 :root {
+  /* AndroidX TabTransition: DefaultEffects on selection, FastEffects on deselection. */
+  --m3-motion-tab-color-enter: var(--m3-motion-transition-default-effects);
+  --m3-motion-tab-color-exit: var(--m3-motion-transition-fast-effects);
+  --md-ripple-focus-opacity-duration: 45ms;
   --m3-motion-demonstration-hold-duration: 1000ms;
   --md-sys-state-hover-state-layer-opacity: 0.08;
   --md-sys-state-focus-state-layer-opacity: 0.1;
@@ -476,6 +480,11 @@
     var(--m3-motion-default-effects-easing);
   --m3-motion-transition-slow-effects: var(--m3-motion-slow-effects-duration)
     var(--m3-motion-slow-effects-easing);
+  /* AndroidX TextFieldImpl: FastSpatial label/indicator, FastEffects color/affix, SlowEffects placeholder entry. */
+  --m3-motion-text-field-caret-blink-duration: 1000ms;
+  --m3-motion-text-field-spatial: var(--m3-motion-transition-fast-spatial);
+  --m3-motion-text-field-effects: var(--m3-motion-transition-fast-effects);
+  --m3-motion-text-field-placeholder-enter: var(--m3-motion-transition-slow-effects);
   /* AndroidX IconButton intentionally uses the non-bouncing DefaultEffects spring. */
   --m3-motion-icon-button-shape: var(--m3-motion-transition-default-effects);
   --m3-motion-transition-fast-shape: var(--m3-motion-transition-fast-spatial);

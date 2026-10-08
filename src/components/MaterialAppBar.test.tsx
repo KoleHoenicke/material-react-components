@@ -3,6 +3,7 @@ import { createRef } from 'react'
 import { describe, expect, it, vi } from 'vitest'
 
 import {
+  MaterialAppBarAvatarButton,
   MaterialAppBarFab,
   MaterialAppBarIconButton,
   MaterialBottomAppBar,
@@ -293,5 +294,27 @@ describe('MaterialBottomAppBar', () => {
     fireEvent.scroll(targetRef.current!)
 
     await waitFor(() => expect(onProgress).toHaveBeenCalledWith(0.5))
+  })
+})
+
+
+describe('MaterialAppBarAvatarButton', () => {
+  it('keeps a photo action accessible without icon/ripple containers and supports refs and disabled state', () => {
+    const onClick = vi.fn()
+    const ref = createRef<HTMLButtonElement>()
+    const { rerender } = render(<MaterialAppBarAvatarButton ref={ref} aria-label="Switch profile" onClick={onClick}>
+      <img src="profile.jpg" alt="" />
+    </MaterialAppBarAvatarButton>)
+    const button = screen.getByRole('button', { name: 'Switch profile' })
+    expect(ref.current).toBe(button)
+    expect(button).toHaveAttribute('type', 'button')
+    expect(button.querySelector('.material-app-bar-avatar-button__avatar')).toBeInTheDocument()
+    expect(button.querySelector('.material-ripple, .material-icon-button__container')).toBeNull()
+    fireEvent.click(button)
+    expect(onClick).toHaveBeenCalledTimes(1)
+    rerender(<MaterialAppBarAvatarButton aria-label="Switch profile" onClick={onClick} disabled>AB</MaterialAppBarAvatarButton>)
+    expect(button).toBeDisabled()
+    fireEvent.click(button)
+    expect(onClick).toHaveBeenCalledTimes(1)
   })
 })

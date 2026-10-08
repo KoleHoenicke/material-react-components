@@ -2,9 +2,11 @@
   display: inline-flex;
 }
 
-.material-menu-surface,
-.material-menu-group,
-.material-menu-item {
+:where(
+  .material-menu-surface,
+  .material-menu-group[data-token-scope='true'],
+  .material-menu-item[data-token-scope='true']
+) {
   --md-menu-container-color: var(--md-sys-color-surface-container);
   --md-menu-container-elevation: var(--md-sys-elevation-level2, none);
   --md-menu-container-shape: var(--md-sys-shape-corner-extra-small, 4px);
@@ -62,12 +64,10 @@
   background: transparent;
   color: var(--md-menu-item-label-color);
   opacity: 0;
-  overflow-x: visible;
-  overflow-y: auto;
+  overflow: visible;
   overscroll-behavior: contain;
   pointer-events: none;
   scrollbar-color: var(--md-menu-scrollbar-color) transparent;
-  scrollbar-gutter: stable;
   scrollbar-width: thin;
   transform: scale(0.8);
   transform-origin: var(--md-menu-transform-origin-x, 0%)
@@ -103,8 +103,25 @@
 }
 
 .material-menu-surface[data-variant='expressive'] {
+  /* Apply the elevation after the scrolling content is composited. */
+  filter: drop-shadow(var(--md-menu-container-elevation));
+}
+
+.material-menu-surface__scroll {
+  display: flex;
+  flex-direction: column;
+  min-block-size: 0;
+  max-block-size: inherit;
+  overflow: auto;
+  overscroll-behavior: contain;
+  scrollbar-color: var(--md-menu-scrollbar-color) transparent;
+  scrollbar-width: thin;
+}
+
+.material-menu-surface[data-variant='expressive'] > .material-menu-surface__scroll {
   gap: var(--md-menu-group-gap);
 }
+
 
 .material-menu-group {
   position: relative;
@@ -118,7 +135,7 @@
   padding-block: var(--md-menu-group-padding);
   border-radius: var(--md-menu-group-shape);
   background: var(--md-menu-group-container-color);
-  box-shadow: var(--md-menu-container-elevation);
+  box-shadow: none;
   transition:
     border-top-left-radius var(--m3-motion-transition-fast-spatial),
     border-top-right-radius var(--m3-motion-transition-fast-spatial),
@@ -247,6 +264,11 @@
   color: var(--md-menu-item-selected-content-color);
 }
 
+/* AndroidX adds this outer inset only to rows with supporting text. */
+.material-menu-item[data-variant='expressive'][data-supporting-text='true'] {
+  margin-block: 2px;
+}
+
 .material-menu-item[data-disabled='true'] {
   cursor: default;
 }
@@ -265,9 +287,8 @@
 
 .material-menu-item__focus-ring {
   position: absolute;
-  inset: calc(
-    -1 * (var(--md-menu-focus-indicator-offset) + var(--md-menu-focus-indicator-thickness))
-  );
+  /* Keep the web focus ring within the scrolling item surface. */
+  inset: var(--md-menu-focus-indicator-offset);
   z-index: 4;
   border: var(--md-menu-focus-indicator-thickness) solid transparent;
   border-radius: inherit;

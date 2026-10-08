@@ -377,13 +377,19 @@
 .material-list-avatar {
   display: grid;
   box-sizing: border-box;
-  inline-size: var(--md-list-leading-avatar-size);
-  block-size: var(--md-list-leading-avatar-size);
+  inline-size: var(--md-list-leading-avatar-size, 40px);
+  block-size: var(--md-list-leading-avatar-size, 40px);
   overflow: hidden;
   border-radius: var(--md-sys-shape-corner-full);
-  background: var(--md-list-leading-avatar-color);
-  color: var(--md-list-leading-avatar-label-color);
+  background: var(--md-list-leading-avatar-color, var(--md-sys-color-primary-container));
+  color: var(--md-list-leading-avatar-label-color, var(--md-sys-color-on-primary-container));
   place-items: center;
+}
+
+/* A profile summary can use a larger portrait without changing ordinary list rows. */
+.material-list-avatar[data-size='large'] {
+  inline-size: 64px;
+  block-size: 64px;
 }
 
 .material-list-avatar > :is(img, svg) {
@@ -494,8 +500,8 @@
 
 .material-list-expand-icon {
   display: grid;
-  inline-size: 40px;
-  block-size: 40px;
+  inline-size: var(--md-list-trailing-icon-size);
+  block-size: var(--md-list-trailing-icon-size);
   border-radius: var(--md-sys-shape-corner-full);
   background: transparent;
   color: var(--md-sys-color-on-surface);
@@ -503,10 +509,6 @@
   transition:
     background-color var(--m3-motion-transition-fast-effects),
     transform var(--m3-motion-transition-fast-spatial);
-}
-
-.material-list-expand-icon[data-expanded='true'] {
-  background: var(--md-sys-color-surface-container-high);
 }
 
 .material-list-expand-icon > svg {

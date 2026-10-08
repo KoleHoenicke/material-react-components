@@ -155,6 +155,7 @@
 }
 
 .material-alert-dialog__actions > .material-button {
+  --md-button-focus-indicator-color: var(--md-dialog-focus-indicator-color);
   min-inline-size: 64px;
 }
 
@@ -171,20 +172,23 @@
   max-inline-size: none;
   block-size: 100%;
   max-block-size: none;
+  overflow: hidden;
   border-radius: 0;
   background: var(--md-sys-color-surface);
   box-shadow: none;
 }
 
 .material-full-screen-dialog__surface {
-  display: grid;
-  grid-template-rows: auto auto minmax(0, 1fr);
-  min-block-size: 100%;
+  display: flex;
+  flex-direction: column;
+  block-size: 100%;
+  min-block-size: 0;
   color: var(--md-sys-color-on-surface);
   background: var(--md-sys-color-surface);
 }
 
 .material-full-screen-dialog__header {
+  flex: 0 0 auto;
   --md-top-app-bar-container-color: var(--md-sys-color-surface);
   max-inline-size: none;
 }
@@ -194,6 +198,7 @@
 }
 
 .material-full-screen-dialog__body {
+  flex: 1 1 0;
   min-block-size: 0;
   padding: 24px;
   padding-block-end: calc(24px + env(safe-area-inset-bottom, 0px));
@@ -201,6 +206,10 @@
   padding-inline-end: calc(24px + env(safe-area-inset-right, 0px));
   overflow: auto;
   overscroll-behavior: contain;
+}
+
+.material-full-screen-dialog__surface > .material-divider {
+  flex: 0 0 auto;
 }
 
 @media (pointer: fine) {
@@ -291,5 +300,36 @@
   }
   to {
     opacity: 0;
+  }
+}
+
+/* Transform transitions preserve the current position when opening is interrupted. */
+.material-full-screen-dialog[data-transition='slide'] {
+  --md-dialog-slide-offset: 100%;
+  transform: translateX(var(--md-dialog-slide-offset));
+  transition: transform var(--m3-motion-transition-enter);
+}
+.material-full-screen-dialog[data-transition='slide']:dir(rtl),
+.material-full-screen-dialog[data-transition='slide'][data-direction='rtl'] {
+  --md-dialog-slide-offset: -100%;
+}
+.material-full-screen-dialog[data-transition='slide'][open][data-state='open'] {
+  animation: none;
+  transform: translateX(0);
+}
+.material-full-screen-dialog[data-transition='slide'][open][data-state='closing'] {
+  animation: none;
+  transform: translateX(var(--md-dialog-slide-offset));
+  transition: transform var(--m3-motion-transition-exit);
+}
+@starting-style {
+  .material-full-screen-dialog[data-transition='slide'][open][data-state='open'] {
+    transform: translateX(var(--md-dialog-slide-offset));
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .material-full-screen-dialog[data-transition='slide'][open]:is([data-state='open'], [data-state='closing']) {
+    transform: none;
+    transition: none;
   }
 }

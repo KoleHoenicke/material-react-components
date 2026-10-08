@@ -15,6 +15,7 @@ import {
   type ComponentPropsWithoutRef,
   type CSSProperties,
 } from 'react'
+import { circularWavyGeometry } from '../internal/circularWavyGeometry'
 import { MATERIAL_PROGRESS_TIMING } from '../theme/materialMotion'
 import './MaterialProgressIndicator.css'
 
@@ -379,7 +380,7 @@ function circularIndeterminateFrame(elapsed: number) {
   const cycle = elapsed % MATERIAL_PROGRESS_TIMING.circularIndeterminateCycleMs
   const half = MATERIAL_PROGRESS_TIMING.circularIndeterminateCycleMs / 2
   const sweepProgress = cycle <= half ? cycle / half : (cycle - half) / half
-  const easedSweep = cubicBezierValue(sweepProgress, 0.2, 0, 0, 1)
+  const easedSweep = cubicBezierValue(sweepProgress, 0.4, 0, 0.2, 1)
   const progress = cycle <= half
     ? MIN_CIRCULAR_PROGRESS + (MAX_CIRCULAR_PROGRESS - MIN_CIRCULAR_PROGRESS) * easedSweep
     : MAX_CIRCULAR_PROGRESS - (MAX_CIRCULAR_PROGRESS - MIN_CIRCULAR_PROGRESS) * easedSweep
@@ -775,39 +776,6 @@ function circleDash(progress: number, gapFraction: number) {
   }
 }
 
-function circularWavePath(size: number, strokeWidth: number, waves: number, amplitude: number, phase: number) {
-  const center = size / 2
-  const outerRadius = center - strokeWidth / 2
-  const depth = outerRadius * 0.25 * amplitude
-  const samples = Math.max(waves * 16, 80)
-  const points = Array.from({ length: samples }, (_, index) => {
-    const theta = -Math.PI / 2 + (index / samples) * TWO_PI
-    const radius = outerRadius - (depth * (1 - Math.cos(waves * theta - phase))) / 2
-    return {
-      x: center + Math.cos(theta) * radius,
-      y: center + Math.sin(theta) * radius,
-    }
-  })
-  const commands = [`M ${formatNumber(points[0].x)} ${formatNumber(points[0].y)}`]
-
-  for (let index = 0; index < points.length; index += 1) {
-    const previous = points[(index - 1 + points.length) % points.length]
-    const current = points[index]
-    const next = points[(index + 1) % points.length]
-    const after = points[(index + 2) % points.length]
-    commands.push(
-      `C ${formatNumber(current.x + (next.x - previous.x) / 6)} ${formatNumber(
-        current.y + (next.y - previous.y) / 6,
-      )} ${formatNumber(next.x - (after.x - current.x) / 6)} ${formatNumber(
-        next.y - (after.y - current.y) / 6,
-      )} ${formatNumber(next.x)} ${formatNumber(next.y)}`,
-    )
-  }
-
-  commands.push('Z')
-  return commands.join(' ')
-}
-
 function CircularProgressSvg({
   elapsed,
   gapSize,
@@ -845,20 +813,22 @@ function CircularProgressSvg({
   const radius = size / 2 - Math.max(strokeWidth, trackStrokeWidth) / 2
   const circumference = TWO_PI * radius
   const adjustedGap = strokeLinecap === 'butt' ? gapSize : gapSize + strokeWidth
-  const gapFraction = adjustedGap / Math.max(circumference, EPSILON)
-  const track = circleDash(frame.progress, gapFraction)
+  const gapFraction = Math.min(frame.progress, adjustedGap / Math.max(TWO_PI * size / 2, EPSILON))
   const waves = Math.max(5, Math.round(circumference / Math.max(wavelength, EPSILON)))
-  const phase = reducedMotion || waveSpeed <= 0
+  const waveOffset = reducedMotion || waveSpeed <= 0 || amplitude <= 0
     ? 0
-    : (((elapsed / 1000) * waveSpeed) / Math.max(wavelength, EPSILON)) * TWO_PI
-  const wavePath = useMemo(
-    () => circularWavePath(size, strokeWidth, waves, amplitude, phase),
-    [amplitude, phase, size, strokeWidth, waves],
+    : ((elapsed / 1000) * waveSpeed / (Math.max(wavelength, EPSILON) * waves)) % 1
+  const waveGeometry = useMemo(
+    () => wavy ? circularWavyGeometry(size, strokeWidth, waves, amplitude) : null,
+    [amplitude, size, strokeWidth, waves, wavy],
   )
+  const wavyGap = (Math.min(frame.progress * (waveGeometry?.length ?? circumference), gapSize)
+    + (strokeLinecap === 'butt' ? 0 : Math.max(strokeWidth, trackStrokeWidth))) / Math.max(circumference, EPSILON)
+  const track = circleDash(frame.progress, wavy ? wavyGap : gapFraction)
   const activeDash = `${formatNumber(frame.progress * 100)} ${formatNumber(
     (1 - frame.progress) * 100,
   )}`
-  const transform = `rotate(${formatNumber(frame.rotation)} ${formatNumber(size / 2)} ${formatNumber(
+  const transform = `rotate(${formatNumber(frame.rotation + (wavy && indeterminate ? 90 : 0))} ${formatNumber(size / 2)} ${formatNumber(
     size / 2,
   )})`
 
@@ -881,16 +851,18 @@ function CircularProgressSvg({
           strokeDashoffset={track.dashOffset}
           strokeLinecap={strokeLinecap}
           strokeWidth={trackStrokeWidth}
-          transform={`rotate(-90 ${formatNumber(size / 2)} ${formatNumber(size / 2)})`}
+          transform={`rotate(${indeterminate && !wavy ? 0 : -90} ${formatNumber(size / 2)} ${formatNumber(size / 2)})`}
           vectorEffect="non-scaling-stroke"
         />
         {wavy ? (
           <path
             className="material-progress__active"
-            d={wavePath}
+            d={waveGeometry?.path}
             fill="none"
             pathLength={100}
             strokeDasharray={activeDash}
+            strokeDashoffset={formatNumber(-waveOffset * 100)}
+            transform={`rotate(${formatNumber(-waveOffset * 360)} ${size / 2} ${size / 2})`}
             strokeLinecap={strokeLinecap}
             strokeWidth={strokeWidth}
             vectorEffect="non-scaling-stroke"
@@ -906,7 +878,7 @@ function CircularProgressSvg({
             strokeDasharray={activeDash}
             strokeLinecap={strokeLinecap}
             strokeWidth={strokeWidth}
-            transform={`rotate(-90 ${formatNumber(size / 2)} ${formatNumber(size / 2)})`}
+            transform={`rotate(${indeterminate && !wavy ? 0 : -90} ${formatNumber(size / 2)} ${formatNumber(size / 2)})`}
             vectorEffect="non-scaling-stroke"
           />
         )}

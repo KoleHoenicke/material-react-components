@@ -5,6 +5,7 @@ import {
   useContext,
   useEffect,
   useId,
+  useLayoutEffect,
   useRef,
   type ButtonHTMLAttributes,
   type CSSProperties,
@@ -15,6 +16,7 @@ import {
   type Ref,
 } from 'react'
 
+import { useFabMenuStagger } from '../internal/useFabMenuStagger'
 import { MaterialRipple } from './MaterialRipple'
 import './MaterialFloatingActionButtonMenu.css'
 
@@ -169,6 +171,7 @@ export const MaterialToggleFloatingActionButton = forwardRef<
   },
   ref,
 ) {
+  const menu = useContext(FabMenuContext)
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
     onClick?.(event)
     if (!event.defaultPrevented) onCheckedChange(!checked)
@@ -180,6 +183,7 @@ export const MaterialToggleFloatingActionButton = forwardRef<
       data-checked={checked ? 'true' : 'false'}
       data-color={color}
       data-material-toggle-fab
+      data-token-scope={menu ? undefined : 'true'}
       data-size={size}
       data-visible={visible ? 'true' : 'false'}
       style={style}
@@ -244,6 +248,7 @@ export const MaterialFloatingActionButtonMenu = forwardRef<
   const internalToggleRef = useRef<HTMLButtonElement | null>(null)
   const wasExpandedRef = useRef(expanded)
   const items = Children.toArray(children)
+  const visibleCount = useFabMenuStagger(expanded, items.length, rootRef)
 
   const requestClose = () => onExpandedChange(false)
 
@@ -374,12 +379,7 @@ export const MaterialFloatingActionButtonMenu = forwardRef<
               className="material-fab-menu__item-slot"
               key={index}
               role="none"
-              style={
-                {
-                  '--md-fab-menu-item-index': index,
-                  '--md-fab-menu-item-reverse-index': items.length - index - 1,
-                } as CSSProperties
-              }
+              data-visible={index >= items.length - visibleCount ? 'true' : 'false'}
             >
               {item}
             </div>
@@ -407,6 +407,17 @@ export const MaterialFloatingActionButtonMenuItem = forwardRef<
   },
   ref,
 ) {
+  const contentRef = useRef<HTMLSpanElement>(null)
+  useLayoutEffect(() => {
+    const content = contentRef.current
+    const slot = content?.closest<HTMLElement>('.material-fab-menu__item-slot')
+    if (!content || !slot) return
+    const measure = () => slot.style.setProperty('--md-fab-menu-item-width', `${content.getBoundingClientRect().width}px`)
+    measure()
+    const observer = typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(measure)
+    observer?.observe(content)
+    return () => observer?.disconnect()
+  }, [])
   const menu = useContext(FabMenuContext)
   const interactive = menu?.expanded ?? true
 
@@ -424,6 +435,7 @@ export const MaterialFloatingActionButtonMenuItem = forwardRef<
       ref={ref}
       className={joinClassNames('material-fab-menu-item', className)}
       data-material-fab-menu-item
+      data-token-scope={menu ? undefined : 'true'}
       disabled={disabled}
       onClick={handleClick}
       role="menuitem"
@@ -433,11 +445,13 @@ export const MaterialFloatingActionButtonMenuItem = forwardRef<
     >
       <MaterialRipple disabled={disabled || !interactive} />
       <span className="material-fab-menu-item__focus-ring" aria-hidden="true" />
-      <span className="material-fab-menu-item__icon" aria-hidden="true">
-        {icon}
-      </span>
-      <span className="material-fab-menu-item__label" data-material-typography="titleMedium">
-        {children}
+      <span ref={contentRef} className="material-fab-menu-item__content">
+        <span className="material-fab-menu-item__icon" aria-hidden="true">
+          {icon}
+        </span>
+        <span className="material-fab-menu-item__label" data-material-typography="titleMedium">
+          {children}
+        </span>
       </span>
     </button>
   )

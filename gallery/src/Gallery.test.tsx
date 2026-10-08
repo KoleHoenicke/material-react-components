@@ -42,7 +42,10 @@ describe('interactive gallery', () => {
       'Text · MaterialText',
       'Divider · HorizontalDivider · VerticalDivider',
       'Checkbox · CheckboxList · CheckboxListItem',
-      'AssistChip · FilterChip · InputChip · SuggestionChip',
+      'Chip · ChipSet · AssistChip · FilterChip · InputChip · SuggestionChip',
+      'NavigationBar · NavigationBarItem',
+      'ToggleFloatingActionButton',
+      'WavyProgress',
       'Ripple',
       'Switch',
       'Slider',
@@ -134,7 +137,7 @@ it('alphabetizes categories, groups buttons, and separates loading and ripple', 
   render(<Gallery />)
   const categories = screen.getByRole('toolbar', { name: 'Component categories' })
   const labels = Array.from(categories.querySelectorAll('button')).map(button => button.textContent)
-  expect(labels).toEqual(['App bars', 'Badges', 'Buttons', 'Cards', 'Chips', 'Dialogs', 'Dividers', 'Lists', 'Loading & progress', 'Menus', 'Ripple', 'Selection'])
+  expect(labels).toEqual(['App bars', 'Badges', 'Buttons', 'Cards', 'Chips', 'Dialogs', 'Dividers', 'Lists', 'Loading & progress', 'Menus', 'Navigation bars', 'Ripple', 'Selection', 'Tabs', 'Text fields'])
   for (const name of ['Button', 'Button group', 'Floating action buttons', 'FAB menu', 'Icon buttons']) {
     expect(screen.getByRole('heading', { name, level: 3 })).toBeVisible()
   }
@@ -160,4 +163,26 @@ it('shows motion under foundations and updates previews and the shared scheme', 
   fireEvent.click(screen.getByRole('button', { name: 'Typography' }))
   expect(screen.getByRole('heading', { name: 'Typography', level: 2 })).toBeVisible()
   expect(screen.queryByRole('button', { name: 'Toggle positions' })).not.toBeInTheDocument()
+})
+
+
+it('opens text fields and exercises configured input and secure visibility', () => {
+  window.location.hash = 'text-fields'
+  render(<Gallery />)
+  expect(screen.getByRole('heading', { name: 'Text fields', level: 2 })).toBeVisible()
+  const input = screen.getByRole('textbox', { name: 'Label' })
+  fireEvent.change(input, { target: { value: 'Hello' } })
+  expect(input).toHaveValue('Hello')
+  fireEvent.click(screen.getByRole('button', { name: 'Clear text' }))
+  expect(input).toHaveValue('')
+  fireEvent.click(screen.getByRole('switch', { name: 'Field error' }))
+  expect(input).toHaveAttribute('aria-invalid', 'true')
+  fireEvent.click(screen.getByRole('switch', { name: 'Show prefix and suffix' }))
+  fireEvent.focus(input)
+  expect(screen.getAllByText('USD').length).toBeGreaterThan(0)
+  const password = screen.getByLabelText('Password')
+  fireEvent.change(password, { target: { value: 'secret' } })
+  fireEvent.click(screen.getByRole('button', { name: 'Show password' }))
+  expect(password).toHaveAttribute('type', 'text')
+  expect(password).toHaveValue('secret')
 })

@@ -116,6 +116,10 @@ export type MaterialBottomAppBarProps = Omit<
   variant?: MaterialBottomAppBarVariant
 }
 
+export type MaterialAppBarAvatarButtonProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'children'> & {
+  children: ReactNode
+}
+
 export type MaterialAppBarIconButtonProps = MaterialIconButtonProps
 
 export type MaterialAppBarFabProps = ButtonHTMLAttributes<HTMLButtonElement> & {
@@ -550,6 +554,17 @@ export const MaterialAppBarIconButton = forwardRef<
     />
   )
 })
+
+/** A photo/initials action, with an avatar-sized slot instead of an icon-sized slot. */
+export const MaterialAppBarAvatarButton = forwardRef<HTMLButtonElement, MaterialAppBarAvatarButtonProps>(
+  function MaterialAppBarAvatarButton({ children, className, type = 'button', ...props }, ref) {
+    return <button {...props} ref={ref} type={type}
+      className={['material-app-bar-avatar-button', className].filter(Boolean).join(' ')}
+      data-material-app-bar-avatar-button="">
+      <span className="material-app-bar-avatar-button__avatar" aria-hidden="true">{children}</span>
+    </button>
+  },
+)
 
 export const MaterialAppBarFab = forwardRef<HTMLButtonElement, MaterialAppBarFabProps>(
   function MaterialAppBarFab(

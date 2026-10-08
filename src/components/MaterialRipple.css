@@ -1,8 +1,4 @@
 .material-ripple {
-  --md-ripple-hover-color: var(--md-sys-color-on-surface);
-  --md-ripple-pressed-color: var(--md-sys-color-on-surface);
-  --md-ripple-hover-opacity: var(--md-sys-state-hover-state-layer-opacity);
-  --md-ripple-pressed-opacity: var(--md-sys-state-pressed-state-layer-opacity);
   --material-ripple-press-opacity-duration: var(--md-ripple-press-fade-out-duration);
   position: absolute;
   inset: 0;
@@ -40,7 +36,7 @@
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background-color: var(--md-ripple-hover-color);
+  background-color: var(--md-ripple-hover-color, var(--md-sys-color-on-surface));
   content: '';
   opacity: 0;
   pointer-events: none;
@@ -50,16 +46,16 @@
 }
 
 .material-ripple--hovered .material-ripple__surface::before {
-  opacity: var(--md-ripple-hover-opacity);
+  opacity: var(--md-ripple-hover-opacity, var(--md-sys-state-hover-state-layer-opacity));
 }
 
 .material-ripple--active-hover .material-ripple__surface::before {
-  opacity: var(--md-ripple-hover-opacity);
+  opacity: var(--md-ripple-hover-opacity, var(--md-sys-state-hover-state-layer-opacity));
 }
 
 .material-ripple--active-pressed .material-ripple__surface::before {
-  background-color: var(--md-ripple-pressed-color);
-  opacity: var(--md-ripple-pressed-opacity);
+  background-color: var(--md-ripple-pressed-color, var(--md-sys-color-on-surface));
+  opacity: var(--md-ripple-pressed-opacity, var(--md-sys-state-pressed-state-layer-opacity));
 }
 
 .material-ripple__press {
@@ -71,7 +67,7 @@
   border-radius: var(--md-sys-shape-corner-full);
   background: radial-gradient(
     closest-side,
-    var(--md-ripple-pressed-color) max(calc(100% - 70px), 65%),
+    var(--md-ripple-pressed-color, var(--md-sys-color-on-surface)) max(calc(100% - 70px), 65%),
     transparent 100%
   );
   opacity: 0;
@@ -82,7 +78,7 @@
 }
 
 .material-ripple--pressed .material-ripple__press {
-  opacity: var(--md-ripple-pressed-opacity);
+  opacity: var(--md-ripple-pressed-opacity, var(--md-sys-state-pressed-state-layer-opacity));
 }
 
 @media (forced-colors: active) {

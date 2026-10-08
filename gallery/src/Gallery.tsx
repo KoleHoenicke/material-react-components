@@ -2,9 +2,13 @@ import { GallerySelect } from './GallerySelect'
 import { GallerySymbol } from './GallerySymbol'
 import { MotionExamples } from './MotionExamples'
 import { IconButtonExamples } from './IconButtonExamples'
+import { TextFieldExamples } from './TextFieldExamples'
+import { NavigationBarExamples } from './NavigationBarExamples'
+import { TabExamples } from './TabExamples'
 import { useEffect, useState, type ReactNode } from 'react'
 import {
   AppBarFab,
+  AppBarAvatarButton,
   AppBarIconButton,
   AlertDialog,
   Badge,
@@ -18,16 +22,26 @@ import {
   CheckboxListItem,
   AssistChip,
   ChipSet,
+  Chip,
   FilterChip,
   InputChip,
   CircularProgressIndicator,
   CircularWavyProgressIndicator,
   HorizontalDivider,
+  Divider,
   ExtendedFloatingActionButton,
+  BaselineExtendedFloatingActionButton,
+  SmallExtendedFloatingActionButton,
+  MediumExtendedFloatingActionButton,
+  LargeExtendedFloatingActionButton,
+  SmallFloatingActionButton,
+  MediumFloatingActionButton,
+  LargeFloatingActionButton,
   ExpandableList,
   FloatingActionButtonMenu,
   FloatingActionButtonMenuItem,
   FloatingActionButton,
+  ToggleFloatingActionButton,
   FullScreenDialog,
   List,
   ListAvatar,
@@ -45,6 +59,7 @@ import {
   MaterialMenu,
   MaterialMenuDivider,
   MaterialMenuGroup,
+  MenuGroupLabel,
   MaterialMenuItem,
   MaterialMenuSubmenu,
   MaterialSelectableMenuItem,
@@ -65,10 +80,10 @@ import {
   Text,
   TopAppBar,
   VerticalDivider,
+  WavyProgress,
   CenterAlignedTopAppBar,
   type MaterialButtonSize,
   type MaterialButtonVariant,
-  type MaterialExtendedFabSize,
   type MaterialFabColor,
   type MaterialFabMenuColor,
   type MaterialFabMenuTriggerSize,
@@ -107,7 +122,14 @@ const fabColors: MaterialFabColor[] = [
   'surface',
 ]
 const fabSizes: MaterialFabSize[] = ['small', 'regular', 'medium', 'large']
-const extendedFabSizes: MaterialExtendedFabSize[] = ['baseline', 'small', 'medium', 'large']
+const sizedFabs = [
+  ['small', SmallFloatingActionButton], ['regular', FloatingActionButton],
+  ['medium', MediumFloatingActionButton], ['large', LargeFloatingActionButton],
+] as const
+const sizedExtendedFabs = [
+  ['baseline', BaselineExtendedFloatingActionButton], ['small', SmallExtendedFloatingActionButton],
+  ['medium', MediumExtendedFloatingActionButton], ['large', LargeExtendedFloatingActionButton],
+] as const
 const fabMenuColors: MaterialFabMenuColor[] = ['primary', 'secondary', 'tertiary']
 const fabMenuSizes: MaterialFabMenuTriggerSize[] = ['regular', 'medium', 'large']
 const themePresets = [
@@ -168,7 +190,7 @@ const componentPages = [
   ['app-bars', 'App bars'], ['badges', 'Badges'], ['actions', 'Buttons'],
   ['cards', 'Cards'], ['chips', 'Chips'], ['dialogs', 'Dialogs'],
   ['dividers', 'Dividers'], ['lists', 'Lists'], ['status', 'Loading & progress'],
-  ['menus', 'Menus'], ['ripple', 'Ripple'], ['selection', 'Selection'],
+  ['menus', 'Menus'], ['navigation-bars', 'Navigation bars'], ['ripple', 'Ripple'], ['selection', 'Selection'], ['tabs', 'Tabs'], ['text-fields', 'Text fields'],
 ] as const
 const foundationPages = [['motion', 'Motion'], ['typography', 'Typography']] as const
 const destinations = [
@@ -210,6 +232,7 @@ export function Gallery() {
   const [fabVisible, setFabVisible] = useState(true)
   const [fabMenuColor, setFabMenuColor] = useState<MaterialFabMenuColor>('primary')
   const [fabMenuExpanded, setFabMenuExpanded] = useState(true)
+  const [toggleFabChecked, setToggleFabChecked] = useState(false)
   const [fabMenuSize, setFabMenuSize] = useState<MaterialFabMenuTriggerSize>('regular')
   const [menuColor, setMenuColor] = useState<MaterialMenuColor>('standard')
   const [menuOpen, setMenuOpen] = useState(false)
@@ -467,7 +490,7 @@ export function Gallery() {
                 </label>
                 <div className="app-bar-grid">
                   <div className="app-bar-demo"><StageLabel>Small</StageLabel><HorizontalDivider /><TopAppBar title="Inbox" navigationIcon={<AppBarIconButton aria-label="Back"><Icon name="back" /></AppBarIconButton>} actions={<><AppBarIconButton aria-label="Search"><Icon name="search" /></AppBarIconButton><AppBarIconButton aria-label="More options"><Icon name="more" /></AppBarIconButton></>} /></div>
-                  <div className="app-bar-demo"><StageLabel>Center aligned</StageLabel><HorizontalDivider /><CenterAlignedTopAppBar title="Photos" navigationIcon={<AppBarIconButton aria-label="Back"><Icon name="back" /></AppBarIconButton>} actions={<AppBarIconButton aria-label="Favorite"><Icon name="star" /></AppBarIconButton>} /></div>
+                  <div className="app-bar-demo"><StageLabel>Center aligned</StageLabel><HorizontalDivider /><CenterAlignedTopAppBar title="Photos" navigationIcon={<AppBarIconButton aria-label="Back"><Icon name="back" /></AppBarIconButton>} actions={<AppBarAvatarButton aria-label="Open profile" onClick={() => setMessage('Profile opened')}>AB</AppBarAvatarButton>} /></div>
                   <div className="app-bar-demo"><StageLabel>Medium</StageLabel><HorizontalDivider /><MediumTopAppBar title="Your library" collapseProgress={appBarProgress} navigationIcon={<AppBarIconButton aria-label="Back"><Icon name="back" /></AppBarIconButton>} actions={<AppBarIconButton aria-label="Search"><Icon name="search" /></AppBarIconButton>} /></div>
                   <div className="app-bar-demo"><StageLabel>Medium flexible</StageLabel><HorizontalDivider /><MediumFlexibleTopAppBar title="Your library" subtitle="12 saved collections" collapseProgress={appBarProgress} navigationIcon={<AppBarIconButton aria-label="Back"><Icon name="back" /></AppBarIconButton>} actions={<AppBarIconButton aria-label="More options"><Icon name="more" /></AppBarIconButton>} /></div>
                   <div className="app-bar-demo"><StageLabel>Large</StageLabel><HorizontalDivider /><LargeTopAppBar title="Your photos" collapseProgress={appBarProgress} navigationIcon={<AppBarIconButton aria-label="Back"><Icon name="back" /></AppBarIconButton>} actions={<AppBarIconButton aria-label="Search"><Icon name="search" /></AppBarIconButton>} /></div>
@@ -666,10 +689,10 @@ export function Gallery() {
               >
                 <div className="divider-showcase">
                   <div className="divider-showcase__horizontal">
-                    <div><StageLabel>Full width</StageLabel><HorizontalDivider /></div>
+                    <div><StageLabel>Full width</StageLabel><Divider /></div>
                     <div><StageLabel>Inset, 16px</StageLabel><HorizontalDivider inset /></div>
                     <div><StageLabel>Start inset, 24px</StageLabel><HorizontalDivider insetStart={24} /></div>
-                    <div><StageLabel>Heavy, 8px</StageLabel><HorizontalDivider variant="heavy" /></div>
+                    <div><StageLabel>Heavy, 8px</StageLabel><Divider variant="heavy" /></div>
                   </div>
                   <div className="divider-showcase__vertical">
                     <span>Copy</span>
@@ -691,13 +714,14 @@ export function Gallery() {
             <div className="specimen-grid">
               <Specimen
                 title="Chip family"
-                api="AssistChip · FilterChip · InputChip · SuggestionChip"
+                api="Chip · ChipSet · AssistChip · FilterChip · InputChip · SuggestionChip"
                 description="All four Material variants, flat and elevated surfaces, controlled selection, avatars, removal, and expressive shape morphing."
                 wide
               >
                 <div className="chip-showcase">
                   <StageLabel>Assist and suggestion</StageLabel>
                   <ChipSet aria-label="Contextual actions">
+                    <Chip kind="assist" leadingIcon={<Icon name="search" />} onClick={() => setMessage('Search selected')}>Search</Chip>
                     <AssistChip leadingIcon={<Icon name="add" />} onClick={() => setMessage('Event added')}>Add event</AssistChip>
                     <AssistChip elevated leadingIcon={<Icon name="search" />}>Search nearby</AssistChip>
                     <SuggestionChip>Sounds good</SuggestionChip>
@@ -805,23 +829,22 @@ export function Gallery() {
                 </div>
                 <StageLabel>All sizes</StageLabel>
                 <div className="fab-size-showcase">
-                  {fabSizes.map((size) => (
+                  {sizedFabs.map(([size, SizedFab]) => (
                     <div key={size}>
-                      <FloatingActionButton aria-label={`${size} FAB`} size={size}>
+                      <SizedFab aria-label={`${size} FAB`}>
                         <Icon name="add" />
-                      </FloatingActionButton>
+                      </SizedFab>
                       <span>{size}</span>
                     </div>
                   ))}
                 </div>
                 <StageLabel>All extended sizes</StageLabel>
                 <div className="fab-extended-size-showcase">
-                  {extendedFabSizes.map((size) => (
+                  {sizedExtendedFabs.map(([size, SizedExtendedFab]) => (
                     <div key={size}>
-                      <ExtendedFloatingActionButton
+                      <SizedExtendedFab
                         icon={<Icon name="edit" />}
                         label={size === 'baseline' ? 'Baseline' : `Compose ${size}`}
-                        size={size}
                         onClick={() => setMessage(`${size} extended FAB pressed`)}
                       />
                       <span>{size}</span>
@@ -879,6 +902,15 @@ export function Gallery() {
                   </div>
                 </div>
               </Specimen>
+              <Specimen title="Toggle FAB" api="ToggleFloatingActionButton" description="A standalone controlled launcher with initial and checked icons.">
+                <ToggleFloatingActionButton
+                  aria-label="Toggle standalone actions"
+                  checked={toggleFabChecked}
+                  onCheckedChange={setToggleFabChecked}
+                  icon={<Icon name="add" />}
+                  checkedIcon={<Icon name="close" />}
+                />
+              </Specimen>
 <Specimen title="Icon buttons" api="IconButton · IconToggleButton" description="AndroidX size, width, color, and shape configurations with 48px minimum targets." wide>
                 <IconButtonExamples />
               </Specimen>
@@ -910,6 +942,7 @@ export function Gallery() {
                       open={menuOpen}
                       variant={menuVariant}
                     >
+                      <MenuGroupLabel>View settings</MenuGroupLabel>
                       <MaterialMenuGroup label="Layout">
                         <MaterialCheckableMenuItem
                           checked={menuGrid}
@@ -957,6 +990,25 @@ export function Gallery() {
               </Specimen>
 
 </div>
+          </section>
+          <section hidden={page !== 'navigation-bars'} className="component-section" id="navigation-bars-panel" aria-labelledby="navigation-bars-title">
+            <div className="section-heading">
+              <Eyebrow>Navigation</Eyebrow>
+              <h2 id="navigation-bars-title" data-material-typography="headlineMedium">Navigation bars</h2>
+            </div>
+            <div className="specimen-grid">
+              <Specimen title="Navigation bar" api="NavigationBar · NavigationBarItem" description="Three to five controlled destinations, selected icons, label visibility, disabled items, and RTL keyboard focus." wide>
+                <NavigationBarExamples />
+              </Specimen>
+            </div>
+          </section>
+          <section hidden={page !== 'text-fields'} className="component-section" id="text-fields-panel" aria-labelledby="text-fields-title">
+            <div className="section-heading"><Text as="h2" id="text-fields-title" variant="headlineMedium">Text fields</Text></div>
+            {page === 'text-fields' && <TextFieldExamples />}
+          </section>
+          <section hidden={page !== 'tabs'} className="component-section" id="tabs-panel" aria-labelledby="tabs-title">
+            <div className="section-heading"><Text as="h2" id="tabs-title" variant="headlineMedium">Tabs</Text></div>
+            {page === 'tabs' && <TabExamples />}
           </section>
           <section hidden={page !== 'selection'} className="component-section" id="selection-panel" aria-labelledby="selection-title">
             <div className="section-heading">
@@ -1225,6 +1277,9 @@ export function Gallery() {
                   </div>
                   <Slider aria-label="Change gallery progress" min={0} max={100} value={sliderValue} onChange={(event) => setSliderValue(event.currentTarget.valueAsNumber)} />
                 </div>
+              </Specimen>
+              <Specimen title="Legacy wavy progress" api="WavyProgress" description="Deprecated compatibility wrapper. Use LinearWavyProgressIndicator for new code.">
+                <WavyProgress label="Legacy gallery progress" value={sliderValue / 100} />
               </Specimen>
 
 

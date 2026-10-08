@@ -37,6 +37,7 @@ export * from './theme/materialTypography'
 
 export { MaterialBadge as Badge } from './components/MaterialBadge'
 export {
+  MaterialAppBarAvatarButton as AppBarAvatarButton,
   MaterialAppBarFab as AppBarFab,
   MaterialAppBarIconButton as AppBarIconButton,
   MaterialBottomAppBar as BottomAppBar,
@@ -153,3 +154,29 @@ export {
   MaterialFilledTonalIconToggleButton as FilledTonalIconToggleButton,
   MaterialOutlinedIconToggleButton as OutlinedIconToggleButton,
 } from './components/MaterialIconButton'
+
+export * from './components/MaterialTextField'
+export {
+  MaterialTextField as TextField, MaterialFilledTextField as FilledTextField,
+  MaterialOutlinedTextField as OutlinedTextField, MaterialSecureTextField as SecureTextField,
+  MaterialOutlinedSecureTextField as OutlinedSecureTextField,
+  MaterialTextFieldDecorator as TextFieldDecorator,
+} from './components/MaterialTextField'
+
+export { MaterialTextFieldDefaults as TextFieldDefaults, MaterialOutlinedTextFieldDefaults as OutlinedTextFieldDefaults } from './components/MaterialTextFieldDefaults'
+
+export * from './components/MaterialTabs'
+export {
+  MaterialTab as Tab,
+  MaterialLeadingIconTab as LeadingIconTab,
+  MaterialTabRow as TabRow,
+  MaterialScrollableTabRow as ScrollableTabRow,
+  MaterialPrimaryTabRow as PrimaryTabRow,
+  MaterialSecondaryTabRow as SecondaryTabRow,
+  MaterialPrimaryScrollableTabRow as PrimaryScrollableTabRow,
+  MaterialSecondaryScrollableTabRow as SecondaryScrollableTabRow,
+  MaterialPrimaryTabIndicator as PrimaryTabIndicator,
+  MaterialSecondaryTabIndicator as SecondaryTabIndicator,
+  MaterialTabRowDefaults as TabRowDefaults,
+  MaterialTabPanel as TabPanel,
+} from './components/MaterialTabs'

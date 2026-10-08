@@ -1,5 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 import { createRef } from 'react'
+import { readFileSync } from 'node:fs'
 import { describe, expect, it, vi } from 'vitest'
 
 import {
@@ -181,6 +182,24 @@ describe('MaterialChip', () => {
     const root = screen.getByRole('button', { name: 'Expressive' }).closest('[data-material-chip]')
     expect(root).toHaveAttribute('data-shape-mode', 'expressive')
     expect(root).toHaveStyle({ '--md-chip-selected-container-shape': '20px' })
+  })
+
+  it('bounds the default selected pill to the visual height while retaining shape overrides', () => {
+    const stylesheet = document.createElement('style')
+    stylesheet.textContent = readFileSync('src/components/MaterialChip.css', 'utf8')
+    document.head.append(stylesheet)
+    try {
+      const { rerender } = render(<MaterialFilterChip selected shapeMode="expressive">Filter</MaterialFilterChip>)
+      const root = screen.getByRole('button', { name: 'Filter' }).closest('[data-material-chip]')!
+      const selectedShape = () => getComputedStyle(root).getPropertyValue('--md-chip-selected-container-shape').trim()
+      expect(selectedShape()).toBe('min(var(--md-sys-shape-corner-full, 9999px), calc(var(--md-chip-container-height) / 2))')
+      rerender(<MaterialFilterChip selected shapeMode="expressive" style={{ '--md-chip-selected-container-shape': '10px' }}>Filter</MaterialFilterChip>)
+      expect(selectedShape()).toBe('10px')
+      rerender(<MaterialFilterChip selected shapeMode="standard">Filter</MaterialFilterChip>)
+      expect(selectedShape()).toBe('var(--md-chip-container-shape)')
+    } finally {
+      stylesheet.remove()
+    }
   })
 })
 

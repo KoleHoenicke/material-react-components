@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.18.0
+
+- Added filled, outlined, secure, and decorator text fields with controlled native editing, multiline sizing, label and slot composition, validation, native date/time pickers, state/color defaults, shared motion, and accessibility tests.
+- Added the complete primary, secondary, fixed, scrollable, and legacy tabs family, indicators and panels, with interruptible AndroidX spatial springs, RTL keyboard navigation, intrinsic geometry, and reduced motion.
+- Corrected component fidelity across app bars, button and chip states, dialog actions, expandable lists, menus and submenus, FAB menus, loading morphs, and circular progress geometry and motion.
+- Expanded interactive gallery coverage and documented pinned AndroidX sources, tokens, APIs, and browser adaptations.
+
 ## 0.17.0
 
 - Added reusable Material navigation bars with controlled destination selection, supplied selected icons, safe-area support, RTL keyboard navigation, reduced motion, and focused tests. Gallery navigation now fills only the active destination icon.

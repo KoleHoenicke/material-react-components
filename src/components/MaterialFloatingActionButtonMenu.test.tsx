@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { useState } from 'react'
 import { describe, expect, it, vi } from 'vitest'
 
@@ -222,22 +222,22 @@ describe('MaterialFloatingActionButtonMenu', () => {
     expect(toggle).toHaveAttribute('aria-expanded', 'false')
   })
 
-  it('closes after an item is activated by default', () => {
+  it('closes after an item is activated by default', async () => {
     render(<ControlledMenu />)
     const toggle = screen.getByRole('button', { name: 'Toggle message actions' })
     fireEvent.click(toggle)
 
-    fireEvent.click(screen.getByRole('menuitem', { name: 'Reply all' }))
+    fireEvent.click(await screen.findByRole('menuitem', { name: 'Reply all' }))
     expect(toggle).toHaveAttribute('aria-expanded', 'false')
     expect(toggle).toHaveFocus()
   })
 
-  it('can keep the menu open after item activation', () => {
+  it('can keep the menu open after item activation', async () => {
     render(<ControlledMenu closeOnItemClick={false} />)
     const toggle = screen.getByRole('button', { name: 'Toggle message actions' })
     fireEvent.click(toggle)
 
-    fireEvent.click(screen.getByRole('menuitem', { name: 'Reply' }))
+    fireEvent.click(await screen.findByRole('menuitem', { name: 'Reply' }))
     expect(toggle).toHaveAttribute('aria-expanded', 'true')
   })
 
@@ -264,10 +264,11 @@ describe('MaterialFloatingActionButtonMenu', () => {
     expect(toggle).toHaveFocus()
   })
 
-  it('supports arrow, Home, End, and Escape keyboard navigation', () => {
+  it('supports arrow, Home, End, and Escape keyboard navigation', async () => {
     render(<ControlledMenu />)
     const toggle = screen.getByRole('button', { name: 'Toggle message actions' })
     fireEvent.click(toggle)
+    await waitFor(() => expect(screen.getAllByRole('menuitem')).toHaveLength(3))
     const items = screen.getAllByRole('menuitem')
 
     items[0].focus()

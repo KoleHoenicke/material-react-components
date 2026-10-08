@@ -13,6 +13,7 @@ import {
   type Ref,
   type RefObject,
   type SyntheticEvent,
+  type TransitionEvent,
 } from 'react'
 
 import { MaterialAppBarIconButton, MaterialTopAppBar } from './MaterialAppBar'
@@ -94,6 +95,8 @@ export type MaterialFullScreenDialogProps = Omit<
   divider?: boolean | ReactNode
   headline: ReactNode
   safeAreaInsets?: boolean
+  /** Side-entry page motion. The default preserves the standard dialog animation. */
+  transition?: 'scale' | 'slide'
 }
 
 function assignRef<T>(ref: Ref<T> | undefined, value: T | null) {
@@ -129,6 +132,7 @@ export const MaterialBasicDialog = forwardRef<
     initialFocusRef,
     onAnimationEnd,
     onClose,
+    onTransitionEnd,
     onDismissRequest,
     open,
     style,
@@ -142,6 +146,7 @@ export const MaterialBasicDialog = forwardRef<
   const phaseRef = useRef<'closed' | 'closing' | 'open'>('closed')
   const exitFallbackRef = useRef<number | undefined>(undefined)
   const [phase, setPhase] = useState<'closed' | 'closing' | 'open'>('closed')
+  const [direction, setDirection] = useState<'ltr' | 'rtl'>('ltr')
 
   const updatePhase = (next: 'closed' | 'closing' | 'open') => {
     phaseRef.current = next
@@ -171,6 +176,10 @@ export const MaterialBasicDialog = forwardRef<
     window.clearTimeout(exitFallbackRef.current)
 
     if (open) {
+      const resolvedDirection = getComputedStyle(dialog).direction === 'rtl' ? 'rtl' : 'ltr'
+      // Set the initial side before showModal paints its starting style.
+      dialog.dataset.direction = resolvedDirection
+      setDirection(resolvedDirection)
       if (!dialog.open) {
         previousFocusRef.current =
           document.activeElement instanceof HTMLElement ? document.activeElement : null
@@ -183,6 +192,10 @@ export const MaterialBasicDialog = forwardRef<
 
     if (dialog.open) {
       updatePhase('closing')
+      if (dialog.dataset.transition === 'slide' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) {
+        finishClose()
+        return
+      }
       exitFallbackRef.current = window.setTimeout(finishClose, 500)
     } else {
       updatePhase('closed')
@@ -231,9 +244,14 @@ export const MaterialBasicDialog = forwardRef<
       className={joinClassNames('material-basic-dialog', className)}
       data-material-dialog
       data-state={phase}
+      data-direction={direction}
       onAnimationEnd={(event: AnimationEvent<HTMLDialogElement>) => {
         onAnimationEnd?.(event)
-        if (event.target === event.currentTarget && phase === 'closing') finishClose()
+        if (event.target === event.currentTarget && !event.pseudoElement && phase === 'closing') finishClose()
+      }}
+      onTransitionEnd={(event: TransitionEvent<HTMLDialogElement>) => {
+        onTransitionEnd?.(event)
+        if (event.target === event.currentTarget && event.propertyName === 'transform' && phase === 'closing') finishClose()
       }}
       onCancel={handleCancel}
       onClick={handleClick}
@@ -347,6 +365,7 @@ export const MaterialFullScreenDialog = forwardRef<
     headline,
     onDismissRequest,
     safeAreaInsets = true,
+    transition = 'scale',
     ...dialogProps
   },
   ref,
@@ -359,6 +378,7 @@ export const MaterialFullScreenDialog = forwardRef<
       ref={ref}
       aria-labelledby={titleId}
       className={joinClassNames('material-full-screen-dialog', className)}
+      data-transition={transition}
       onDismissRequest={onDismissRequest}
       role="dialog"
     >

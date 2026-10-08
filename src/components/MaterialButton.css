@@ -87,7 +87,11 @@
 }
 
 .material-button:focus-visible {
-  outline: 3px solid color-mix(in srgb, var(--md-sys-color-primary) 72%, transparent);
+  outline: none;
+}
+
+.material-button:focus-visible::before {
+  outline: 3px solid var(--md-button-focus-indicator-color, var(--md-sys-color-primary));
   outline-offset: 2px;
 }
 
@@ -215,7 +219,7 @@
 
 .material-button--text {
   --md-button-container-color: transparent;
-  --md-button-content-color: var(--md-sys-color-on-surface-variant);
+  --md-button-content-color: var(--md-sys-color-primary);
   --md-button-hover-elevation: var(--md-sys-elevation-level0, none);
 }
 

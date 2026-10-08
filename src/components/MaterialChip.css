@@ -62,6 +62,7 @@
   block-size: var(--md-chip-container-height);
   border-radius: var(--md-chip-container-shape);
   color: var(--md-chip-label-color);
+  box-shadow: var(--md-chip-elevation);
   vertical-align: middle;
   transition:
     border-radius var(--m3-motion-transition-fast-spatial),
@@ -357,17 +358,20 @@
   opacity: var(--md-sys-state-focus-state-layer-opacity, 0.1);
 }
 
-.material-chip:hover {
+@media (hover: hover) and (pointer: fine) {
+.material-chip:not([data-disabled='true'], [data-soft-disabled='true']):hover {
   box-shadow: var(--md-chip-hover-elevation);
   transition-timing-function: var(--md-sys-motion-easing-legacy);
 }
 
-.material-chip:hover .material-chip__leading-icon {
+.material-chip:not([data-disabled='true'], [data-soft-disabled='true']):hover .material-chip__leading-icon {
   color: var(--md-chip-hover-leading-icon-color);
 }
 
-.material-chip:hover :is(.material-chip__trailing-icon, .material-chip__remove-icon) {
+.material-chip:not([data-disabled='true'], [data-soft-disabled='true']):hover :is(.material-chip__trailing-icon, .material-chip__remove-icon) {
   color: var(--md-chip-hover-trailing-icon-color);
+}
+
 }
 
 .material-chip:has(.material-chip__primary:focus-visible) {
@@ -471,20 +475,22 @@
   --md-chip-focus-elevation: var(--md-sys-elevation-level1, none);
   --md-chip-pressed-elevation: var(--md-sys-elevation-level1, none);
   --md-chip-outline-width: 0px;
-  box-shadow: var(--md-chip-elevation);
 }
 
 .material-chip[data-elevated='true'][data-selected='true'] {
   --md-chip-container-color: var(--md-sys-color-secondary-container);
 }
 
-.material-chip[data-kind='filter'][data-elevated='false'][data-selected='true']:hover {
-  box-shadow: var(--md-sys-elevation-level1, none);
+@media (hover: hover) and (pointer: fine) {
+  .material-chip[data-kind='filter']:not([data-elevated='true'])[data-selected='true']:hover {
+    box-shadow: var(--md-sys-elevation-level1, none);
+  }
 }
 
 .material-chip[data-shape-mode='expressive'] {
   --md-chip-container-shape: var(--md-sys-shape-corner-medium, 12px);
-  --md-chip-selected-container-shape: var(--md-sys-shape-corner-full, 9999px);
+  /* Animate the pill's actual radius, avoiding a clamped 9999px transition that snaps. */
+  --md-chip-selected-container-shape: min(var(--md-sys-shape-corner-full, 9999px), calc(var(--md-chip-container-height) / 2));
   --md-chip-pressed-shape: var(--md-sys-shape-corner-small, 8px);
 }
 
@@ -570,5 +576,21 @@
   .material-chip__leading-icon-selected {
     transition-duration: var(--m3-motion-reduced-effects-duration);
     transition-delay: 0ms;
+  }
+}
+
+/* Anchor the primary state layer to the complete chip surface, while keeping
+   the independently named remove button and its touch target. */
+.material-chip[data-removable='true'] > .material-chip__primary {
+  position: static;
+}
+@media (hover: hover) and (pointer: fine) {
+  .material-chip[data-removable='true']:not([data-disabled='true'], [data-soft-disabled='true']):hover
+    > .material-chip__primary > .material-ripple .material-ripple__surface::before {
+    opacity: var(--md-chip-hover-state-layer-opacity);
+  }
+  .material-chip[data-removable='true']:hover > .material-chip__remove > .material-ripple
+    .material-ripple__surface::before {
+    opacity: 0;
   }
 }

@@ -279,6 +279,15 @@ describe('MaterialList', () => {
     expect(onDraggedChange).toHaveBeenNthCalledWith(2, false)
   })
 
+  it('supports a large profile portrait while preserving the standard avatar default', () => {
+    const { container, rerender } = render(<MaterialListAvatar>KH</MaterialListAvatar>)
+    expect(container.querySelector('[data-material-list-avatar]')).toHaveAttribute('data-size', 'standard')
+    rerender(<MaterialListAvatar size="large"><img src="profile.jpg" alt="Kole" /></MaterialListAvatar>)
+    expect(container.querySelector('[data-material-list-avatar]')).toHaveAttribute('data-size', 'large')
+    expect(screen.getByRole('img', { name: 'Kole' })).toHaveAttribute('src', 'profile.jpg')
+    expect(container.querySelector('[data-material-list-avatar]')).not.toHaveAttribute('style')
+  })
+
   it('provides exact avatar, media, and divider building blocks', () => {
     const { container } = render(
       <MaterialList>

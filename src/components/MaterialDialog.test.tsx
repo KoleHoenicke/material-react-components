@@ -254,3 +254,88 @@ describe('MaterialFullScreenDialog', () => {
     expect(onDismissRequest).toHaveBeenCalledWith('close')
   })
 })
+
+
+describe('MaterialFullScreenDialog slide transition', () => {
+  it('constrains the page to the viewport and scrolls its body with or without a divider', () => {
+    expect(componentCss).toMatch(/\.material-full-screen-dialog \{[^}]*overflow: hidden;/)
+    expect(componentCss).toMatch(/\.material-full-screen-dialog__surface \{[^}]*display: flex;[^}]*block-size: 100%;[^}]*min-block-size: 0;/)
+    expect(componentCss).toMatch(/\.material-full-screen-dialog__body \{[^}]*flex: 1 1 0;[^}]*min-block-size: 0;[^}]*overflow: auto;/)
+  })
+  const renderPage = (open: boolean) => <MaterialFullScreenDialog transition="slide" open={open}
+    headline="Accounts" closeLabel="Close accounts" closeIcon={closeIcon} onDismissRequest={() => undefined}>
+    <button>Profile</button>
+  </MaterialFullScreenDialog>
+
+  it('waits for its own transform exit, ignores child transitions, and cancels closing when reopened', () => {
+    const { rerender } = render(renderPage(true))
+    const dialog = screen.getByRole('dialog', { name: 'Accounts' })
+    expect(dialog).toHaveAttribute('data-transition', 'slide')
+    const transitionEnd = (target: Element) => {
+      const event = new Event('transitionend', { bubbles: true })
+      Object.defineProperty(event, 'propertyName', { value: 'transform' })
+      fireEvent(target, event)
+    }
+    rerender(renderPage(false))
+    expect(dialog).toHaveAttribute('data-state', 'closing')
+    transitionEnd(screen.getByRole('button', { name: 'Profile' }))
+    expect(dialog).toHaveAttribute('open')
+    rerender(renderPage(true))
+    transitionEnd(dialog)
+    expect(dialog).toHaveAttribute('open')
+    expect(dialog).toHaveAttribute('data-state', 'open')
+    rerender(renderPage(false))
+    transitionEnd(dialog)
+    expect(dialog).not.toHaveAttribute('open')
+  })
+
+  it('closes immediately for reduced motion without waiting for a spatial transition', () => {
+    const original = window.matchMedia
+    window.matchMedia = vi.fn().mockReturnValue({ matches: true })
+    try {
+      const { rerender } = render(renderPage(true))
+      const dialog = screen.getByRole('dialog', { name: 'Accounts' })
+      rerender(renderPage(false))
+      expect(dialog).not.toHaveAttribute('open')
+    } finally {
+      window.matchMedia = original
+    }
+  })
+
+  it('uses shared Material motion tokens, trailing-edge direction, and a motion-free reduced variant', () => {
+    expect(componentCss).toContain('transition: transform var(--m3-motion-transition-enter)')
+    expect(componentCss).toContain('transition: transform var(--m3-motion-transition-exit)')
+    expect(componentCss).toContain('--md-dialog-slide-offset: -100%')
+    expect(componentCss).toMatch(/@starting-style[\s\S]*translateX/)
+    expect(componentCss).toMatch(/@media \(prefers-reduced-motion: reduce\) \{[\s\S]*data-transition='slide'[\s\S]*transform: none;[\s\S]*transition: none;/)
+  })
+})
+
+
+it('records the computed full-screen page direction before opening for bundled CSS fallbacks', () => {
+  let openingDirection: string | undefined
+  render(<MaterialFullScreenDialog ref={(dialog) => {
+    if (dialog) dialog.showModal = () => { openingDirection = dialog.dataset.direction; dialog.setAttribute('open', '') }
+  }} transition="slide" open style={{ direction: 'rtl' }}
+    headline="RTL accounts" closeLabel="Close accounts" closeIcon={closeIcon} onDismissRequest={() => undefined}>
+    Content
+  </MaterialFullScreenDialog>)
+  expect(openingDirection).toBe('rtl')
+  expect(screen.getByRole('dialog', { name: 'RTL accounts' })).toHaveAttribute('data-direction', 'rtl')
+  expect(componentCss).toContain("[data-transition='slide'][data-direction='rtl']")
+})
+
+
+it('does not let a backdrop fade finish the dialog container exit early', () => {
+  const renderDialog = (open: boolean) => <MaterialBasicDialog open={open} aria-label="Exit timing"
+    onDismissRequest={() => undefined}>Content</MaterialBasicDialog>
+  const { rerender } = render(renderDialog(true))
+  const dialog = screen.getByRole('dialog', { name: 'Exit timing' })
+  rerender(renderDialog(false))
+  const event = new Event('animationend', { bubbles: true })
+  Object.defineProperty(event, 'pseudoElement', { value: '::backdrop' })
+  fireEvent(dialog, event)
+  expect(dialog).toHaveAttribute('open')
+  fireEvent.animationEnd(dialog)
+  expect(dialog).not.toHaveAttribute('open')
+})
