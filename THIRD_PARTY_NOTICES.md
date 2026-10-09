@@ -45,3 +45,7 @@ The SVG Material Symbols in `gallery/src/TabExampleIcons.tsx` are gallery-only a
 This package uses `@material/material-color-utilities`, copyright Google LLC. Licensed under the Apache License 2.0.
 
 The full Apache License 2.0 text is included in `LICENSE`.
+
+The search layouts, tokens, palette defaults and animation specifications in `MaterialSearchBar.tsx`, `MaterialSearchBar.css`, `MaterialSearchBarDefaults.ts`, `src/internal/searchGeometry.ts` and `src/internal/useSearchBarAnimation.ts` are adapted from AndroidX Material 3. Copyright 2022-2026 The Android Open Source Project. Licensed under Apache License 2.0. The pinned source revision and web adaptations are documented in `docs/search.md`.
+
+The SVG Material Symbols in `gallery/src/SearchExampleIcons.tsx` are gallery-only assets from [Material Design Icons](https://github.com/google/material-design-icons). Copyright Google LLC. Licensed under Apache License 2.0.

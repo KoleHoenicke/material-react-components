@@ -1,6 +1,6 @@
 {
   "name": "@kolehoenicke/material-react-components",
-  "version": "0.18.3",
+  "version": "0.19.0",
   "description": "Independent Material Design components for React on the web, currently implementing Material 3 Expressive.",
   "license": "Apache-2.0",
   "packageManager": "pnpm@11.24.0",
@@ -26,6 +26,7 @@
     "docs/icon-buttons.md",
     "docs/text-fields.md",
     "docs/tabs.md",
+    "docs/search.md",
     "docs/component-fidelity.md"
   ],
   "sideEffects": [

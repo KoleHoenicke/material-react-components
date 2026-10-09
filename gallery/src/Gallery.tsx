@@ -2,6 +2,7 @@ import { GallerySelect } from './GallerySelect'
 import { GallerySymbol } from './GallerySymbol'
 import { MotionExamples } from './MotionExamples'
 import { IconButtonExamples } from './IconButtonExamples'
+import { SearchExamples } from './SearchExamples'
 import { TextFieldExamples } from './TextFieldExamples'
 import { NavigationBarExamples } from './NavigationBarExamples'
 import { TabExamples } from './TabExamples'
@@ -190,7 +191,7 @@ const componentPages = [
   ['app-bars', 'App bars'], ['badges', 'Badges'], ['actions', 'Buttons'],
   ['cards', 'Cards'], ['chips', 'Chips'], ['dialogs', 'Dialogs'],
   ['dividers', 'Dividers'], ['lists', 'Lists'], ['status', 'Loading & progress'],
-  ['menus', 'Menus'], ['navigation-bars', 'Navigation bars'], ['ripple', 'Ripple'], ['selection', 'Selection'], ['tabs', 'Tabs'], ['text-fields', 'Text fields'],
+  ['menus', 'Menus'], ['navigation-bars', 'Navigation bars'], ['ripple', 'Ripple'], ['search', 'Search'], ['selection', 'Selection'], ['tabs', 'Tabs'], ['text-fields', 'Text fields'],
 ] as const
 const foundationPages = [['motion', 'Motion'], ['typography', 'Typography']] as const
 const destinations = [
@@ -1001,6 +1002,10 @@ export function Gallery() {
                 <NavigationBarExamples />
               </Specimen>
             </div>
+          </section>
+          <section hidden={page !== 'search'} className="component-section" id="search-panel" aria-labelledby="search-title">
+            <div className="section-heading"><Text as="h2" id="search-title" variant="headlineMedium">Search</Text></div>
+            {page === 'search' && <SearchExamples />}
           </section>
           <section hidden={page !== 'text-fields'} className="component-section" id="text-fields-panel" aria-labelledby="text-fields-title">
             <div className="section-heading"><Text as="h2" id="text-fields-title" variant="headlineMedium">Text fields</Text></div>

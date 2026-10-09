@@ -47,7 +47,7 @@ Included now:
 Until the first npm release, install the package directly from GitHub:
 
 ```sh
-npm install github:KoleHoenicke/material-react-components#v0.17.0
+npm install github:KoleHoenicke/material-react-components#v0.19.0
 ```
 
 React and React DOM are peer dependencies. React 18 and 19 are supported.
@@ -783,3 +783,24 @@ import { FilledTextField, OutlinedTextField, SecureTextField } from '@kolehoenic
 Like Compose, ordinary fields default to multiline. Use `singleLine` for a native input. `TextField`, `FilledTextField`, `OutlinedTextField`, `SecureTextField`, `OutlinedSecureTextField`, `TextFieldDecorator`, `TextFieldDefaults`, and `OutlinedTextFieldDefaults` also have `Material`-prefixed exports. All state colors, shape, content padding, indicator widths and editor typography can be configured. Applications own icons, counters, validation feedback and reveal controls.
 
 See [text field configuration and source audit](docs/text-fields.md) for the complete API, pinned AndroidX revision, geometry, colors, motion, and browser adaptations.
+
+### Search
+
+The search family follows current AndroidX Material 3, including full-screen, contained full-screen, joined docked, docked with a separate dropdown, app-bar search, and the integrated forms. See [search documentation](docs/search.md) for the pinned source, measurements, motion, controlled state and browser adaptations.
+
+```tsx
+import { SearchBar, SearchBarInputField, ExpandedDockedSearchBar, useSearchBarState } from '@kolehoenicke/material-react-components'
+
+const state = useSearchBarState()
+const inputField = <SearchBarInputField
+  state={state} aria-label="Search library" placeholder="Search library"
+  value={query} onValueChange={setQuery} onSearch={search}
+/>
+
+<SearchBar state={state} inputField={inputField} />
+<ExpandedDockedSearchBar state={state} inputField={inputField}>
+  {suggestions}
+</ExpandedDockedSearchBar>
+```
+
+Use one expansion state and a controlled query for both input locations. Applications supply icons, clear/back controls and results. Tab focus stays collapsed; typing, pointer interaction or Arrow Down expands search. The expanded view manages focus, Escape, viewport constraints, reduced motion and RTL. All exports also have `Material`-prefixed names.

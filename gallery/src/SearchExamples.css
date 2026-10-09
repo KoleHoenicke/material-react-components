@@ -1,0 +1,13 @@
+.search-examples { display: grid; gap: 24px; }
+.search-examples__controls { display: flex; flex-wrap: wrap; gap: 24px; }
+.search-examples__controls label { display: flex; align-items: center; gap: 12px; }
+.search-examples__stage { display: grid; gap: 24px; padding: 32px; min-width: 0; }
+.search-examples__matrix { display: flex; flex-wrap: wrap; align-items: start; gap: 24px; padding: 32px; }
+.search-examples__matrix > * { max-width: 100%; }
+.search-examples__matrix > .material-search-input { width: 360px; }
+.search-examples__scroll { height: 320px; overflow: auto; border-radius: var(--md-sys-shape-corner-large); }
+.search-examples__empty { padding: 24px; }
+@media (max-width: 600px) {
+  .search-examples__stage, .search-examples__matrix { padding: 16px; }
+  .search-examples__controls { gap: 12px; }
+}

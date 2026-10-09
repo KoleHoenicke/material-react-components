@@ -180,3 +180,18 @@ export {
   MaterialTabRowDefaults as TabRowDefaults,
   MaterialTabPanel as TabPanel,
 } from './components/MaterialTabs'
+
+export * from './components/MaterialSearchBar'
+export {
+  MaterialSearchBar as SearchBar, MaterialDockedSearchBar as DockedSearchBar,
+  MaterialSearchBarInputField as SearchBarInputField, MaterialSearchBarDefaults as SearchBarDefaults,
+  MaterialExpandedFullScreenSearchBar as ExpandedFullScreenSearchBar,
+  MaterialExpandedFullScreenContainedSearchBar as ExpandedFullScreenContainedSearchBar,
+  MaterialExpandedDockedSearchBar as ExpandedDockedSearchBar,
+  MaterialExpandedDockedSearchBarWithGap as ExpandedDockedSearchBarWithGap,
+  MaterialAppBarWithSearch as AppBarWithSearch, MaterialTopSearchBar as TopSearchBar,
+  useMaterialSearchBarState as useSearchBarState,
+  useMaterialContainedSearchBarState as useContainedSearchBarState,
+  useMaterialSearchBarWithGapState as useSearchBarWithGapState,
+  useMaterialSearchBarScrollBehavior as useSearchBarScrollBehavior,
+} from './components/MaterialSearchBar'

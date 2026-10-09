@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.19.0
+
+- Added the AndroidX search family: collapsed inputs, full-screen, contained, docked and separate dropdown views, search app bars, legacy integrated forms, state hooks and defaults.
+- Matched search geometry, colors and typography to pinned AndroidX sources, with interruptible spatial springs, controlled editing, IME handling, keyboard navigation, dialog focus restoration, safe areas, RTL and reduced motion.
+- Added search documentation and interactive gallery coverage, including inline filtering without popup semantics.
+
 ## 0.18.3
 
 - Corrected menu viewport placement to measure its final layout size rather than its scaled opening animation, keeping popup edges within the viewport during motion.
