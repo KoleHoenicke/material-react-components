@@ -36,6 +36,7 @@ Included now:
 - Ripple and state layers
 - Segmented action list
 - Slider, including centered ranges and stops
+- Snackbar, with inline and separate-row actions, close affordances, FIFO host state, cancellation, and AndroidX spring motion
 - Switch
 - Text fields: filled, outlined, secure, and expressive tonal configurations
 - Progress indicators, including standard and Expressive linear and circular variants
@@ -48,7 +49,7 @@ Included now:
 Until the first npm release, install the package directly from GitHub:
 
 ```sh
-npm install github:KoleHoenicke/material-react-components#v0.20.0
+npm install github:KoleHoenicke/material-react-components#v0.21.0
 ```
 
 React and React DOM are peer dependencies. React 18 and 19 are supported.
@@ -822,3 +823,20 @@ const inputField = <SearchBarInputField
 ```
 
 Use one expansion state and a controlled query for both input locations. Applications supply icons, clear/back controls and results. Tab focus stays collapsed; typing, pointer interaction or Arrow Down expands search. The expanded view manages focus, Escape, viewport constraints, reduced motion and RTL. All exports also have `Material`-prefixed names.
+
+## Snackbars
+
+Use `SnackbarHost` with `useSnackbarHostState()` in your application's bottom layout slot. `showSnackbar` queues requests and resolves with `action-performed` or `dismissed`; actions default to indefinite duration. Applications own the operation and its Undo behavior.
+
+```tsx
+const snackbarState = useSnackbarHostState()
+
+<Button onClick={() => snackbarState.showSnackbar({
+  message: 'Item removed', actionLabel: 'Undo', withDismissAction: true,
+}).then(result => { if (result === 'action-performed') restoreItem() })}>
+  Remove item
+</Button>
+<SnackbarHost hostState={snackbarState} />
+```
+
+`Snackbar` also supports custom content, action and dismiss slots, `actionOnNewLine`, and typed color and shape overrides. The port matches the default pinned AndroidX layout; `stylingFix` selects AndroidX's opt-in updated layout. See [snackbar documentation](docs/snackbars.md) for exact measurements, sources, motion, accessibility, cancellation and browser adaptations.

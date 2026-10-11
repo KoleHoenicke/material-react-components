@@ -1,5 +1,7 @@
 # Component fidelity audit
 
+Snackbars have a separate [source audit](snackbars.md) for their pinned AndroidX layouts, baseline and padding rules, styling-fix flag, inverse color tokens, queue behavior, spring motion, and browser adaptations.
+
 Radio buttons have a separate [source audit](radio-buttons.md) for their pinned AndroidX geometry, enabled/selected color resolution, spring motion, parent selection, and browser adaptations.
 
 This audit covers the FAB menu, chip hover states, dialog actions, expandable lists, dropdown menus, and circular progress and loading indicators. AndroidX `androidx-main` was inspected at revision [`40ff481447ab78cbdc1a316bc7c8ecfca630f19e`](https://github.com/androidx/androidx/commit/40ff481447ab78cbdc1a316bc7c8ecfca630f19e). Measurements map dp to CSS pixels.

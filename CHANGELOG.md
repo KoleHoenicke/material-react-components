@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.21.0
+
+- Added `Snackbar`, `SnackbarHost`, `SnackbarHostState` and `useSnackbarHostState`, with Material-prefixed exports, visual slots, inline and separate-row actions, localized close controls, FIFO requests, action/dismiss results and AbortSignal cancellation.
+- Matched the pinned AndroidX snackbar layout, inverse color tokens, baseline typography, static action controls, and FastEffects/FastSpatial springs. Preserved the default styling branch and exposed the source styling fix as an option.
+- Added duration handling, hover/focus timeout pause, accessibility timeout policy, polite announcements, inert outgoing items, live reduced motion, RTL and forced colors. Added source documentation, gallery examples and focused tests.
+
 ## 0.20.0
 
 - Added `RadioButton` and `MaterialRadioButton` with pinned AndroidX geometry and color tokens, native form and group behavior, disabled states, and decorative parent-selection mode.

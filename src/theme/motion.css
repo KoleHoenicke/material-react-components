@@ -1,4 +1,5 @@
 :root {
+  --md-snackbar-hidden-scale: 0.8;
   /* Search input uses FastEffects; AppBarWithSearch uses DefaultEffects. */
   --m3-motion-search-input-effects: var(--m3-motion-transition-fast-effects);
   --m3-motion-search-app-bar-effects: var(--m3-motion-transition-default-effects);

@@ -219,6 +219,13 @@ export const MATERIAL_RADIO_BUTTON_MOTION = {
   velocityThresholdMultiplier: 62.5,
 } as const
 
+/** SnackbarHost.kt Float Animatable defaults: FastEffects opacity, FastSpatial scale. */
+export const MATERIAL_SNACKBAR_MOTION = {
+  hiddenScale: 0.8,
+  visibilityThreshold: 0.01,
+  velocityThreshold: 0.625,
+} as const
+
 /** SearchBar.kt float visibility thresholds and deprecated/content tween specifications. */
 export const MATERIAL_SEARCH_MOTION = {
   visibilityThreshold: 0.01, velocityThreshold: 0.625,

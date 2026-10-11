@@ -1,5 +1,7 @@
 # Third-party notices
 
+The snackbar geometry, colors, queue behavior, durations and animation specifications in `MaterialSnackbar.tsx`, `MaterialSnackbar.css`, `MaterialSnackbarHost.tsx`, `MaterialSnackbarState.ts`, `src/internal/useSnackbarLayout.ts` and `src/internal/useSnackbarAnimation.ts` are adapted from AndroidX Material 3 and animation-core. Copyright 2021-2026 The Android Open Source Project. Licensed under the Apache License 2.0. The pinned revision and browser adaptations are documented in `docs/snackbars.md`. The default close SVG path follows AndroidX's Apache-2.0 Material filled Close icon.
+
 ## AndroidX Material 3
 
 The motion schemes, generated spring values, web curve conversions, and component motion roles in `materialMotion.ts`, `motion.css`, and component styles are adapted from AndroidX Material 3 and the Material Design 3 motion guidance. Copyright 2021-2026 The Android Open Source Project and copyright Google LLC. Licensed under the Apache License 2.0 where applicable.

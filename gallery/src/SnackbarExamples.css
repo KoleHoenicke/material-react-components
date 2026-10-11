@@ -1,0 +1,10 @@
+.snackbar-examples { display: grid; gap: 24px; min-inline-size: 0; }
+.snackbar-examples__options { display: flex; flex-wrap: wrap; gap: 16px; }
+.snackbar-examples__options label { display: flex; align-items: center; gap: 8px; }
+.snackbar-examples__previews { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+.snackbar-examples h3 { margin: 0 0 12px; }
+.snackbar-examples__buttons { display: flex; flex-wrap: wrap; gap: 8px; }
+.snackbar-examples__host-stage { display: grid; align-items: end; min-block-size: 156px; margin-block-start: 16px; background: var(--md-sys-color-surface-container); border-radius: var(--md-sys-shape-corner-large); }
+.snackbar-examples__host-stage .material-snackbar-host { align-self: end; }
+.snackbar-examples__live > p { margin-block: 8px 16px; }
+@media (max-width: 700px) { .snackbar-examples__previews { grid-template-columns: minmax(0, 1fr); } }

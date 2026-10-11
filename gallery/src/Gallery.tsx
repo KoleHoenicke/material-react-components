@@ -7,6 +7,7 @@ import { TextFieldExamples } from './TextFieldExamples'
 import { NavigationBarExamples } from './NavigationBarExamples'
 import { TabExamples } from './TabExamples'
 import { RadioButtonExamples } from './RadioButtonExamples'
+import { SnackbarExamples } from './SnackbarExamples'
 import { useEffect, useState, type ReactNode } from 'react'
 import {
   AppBarFab,
@@ -192,7 +193,7 @@ const componentPages = [
   ['app-bars', 'App bars'], ['badges', 'Badges'], ['actions', 'Buttons'],
   ['cards', 'Cards'], ['chips', 'Chips'], ['dialogs', 'Dialogs'],
   ['dividers', 'Dividers'], ['lists', 'Lists'], ['status', 'Loading & progress'],
-  ['menus', 'Menus'], ['navigation-bars', 'Navigation bars'], ['ripple', 'Ripple'], ['search', 'Search'], ['selection', 'Selection'], ['tabs', 'Tabs'], ['text-fields', 'Text fields'],
+  ['menus', 'Menus'], ['navigation-bars', 'Navigation bars'], ['ripple', 'Ripple'], ['search', 'Search'], ['selection', 'Selection'], ['snackbars', 'Snackbars'], ['tabs', 'Tabs'], ['text-fields', 'Text fields'],
 ] as const
 const foundationPages = [['motion', 'Motion'], ['typography', 'Typography']] as const
 const destinations = [
@@ -1004,6 +1005,11 @@ export function Gallery() {
               </Specimen>
             </div>
           </section>
+          <section hidden={page !== 'snackbars'} className="component-section" id="snackbars-panel" aria-labelledby="snackbars-title">
+            <div className="section-heading"><Text as="h2" id="snackbars-title" variant="headlineMedium">Snackbars</Text></div>
+            {page === 'snackbars' && <SnackbarExamples />}
+          </section>
+
           <section hidden={page !== 'search'} className="component-section" id="search-panel" aria-labelledby="search-title">
             <div className="section-heading"><Text as="h2" id="search-title" variant="headlineMedium">Search</Text></div>
             {page === 'search' && <SearchExamples />}

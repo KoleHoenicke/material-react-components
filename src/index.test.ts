@@ -4,6 +4,10 @@ import * as library from './index'
 describe('public package surface', () => {
   it('exports short and explicit component names', () => {
     expect(library.Button).toBe(library.MaterialButton)
+    expect(library.Snackbar).toBe(library.MaterialSnackbar)
+    expect(library.SnackbarHost).toBe(library.MaterialSnackbarHost)
+    expect(library.SnackbarHostState).toBe(library.MaterialSnackbarHostState)
+    expect(library.useSnackbarHostState).toBe(library.useMaterialSnackbarHostState)
     expect(library.Card).toBe(library.MaterialCard)
     expect(library.Divider).toBe(library.MaterialDivider)
     expect(library.HorizontalDivider).toBe(library.MaterialHorizontalDivider)
