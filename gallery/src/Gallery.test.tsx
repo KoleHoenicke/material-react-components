@@ -42,6 +42,7 @@ describe('interactive gallery', () => {
       'Text · MaterialText',
       'Divider · HorizontalDivider · VerticalDivider',
       'Checkbox · CheckboxList · CheckboxListItem',
+      'RadioButton · MaterialRadioButton',
       'Chip · ChipSet · AssistChip · FilterChip · InputChip · SuggestionChip',
       'NavigationBar · NavigationBarItem',
       'ToggleFloatingActionButton',

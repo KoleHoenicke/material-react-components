@@ -1,0 +1,123 @@
+/* AndroidX RadioButton.kt / RadioButtonTokens v0_117. Apache-2.0. */
+.material-radio-button {
+  --md-radio-button-icon-size: 20px;
+  --md-radio-button-padding: 2px;
+  --md-radio-button-stroke-width: 2px;
+  --md-radio-button-dot-size: 12px;
+  --md-radio-button-state-layer-size: 40px;
+  --md-radio-button-touch-target-size: 48px;
+  --md-radio-button-selected-color: var(--md-sys-color-primary);
+  --md-radio-button-unselected-color: var(--md-sys-color-on-surface-variant);
+  --md-radio-button-disabled-selected-color: var(--md-sys-color-on-surface);
+  --md-radio-button-disabled-unselected-color: var(--md-sys-color-on-surface);
+  --md-radio-button-disabled-selected-opacity: 0.38;
+  --md-radio-button-disabled-unselected-opacity: 0.38;
+  /* AndroidX ripple defaults to LocalContentColor, independently of selection. */
+  --md-radio-button-state-layer-color: var(--md-sys-color-on-surface);
+  --md-radio-button-hover-state-layer-opacity: var(--md-sys-state-hover-state-layer-opacity);
+  --md-radio-button-focus-state-layer-opacity: var(--md-sys-state-focus-state-layer-opacity);
+  --md-radio-button-pressed-state-layer-opacity: var(--md-sys-state-pressed-state-layer-opacity);
+  --md-radio-button-target-color: var(--md-radio-button-unselected-color);
+  --md-radio-button-animated-dot-radius: 0px;
+  --md-ripple-hover-color: var(--md-radio-button-state-layer-color);
+  --md-ripple-pressed-color: var(--md-radio-button-state-layer-color);
+  --md-ripple-hover-opacity: var(--md-radio-button-hover-state-layer-opacity);
+  --md-ripple-pressed-opacity: var(--md-radio-button-pressed-state-layer-opacity);
+  --material-ripple-state-layer-size: var(--md-radio-button-state-layer-size);
+  position: relative;
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  box-sizing: border-box;
+  inline-size: max(var(--md-radio-button-touch-target-size), calc(var(--md-radio-button-icon-size) + 2 * var(--md-radio-button-padding)));
+  block-size: max(var(--md-radio-button-touch-target-size), calc(var(--md-radio-button-icon-size) + 2 * var(--md-radio-button-padding)));
+  padding: var(--md-radio-button-padding);
+  border-radius: var(--md-sys-shape-corner-full);
+  cursor: pointer;
+  isolation: isolate;
+  vertical-align: middle;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.material-radio-button[data-selected='true'],
+.material-radio-button:has(> input:checked) {
+  --md-radio-button-target-color: var(--md-radio-button-selected-color);
+  --md-radio-button-animated-dot-radius: calc(var(--md-radio-button-dot-size) / 2);
+}
+
+.material-radio-button[data-disabled='true'],
+.material-radio-button:has(> input:disabled) {
+  --md-radio-button-target-color: color-mix(in srgb, var(--md-radio-button-disabled-unselected-color) calc(var(--md-radio-button-disabled-unselected-opacity) * 100%), transparent);
+  cursor: default;
+}
+
+.material-radio-button[data-disabled='true'][data-selected='true'],
+.material-radio-button:has(> input:disabled:checked) {
+  --md-radio-button-target-color: color-mix(in srgb, var(--md-radio-button-disabled-selected-color) calc(var(--md-radio-button-disabled-selected-opacity) * 100%), transparent);
+}
+
+.material-radio-button[data-interactive='false'] {
+  inline-size: calc(var(--md-radio-button-icon-size) + 2 * var(--md-radio-button-padding));
+  block-size: calc(var(--md-radio-button-icon-size) + 2 * var(--md-radio-button-padding));
+  cursor: inherit;
+  pointer-events: none;
+}
+
+.material-radio-button > input {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  inline-size: 100%;
+  block-size: 100%;
+  margin: 0;
+  appearance: none;
+  opacity: 0;
+  cursor: inherit;
+}
+
+.material-radio-button > .material-ripple { z-index: 1; }
+.material-radio-button:has(> input:disabled) > .material-ripple { display: none; }
+.material-radio-button:has(> input:disabled) .material-radio-button__icon { color: var(--md-radio-button-target-color) !important; }
+.material-radio-button > input:focus-visible ~ .material-ripple .material-ripple__surface::before {
+  background-color: var(--md-radio-button-state-layer-color);
+  opacity: var(--md-radio-button-focus-state-layer-opacity);
+}
+
+.material-radio-button__color-target {
+  position: absolute;
+  inline-size: var(--md-radio-button-dot-size);
+  visibility: hidden;
+  pointer-events: none;
+  color: var(--md-radio-button-target-color);
+}
+
+.material-radio-button__icon {
+  position: relative;
+  z-index: 2;
+  inline-size: var(--md-radio-button-icon-size);
+  block-size: var(--md-radio-button-icon-size);
+  overflow: visible;
+  pointer-events: none;
+  color: var(--md-radio-button-target-color);
+}
+
+.material-radio-button__ring {
+  r: calc((var(--md-radio-button-icon-size) - var(--md-radio-button-stroke-width)) / 2);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: var(--md-radio-button-stroke-width);
+}
+
+.material-radio-button__dot {
+  r: max(0px, calc(var(--md-radio-button-animated-dot-radius, 0px) - var(--md-radio-button-stroke-width) / 2));
+  fill: currentColor;
+}
+
+@media (forced-colors: active) {
+  .material-radio-button__icon { color: CanvasText !important; forced-color-adjust: none; }
+  .material-radio-button:has(> input:checked) .material-radio-button__icon,
+  .material-radio-button[data-selected='true'] .material-radio-button__icon { color: Highlight !important; }
+  .material-radio-button[data-disabled='true'] .material-radio-button__icon,
+  .material-radio-button:has(> input:disabled) .material-radio-button__icon { color: GrayText !important; }
+  .material-radio-button > input:focus-visible ~ .material-radio-button__icon { outline: 2px solid Highlight; outline-offset: 2px; border-radius: 50%; }
+}

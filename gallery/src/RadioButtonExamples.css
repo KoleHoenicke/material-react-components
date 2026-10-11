@@ -1,0 +1,13 @@
+.radio-examples { display: grid; gap: 24px; inline-size: 100%; color: var(--md-sys-color-on-surface); }
+.radio-examples__states { display: flex; flex-wrap: wrap; gap: 16px; }
+.radio-examples__states label,
+.radio-examples__direction,
+.radio-examples__native { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+.radio-examples__groups { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+.radio-examples fieldset { min-inline-size: 0; margin: 0; padding: 0; border: 0; }
+.radio-examples legend { margin-block-end: 12px; }
+/* RadioGroupSample: 56dp row, 16dp horizontal padding, passive 24dp control, 16dp text gap. */
+.radio-examples__row { position: relative; display: flex; align-items: center; box-sizing: border-box; block-size: 56px; padding-inline: 16px; gap: 16px; cursor: pointer; }
+.radio-examples__row > input { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; margin: 0; opacity: 0; cursor: inherit; }
+.radio-examples__row:has(> input:focus-visible) { outline: 2px solid var(--md-sys-color-secondary); outline-offset: -2px; }
+@media (max-width: 600px) { .radio-examples__groups { grid-template-columns: 1fr; } }

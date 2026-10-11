@@ -35,6 +35,7 @@ describe('public package surface', () => {
       library.MaterialToggleFloatingActionButton,
     )
     expect(library.Checkbox).toBe(library.MaterialCheckbox)
+    expect(library.RadioButton).toBe(library.MaterialRadioButton)
     expect(library.CheckboxList).toBe(library.MaterialCheckboxList)
     expect(library.CheckboxListItem).toBe(library.MaterialCheckboxListItem)
     expect(library.List).toBe(library.MaterialList)

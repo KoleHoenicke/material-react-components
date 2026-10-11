@@ -6,6 +6,7 @@ import { SearchExamples } from './SearchExamples'
 import { TextFieldExamples } from './TextFieldExamples'
 import { NavigationBarExamples } from './NavigationBarExamples'
 import { TabExamples } from './TabExamples'
+import { RadioButtonExamples } from './RadioButtonExamples'
 import { useEffect, useState, type ReactNode } from 'react'
 import {
   AppBarFab,
@@ -1018,7 +1019,7 @@ export function Gallery() {
           <section hidden={page !== 'selection'} className="component-section" id="selection-panel" aria-labelledby="selection-title">
             <div className="section-heading">
               <Eyebrow>Selection</Eyebrow>
-              <h2 id="selection-title" data-material-typography="headlineMedium">Checkboxes, switches, and sliders</h2>
+              <h2 id="selection-title" data-material-typography="headlineMedium">Checkboxes, radio buttons, switches, and sliders</h2>
             </div>
             <div className="specimen-grid">
               <Specimen
@@ -1078,6 +1079,9 @@ export function Gallery() {
                 </CheckboxList>
               </Specimen>
 
+              <Specimen title="Radio button" api="RadioButton · MaterialRadioButton" description="Single selection, native radio groups, disabled states, and selectable sample rows." wide>
+                {page === 'selection' && <RadioButtonExamples />}
+              </Specimen>
               <Specimen title="Switch" description="Selected, unselected, icon, and disabled states.">
                 <div className="switch-list">
                   <label><span><strong data-material-typography="titleMediumEmphasized">Notifications</strong><small data-material-typography="bodyMedium">Selected icon</small></span><Switch aria-label="Notifications" checked={notifications} onChange={(event) => setNotifications(event.currentTarget.checked)} /></label>

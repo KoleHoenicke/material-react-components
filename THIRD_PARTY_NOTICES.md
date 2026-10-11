@@ -12,6 +12,8 @@ The chip geometry, tokens, interaction states, and expressive shapes in `Materia
 
 The checkbox geometry, mark path, tokens, state colors, and transition behavior in `MaterialCheckbox.tsx` and `MaterialCheckbox.css` are adapted from AndroidX Material 3 and Material Web. Copyright 2021-2026 The Android Open Source Project and copyright 2019-2023 Google LLC. Licensed under the Apache License 2.0.
 
+The radio button geometry, token mappings, sample layouts, spring motion, and Oklab color interpolation in `MaterialRadioButton.tsx`, `MaterialRadioButton.css`, `src/internal/useRadioButtonAnimation.ts`, `src/internal/radioColor.ts`, and `gallery/src/RadioButtonExamples.*` are adapted from AndroidX Material 3 and animation. Copyright 2019-2026 The Android Open Source Project. Licensed under the Apache License 2.0. The pinned source revision and browser adaptations are documented in `docs/radio-buttons.md`.
+
 The progress-indicator geometry, paths, and timing in `MaterialProgressIndicator.tsx` and `MaterialProgressIndicator.css` are adapted from AndroidX Material 3. Copyright 2022-2025 The Android Open Source Project. Licensed under the Apache License 2.0.
 
 The list geometry, tokens, selection and drag states, expansion behavior, and swipe interaction model in `MaterialList.tsx`, `MaterialList.css`, `MaterialListSwipeActions.tsx`, and `MaterialListSwipeActions.css` are adapted from AndroidX Material 3 and Material Components for Android. Copyright 2018-2026 The Android Open Source Project. Licensed under the Apache License 2.0.

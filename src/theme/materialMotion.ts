@@ -212,6 +212,13 @@ export const MATERIAL_MOTION_DEMONSTRATION_HOLD_MS = 1000
 /** AndroidX Dp spring visibility threshold and its derived velocity threshold. */
 export const MATERIAL_TAB_MOTION = { visibilityThreshold: 0.1, velocityThreshold: 6.25 } as const
 
+/** AndroidX Dp and color-vector spring thresholds. RadioButton uses FastSpatial / DefaultEffects. */
+export const MATERIAL_RADIO_BUTTON_MOTION = {
+  radiusVisibilityThreshold: 0.1,
+  colorVisibilityThreshold: 0.01,
+  velocityThresholdMultiplier: 62.5,
+} as const
+
 /** SearchBar.kt float visibility thresholds and deprecated/content tween specifications. */
 export const MATERIAL_SEARCH_MOTION = {
   visibilityThreshold: 0.01, velocityThreshold: 0.625,

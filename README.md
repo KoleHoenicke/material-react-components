@@ -23,6 +23,7 @@ Included now:
 - Divider, including horizontal, vertical, full-width, inset, one-sided, heavy, and custom styles
 - Dialogs, including alert, basic custom-content, and full-screen variants
 - Checkbox, including indeterminate and error states, checkbox groups, and list items
+- Radio button, with native radio groups, decorative parent-selection mode, and AndroidX spring motion
 - Chips, including assist, filter, input, suggestion, elevated, removable, and expressive-shape variants
 - Floating action buttons, including every current size and color mapping, extended and collapsible variants, lowered elevation, and baseline compatibility
 - FAB menus with controlled launchers, two to six actions, all three color sets, and regular, medium, and large launcher geometry
@@ -47,7 +48,7 @@ Included now:
 Until the first npm release, install the package directly from GitHub:
 
 ```sh
-npm install github:KoleHoenicke/material-react-components#v0.19.0
+npm install github:KoleHoenicke/material-react-components#v0.20.0
 ```
 
 React and React DOM are peer dependencies. React 18 and 19 are supported.
@@ -420,6 +421,23 @@ export function ExportFormats() {
 ```
 
 The default visual container is 18px with a 2px corner and stroke. The state layer is 40px and the interaction target is 48px. `MaterialCheckboxStyle` types every `--md-checkbox-*` property, including separate checkmark, box, outline, interaction, disabled, indeterminate, error, and focus-indicator values. `CheckboxListItem` can place the control at the leading or trailing edge and keeps adjacent text on the `on-surface` role in every selection state.
+
+### Radio buttons
+
+`RadioButton` renders a native radio input with a 48px target, 20px circular icon, 2px stroke, and 40px state layer. Radios with the same `name` use native single-selection and keyboard behavior. Use `checked` and `onChange` for controlled groups or `defaultChecked` for native forms.
+
+```tsx
+<label>
+  <RadioButton name="delivery" value="email" defaultChecked />
+  Email
+</label>
+<label>
+  <RadioButton name="delivery" value="text" />
+  Text message
+</label>
+```
+
+The dot uses the AndroidX FastSpatial spring; color uses DefaultEffects in Oklab. `interactive={false}` provides the 24px decorative mode for a parent that owns radio semantics and selection. See [radio button configuration and source audit](docs/radio-buttons.md) for exact measurements, typed token overrides, sample row spacing, and browser adaptations.
 
 ### Dividers
 

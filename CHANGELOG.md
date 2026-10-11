@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.20.0
+
+- Added `RadioButton` and `MaterialRadioButton` with pinned AndroidX geometry and color tokens, native form and group behavior, disabled states, and decorative parent-selection mode.
+- Added interruptible FastSpatial dot and DefaultEffects Oklab color springs, reduced-motion support, source documentation, and radio gallery examples.
+
 ## 0.19.0
 
 - Added the AndroidX search family: collapsed inputs, full-screen, contained, docked and separate dropdown views, search app bars, legacy integrated forms, state hooks and defaults.

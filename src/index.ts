@@ -25,6 +25,7 @@ export * from './components/MaterialProgressIndicator'
 export * from './components/MaterialQuantityStepper'
 export * from './components/MaterialRichOptionList'
 export * from './components/MaterialRipple'
+export * from './components/MaterialRadioButton'
 export * from './components/MaterialSegmentedActionList'
 export * from './components/MaterialSlider'
 export * from './components/MaterialSwitch'
@@ -84,6 +85,7 @@ export {
   MaterialToggleFloatingActionButton as ToggleFloatingActionButton,
 } from './components/MaterialFloatingActionButtonMenu'
 export { MaterialCheckbox as Checkbox } from './components/MaterialCheckbox'
+export { MaterialRadioButton as RadioButton } from './components/MaterialRadioButton'
 export {
   MaterialCheckboxList as CheckboxList,
   MaterialCheckboxListItem as CheckboxListItem,
