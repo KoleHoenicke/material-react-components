@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.21.1
+
+- Kept list content and trailing controls in their intended columns when the leading slot is empty, including expandable-list disclosure icons. Preserved checkbox-list column layouts.
+
 ## 0.21.0
 
 - Added `Snackbar`, `SnackbarHost`, `SnackbarHostState` and `useSnackbarHostState`, with Material-prefixed exports, visual slots, inline and separate-row actions, localized close controls, FIFO requests, action/dismiss results and AbortSignal cancellation.

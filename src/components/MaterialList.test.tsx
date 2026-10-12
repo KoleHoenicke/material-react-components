@@ -1,4 +1,5 @@
 import { act, fireEvent, render, screen } from '@testing-library/react'
+import { readFileSync } from 'node:fs'
 import { useState } from 'react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
@@ -11,6 +12,7 @@ import {
   MaterialListMedia,
 } from './MaterialList'
 import { MaterialListTrailingAction } from './MaterialListTrailingAction'
+import { MaterialCheckboxListItem } from './MaterialCheckboxList'
 
 afterEach(() => {
   vi.useRealTimers()
@@ -19,6 +21,32 @@ afterEach(() => {
 })
 
 describe('MaterialList', () => {
+  it('keeps optional slots in their columns without changing checkbox row layouts', () => {
+    const stylesheet = document.createElement('style')
+    stylesheet.textContent = readFileSync('src/components/MaterialList.css', 'utf8')
+    document.head.append(stylesheet)
+    try {
+      const { container } = render(<MaterialList>
+        <MaterialListItem headline="Without leading" trailing={<svg />} />
+        <MaterialListItem headline="With leading" leading={<svg />} trailing={<svg />} />
+        <MaterialExpandableList expanded={false} onExpandedChange={() => undefined} summary={{ headline: 'Schedule' }}><span>Times</span></MaterialExpandableList>
+        <MaterialCheckboxListItem label="Checkbox leading" checkboxPosition="leading" checkboxProps={{ checked: false, onChange: () => undefined }} />
+        <MaterialCheckboxListItem label="Checkbox trailing" checkboxPosition="trailing" checkboxProps={{ checked: false, onChange: () => undefined }} />
+      </MaterialList>)
+      for (const row of container.querySelectorAll('.material-list-item:not(.material-checkbox-list-item)')) {
+        expect(getComputedStyle(row.querySelector('.material-list-item__content')!).gridColumn).toBe('2')
+        expect(getComputedStyle(row.querySelector('.material-list-item__trailing')!).gridColumn).toBe('3')
+        const leading = row.querySelector('.material-list-item__leading')
+        if (leading) expect(getComputedStyle(leading).gridColumn).toBe('1')
+      }
+      for (const content of container.querySelectorAll('.material-checkbox-list-item__body')) {
+        expect(getComputedStyle(content).gridColumn).toBe('')
+      }
+    } finally {
+      stylesheet.remove()
+    }
+  })
+
   it('exposes trailing metadata as a description while keeping decorative icons hidden', () => {
     const { rerender } = render(<MaterialList>
       <span id="hint">Opens details</span>

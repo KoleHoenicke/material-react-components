@@ -347,6 +347,20 @@
   align-self: inherit;
 }
 
+/* Optional slots keep their columns when a regular row has no leading icon.
+   Checkbox rows own a different column arrangement. */
+.material-list-item:not(.material-checkbox-list-item) > .material-list-item__leading {
+  grid-column: 1;
+}
+
+.material-list-item:not(.material-checkbox-list-item) > .material-list-item__content {
+  grid-column: 2;
+}
+
+.material-list-item:not(.material-checkbox-list-item) > .material-list-item__trailing {
+  grid-column: 3;
+}
+
 .material-list-item__headline,
 .material-list-item__supporting,
 .material-list-item__overline {
