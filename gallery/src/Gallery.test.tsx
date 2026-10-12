@@ -138,7 +138,7 @@ it('alphabetizes categories, groups buttons, and separates loading and ripple', 
   render(<Gallery />)
   const categories = screen.getByRole('toolbar', { name: 'Component categories' })
   const labels = Array.from(categories.querySelectorAll('button')).map(button => button.textContent)
-  expect(labels).toEqual(['App bars', 'Badges', 'Buttons', 'Cards', 'Chips', 'Dialogs', 'Dividers', 'Lists', 'Loading & progress', 'Menus', 'Navigation bars', 'Ripple', 'Search', 'Selection', 'Snackbars', 'Tabs', 'Text fields'])
+  expect(labels).toEqual(['App bars', 'Badges', 'Buttons', 'Cards', 'Chips', 'Dialogs', 'Dividers', 'Lists', 'Loading & progress', 'Menus', 'Navigation bars', 'Ripple', 'Search', 'Selection', 'Snackbars', 'Tabs', 'Text fields', 'Time pickers'])
   for (const name of ['Button', 'Button group', 'Floating action buttons', 'FAB menu', 'Icon buttons']) {
     expect(screen.getByRole('heading', { name, level: 3 })).toBeVisible()
   }

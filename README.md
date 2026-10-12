@@ -38,6 +38,7 @@ Included now:
 - Slider, including centered ranges and stops
 - Snackbar, with inline and separate-row actions, close affordances, FIFO host state, cancellation, and AndroidX spring motion
 - Switch
+- Time pickers, including baseline and vibrant dials, horizontal and vertical layouts, 12/24-hour formats, text and scroll inputs, uncontained controls, and dialog containers
 - Text fields: filled, outlined, secure, and expressive tonal configurations
 - Progress indicators, including standard and Expressive linear and circular variants
 - Dynamic Material color themes
@@ -49,7 +50,7 @@ Included now:
 Until the first npm release, install the package directly from GitHub:
 
 ```sh
-npm install github:KoleHoenicke/material-react-components#v0.21.0
+npm install github:KoleHoenicke/material-react-components#v0.22.0
 ```
 
 React and React DOM are peer dependencies. React 18 and 19 are supported.

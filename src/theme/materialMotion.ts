@@ -1,4 +1,11 @@
 export type MaterialMotionScheme = 'expressive' | 'standard'
+/** TimePicker.kt Float Animatable thresholds and hour tap auto-advance delay. */
+export const MATERIAL_TIME_PICKER_MOTION = {
+  visibilityThreshold: 0.01, velocityThreshold: 0.625, autoAdvanceDelayMs: 100,
+  // Foundation PagerState.animateScrollToPage and PagerDefaults.flingBehavior.
+  pagerProgrammaticSpring: { dampingRatio: 1, stiffness: 1500 },
+  pagerSnapSpring: { dampingRatio: 1, stiffness: 400 },
+} as const
 export type MaterialMotionKind = 'spatial' | 'effects'
 export type MaterialMotionSpeed = 'fast' | 'default' | 'slow'
 export type MaterialEasingSet = 'emphasized' | 'standard'

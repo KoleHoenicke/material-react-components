@@ -1,4 +1,6 @@
 :root {
+  /* TimePicker.kt waits after the hour hand settles before showing minutes. */
+  --md-time-picker-auto-advance-delay: 100ms;
   --md-snackbar-hidden-scale: 0.8;
   /* Search input uses FastEffects; AppBarWithSearch uses DefaultEffects. */
   --m3-motion-search-input-effects: var(--m3-motion-transition-fast-effects);

@@ -4,6 +4,8 @@ The snackbar geometry, colors, queue behavior, durations and animation specifica
 
 ## AndroidX Material 3
 
+The time picker layouts, geometry, tokens, input transformations, icons, and animation specifications in `MaterialTimePicker.tsx`, `MaterialTimePicker.css`, `src/internal/timePickerGeometry.ts`, `src/internal/useTimePickerSpring.ts`, and `gallery/src/TimePickerExamples.*` are adapted from AndroidX Material 3, Foundation, animation-core, and Material Design Icons. Copyright 2023-2026 The Android Open Source Project and copyright Google LLC. Licensed under Apache License 2.0. The pinned revision and browser adaptations are documented in `docs/time-pickers.md`.
+
 The motion schemes, generated spring values, web curve conversions, and component motion roles in `materialMotion.ts`, `motion.css`, and component styles are adapted from AndroidX Material 3 and the Material Design 3 motion guidance. Copyright 2021-2026 The Android Open Source Project and copyright Google LLC. Licensed under the Apache License 2.0 where applicable.
 
 The geometry and timing in `MaterialLoadingIndicator.tsx` are adapted from AndroidX Material 3, Material Shapes, and graphics-shapes. Copyright 2022-2024 The Android Open Source Project. Licensed under the Apache License 2.0.

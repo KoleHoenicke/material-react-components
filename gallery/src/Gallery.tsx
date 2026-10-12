@@ -8,6 +8,7 @@ import { NavigationBarExamples } from './NavigationBarExamples'
 import { TabExamples } from './TabExamples'
 import { RadioButtonExamples } from './RadioButtonExamples'
 import { SnackbarExamples } from './SnackbarExamples'
+import { TimePickerExamples } from './TimePickerExamples'
 import { useEffect, useState, type ReactNode } from 'react'
 import {
   AppBarFab,
@@ -194,6 +195,7 @@ const componentPages = [
   ['cards', 'Cards'], ['chips', 'Chips'], ['dialogs', 'Dialogs'],
   ['dividers', 'Dividers'], ['lists', 'Lists'], ['status', 'Loading & progress'],
   ['menus', 'Menus'], ['navigation-bars', 'Navigation bars'], ['ripple', 'Ripple'], ['search', 'Search'], ['selection', 'Selection'], ['snackbars', 'Snackbars'], ['tabs', 'Tabs'], ['text-fields', 'Text fields'],
+  ['time-pickers', 'Time pickers'],
 ] as const
 const foundationPages = [['motion', 'Motion'], ['typography', 'Typography']] as const
 const destinations = [
@@ -1005,6 +1007,11 @@ export function Gallery() {
               </Specimen>
             </div>
           </section>
+          <section hidden={page !== 'time-pickers'} className="component-section" id="time-pickers-panel" aria-labelledby="time-pickers-title">
+            <div className="section-heading"><Text as="h2" id="time-pickers-title" variant="headlineMedium">Time pickers</Text></div>
+            {page === 'time-pickers' && <TimePickerExamples />}
+          </section>
+
           <section hidden={page !== 'snackbars'} className="component-section" id="snackbars-panel" aria-labelledby="snackbars-title">
             <div className="section-heading"><Text as="h2" id="snackbars-title" variant="headlineMedium">Snackbars</Text></div>
             {page === 'snackbars' && <SnackbarExamples />}

@@ -1,0 +1,186 @@
+/* AndroidX TimePicker/TimeInput v0_210 tokens and vibrant implementation constants.
+ * Copyright 2023-2026 The Android Open Source Project. Apache-2.0. */
+.material-time-picker {
+  --md-time-picker-dial-color: var(--md-sys-color-surface-container-highest);
+  --md-time-picker-dial-content-color: var(--md-sys-color-on-surface);
+  --md-time-picker-dial-selected-content-color: var(--md-sys-color-on-primary);
+  --md-time-picker-selector-color: var(--md-sys-color-primary);
+  --md-time-picker-field-color: var(--md-sys-color-surface-container-highest);
+  --md-time-picker-field-selected-color: var(--md-sys-color-primary-container);
+  --md-time-picker-field-content-color: var(--md-sys-color-on-surface);
+  --md-time-picker-field-selected-content-color: var(--md-sys-color-on-primary-container);
+  --md-time-picker-field-shape: var(--md-sys-shape-corner-small, 8px);
+  --md-time-picker-period-color: var(--md-sys-color-surface-container-lowest);
+  --md-time-picker-period-selected-color: var(--md-sys-color-primary-container);
+  --md-time-picker-period-content-color: var(--md-sys-color-on-surface-variant);
+  --md-time-picker-period-selected-content-color: var(--md-sys-color-on-primary-container);
+  --md-time-picker-dial-size: 256px;
+  --md-time-picker-field-width: 96px;
+  --md-time-picker-field-height: 80px;
+  --md-time-picker-separator-width: 24px;
+  --md-time-picker-period-width: 52px;
+  --md-time-picker-period-height: 80px;
+  --md-time-picker-period-gap: 4px;
+  --md-time-picker-period-padding: 4px;
+  --md-time-picker-display-gap: 36px;
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  align-items: center;
+  inline-size: max-content;
+  box-sizing: border-box;
+  gap: var(--md-time-picker-display-gap);
+  padding-block-end: 24px;
+  color: var(--md-sys-color-on-surface);
+}
+.material-time-picker[data-variant='vibrant'] {
+  --md-time-picker-dial-color: var(--md-sys-color-surface-container-lowest);
+  --md-time-picker-field-color: var(--md-sys-color-surface-container-lowest);
+  --md-time-picker-field-selected-color: var(--md-sys-color-surface-container-lowest);
+  --md-time-picker-field-selected-content-color: var(--md-sys-color-primary);
+  --md-time-picker-field-shape: var(--md-sys-shape-corner-large, 16px);
+  --md-time-picker-field-width: 100px;
+  --md-time-picker-field-height: 120px;
+  --md-time-picker-separator-width: 16px;
+  --md-time-picker-period-width: 56px;
+  --md-time-picker-period-height: 120px;
+  --md-time-picker-period-gap: 8px;
+  --md-time-picker-period-padding: 16px;
+  --md-time-picker-display-gap: 12px;
+  padding-block-end: 0;
+}
+.material-time-picker[data-layout='vertical'][data-variant='vibrant'][data-24-hour='true'] { --md-time-picker-field-width: 132px; }
+.material-time-picker[data-layout='horizontal'] { flex-direction: row; padding-block-end: 0; }
+.material-time-picker[data-layout='horizontal'][data-variant='vibrant'] { --md-time-picker-display-gap: 52px; }
+/* ClockFaceSizeModifier's bounded-height landscape fallback. */
+@media (max-height: 383px) {
+  .material-time-picker[data-layout='horizontal'][data-variant='baseline'] { --md-time-picker-dial-size: 238px; }
+}
+@media (max-height: 329px) {
+  .material-time-picker[data-layout='horizontal'][data-variant='baseline'] { --md-time-picker-dial-size: 200px; }
+}
+.material-time-picker__display { display: flex; align-items: start; gap: var(--md-time-picker-period-padding); }
+.material-time-picker__display[data-horizontal='true'] { flex-direction: column; gap: 16px; }
+.material-time-picker__numbers, .material-time-picker__number-part { display: flex; align-items: start; flex: none; }
+.material-time-picker__separator {
+  display: grid; place-items: center; flex: none;
+  inline-size: var(--md-time-picker-separator-width); block-size: var(--md-time-picker-field-height);
+  color: var(--md-sys-color-on-surface); transform: translateY(-4px);
+}
+.material-time-picker__selector, .material-time-picker__input {
+  position: relative; box-sizing: border-box; flex: none;
+  inline-size: var(--md-time-picker-field-width); block-size: var(--md-time-picker-field-height);
+  padding: 0; margin: 0; border: 0; border-radius: var(--md-time-picker-field-shape);
+  color: var(--md-time-picker-field-content-color); background: var(--md-time-picker-field-color);
+  text-align: center; -webkit-tap-highlight-color: transparent;
+}
+.material-time-picker__selector { display: grid; place-items: center; cursor: pointer; overflow: hidden; }
+.material-time-picker__selector[data-selected='true'], .material-time-picker__input[data-selected='true'] {
+  color: var(--md-time-picker-field-selected-content-color); background: var(--md-time-picker-field-selected-color);
+}
+.material-time-picker[data-variant='vibrant'] .material-time-picker__selector[data-selected='true'] { box-shadow: inset 0 0 0 2px var(--md-sys-color-primary); }
+.material-time-picker__selector:focus-visible, .material-time-picker__period-button:focus-visible,
+.material-time-picker__dial-label:focus-visible, .material-time-picker__scroll-field:focus-visible {
+  outline: 2px solid var(--md-sys-color-secondary); outline-offset: 2px;
+}
+.material-time-picker__period {
+  display: flex; flex: none; flex-direction: column; gap: var(--md-time-picker-period-gap);
+  inline-size: var(--md-time-picker-period-width); block-size: var(--md-time-picker-period-height);
+}
+.material-time-picker__period[data-horizontal='true'] {
+  flex-direction: row; inline-size: 216px; block-size: 38px;
+}
+.material-time-picker[data-variant='vibrant'] .material-time-picker__period[data-horizontal='true'] { block-size: 40px; gap: 16px; }
+.material-time-picker__period-button {
+  position: relative; display: grid; place-items: center; flex: 1 1 0; min-block-size: 0; min-inline-size: 0;
+  box-sizing: border-box; padding: 0; border: 0; cursor: pointer; -webkit-tap-highlight-color: transparent;
+  color: var(--md-time-picker-period-content-color); background: var(--md-time-picker-period-color);
+  border-radius: var(--md-time-picker-period-animated-radius, 28px);
+}
+.material-time-picker__period-button > .material-ripple { border-radius: inherit; overflow: hidden; }
+.material-time-picker__period-button::before {
+  content: ''; position: absolute; inset-inline: 0; inset-block: min(0px, calc((100% - 48px) / 2));
+}
+.material-time-picker__period-button[data-selected='true'] {
+  color: var(--md-time-picker-period-selected-content-color); background: var(--md-time-picker-period-selected-color); font-weight: 700;
+}
+.material-time-picker__dial {
+  position: relative; flex: none; inline-size: var(--md-time-picker-dial-size); block-size: var(--md-time-picker-dial-size);
+  border-radius: var(--md-sys-shape-corner-full, 9999px); background: var(--md-time-picker-dial-color);
+  touch-action: none; user-select: none; -webkit-user-select: none;
+}
+.material-time-picker__dial-art { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; overflow: visible; pointer-events: none; }
+.material-time-picker__handle { fill: var(--md-time-picker-selector-color); }
+.material-time-picker__track { stroke: var(--md-time-picker-selector-color); }
+.material-time-picker__dial-text { fill: var(--md-time-picker-dial-content-color); }
+.material-time-picker__dial-selected-text { fill: var(--md-time-picker-dial-selected-content-color); }
+.material-time-picker__dial-label {
+  position: absolute; display: block; inline-size: 48px; block-size: 48px;
+  transform: translate(-50%, -50%); padding: 0; border: 0; border-radius: 50%; background: transparent;
+  color: var(--md-time-picker-dial-content-color); cursor: pointer; -webkit-tap-highlight-color: transparent;
+}
+.material-time-input, .material-time-scroll {
+  --md-time-picker-field-height: 72px; --md-time-picker-period-height: 72px;
+  flex-direction: row; align-items: start; gap: var(--md-time-picker-period-padding); padding: 0;
+}
+.material-time-input[data-variant='vibrant'], .material-time-scroll[data-variant='vibrant'] {
+  --md-time-picker-period-padding: 8px;
+}
+.material-time-input[data-uncontained='true'], .material-time-scroll[data-uncontained='true'] {
+  --md-time-picker-field-height: 136px; --md-time-picker-period-padding: 4px;
+}
+.material-time-picker__input { outline: none; caret-color: var(--md-sys-color-primary); }
+.material-time-picker__input[data-selected='true'] { box-shadow: inset 0 0 0 2px var(--md-sys-color-outline); }
+.material-time-input[data-variant='vibrant'] .material-time-picker__input[data-selected='true'] { box-shadow: inset 0 0 0 2px var(--md-sys-color-primary); }
+.material-time-picker__input[data-invalid='true'] {
+  color: var(--md-sys-color-error); background: var(--md-sys-color-error-container); box-shadow: inset 0 0 0 2px var(--md-sys-color-error);
+}
+.material-time-picker__input-part { inline-size: var(--md-time-picker-field-width); flex: none; }
+.material-time-picker__support { margin-block-start: 7px; min-block-size: 32px; color: var(--md-sys-color-on-surface-variant); }
+.material-time-picker__support[data-invalid='true'] { color: var(--md-sys-color-error); }
+.material-time-picker__period[data-side-control='true'] { position: relative; inline-size: 48px; block-size: 140px; gap: 8px; }
+.material-time-picker__period[data-side-control='true'] .material-time-picker__period-button { flex: none; inline-size: 40px; block-size: 40px; margin-inline: 4px; }
+.material-time-picker__side-toggle { display: grid; place-items: center; position: absolute; inset-block-start: 92px; inline-size: 48px; block-size: 48px; }
+.material-time-picker__period[data-side-control='true'][data-24-hour='true'] .material-time-picker__side-toggle { inset-block-start: 84px; }
+.material-time-picker__scroll-field {
+  position: relative; flex: none; inline-size: 100px; block-size: var(--md-time-picker-field-height);
+  overflow: hidden; border-radius: var(--md-sys-shape-corner-large, 16px);
+  background: var(--md-sys-color-surface-container-lowest); touch-action: none; user-select: none; cursor: ns-resize;
+}
+.material-time-picker__scroll-item {
+  position: absolute; inset-inline: 0; top: calc(50% - 100px / 3); block-size: calc(200px / 3);
+  display: grid; place-items: center; pointer-events: none;
+  font-size: calc(var(--md-sys-typescale-display-medium-size, 45px) + var(--md-time-picker-scroll-fraction) * (var(--md-sys-typescale-display-large-emphasized-size, 57px) - var(--md-sys-typescale-display-medium-size, 45px)));
+  line-height: calc(var(--md-sys-typescale-display-medium-line-height, 52px) + var(--md-time-picker-scroll-fraction) * (var(--md-sys-typescale-display-large-emphasized-line-height, 64px) - var(--md-sys-typescale-display-medium-line-height, 52px)));
+  font-weight: calc(var(--md-sys-typescale-display-medium-weight, 400) + var(--md-time-picker-scroll-fraction) * (var(--md-sys-typescale-display-large-emphasized-weight, 500) - var(--md-sys-typescale-display-medium-weight, 400)));
+  letter-spacing: calc(var(--md-sys-typescale-display-medium-tracking, 0px) + var(--md-time-picker-scroll-fraction) * (var(--md-sys-typescale-display-large-emphasized-tracking, 0px) - var(--md-sys-typescale-display-medium-tracking, 0px)));
+  color: color-mix(in oklab, var(--md-sys-color-on-surface) calc(var(--md-time-picker-scroll-fraction) * 100%), var(--md-sys-color-outline));
+}
+.material-time-picker-dialog {
+  --md-time-picker-container-color: var(--md-sys-color-surface-container-high);
+  --md-time-picker-container-shape: var(--md-sys-shape-corner-extra-large, 28px);
+  display: none; inline-size: max-content; min-inline-size: 0; max-inline-size: calc(100% - 32px);
+  padding: 24px; overflow: auto; border-radius: var(--md-time-picker-container-shape);
+  background: var(--md-time-picker-container-color); color: var(--md-sys-color-on-surface);
+}
+.material-time-picker-dialog[open] { display: block; }
+.material-time-picker-dialog__title { padding-block-end: 20px; color: var(--md-sys-color-on-surface); }
+.material-time-picker-dialog__actions { display: flex; align-items: center; gap: 8px; }
+.material-time-picker-dialog__spacer { flex: 1; }
+.material-time-picker-dialog__actions > .material-button { min-inline-size: 64px; }
+.material-time-picker-dialog[data-variant='vibrant'] { --md-time-picker-container-color: var(--md-sys-color-surface-container); padding: 12px; }
+.material-time-picker-dialog[data-variant='vibrant'] .material-time-picker-dialog__actions { margin-block-start: 12px; }
+.material-time-picker-dialog[data-layout='horizontal'] { padding: 16px 24px 8px; }
+.material-time-picker-dialog[data-layout='horizontal'] .material-time-picker-dialog__title { position: absolute; inset-block-start: 24px; padding: 0; }
+.material-time-picker-dialog[data-layout='horizontal'] .material-time-picker-dialog__actions { margin-block-start: 4px; }
+.material-time-picker-dialog[data-layout='horizontal'][data-variant='vibrant'] { padding: 12px 24px; }
+.material-time-picker-dialog[data-layout='horizontal'][data-variant='vibrant'] .material-time-picker-dialog__actions { margin-block-start: 24px; }
+@media (forced-colors: active) {
+  .material-time-picker { --md-time-picker-dial-color: Canvas; --md-time-picker-dial-content-color: CanvasText; --md-time-picker-selector-color: Highlight; --md-time-picker-dial-selected-content-color: HighlightText; }
+  .material-time-picker__selector, .material-time-picker__input, .material-time-picker__period-button,
+  .material-time-picker__scroll-field, .material-time-picker-dialog { border: 1px solid CanvasText; background: Canvas; color: CanvasText; }
+  .material-time-picker__selector, .material-time-picker__input, .material-time-picker__period-button { forced-color-adjust: none; box-shadow: none; }
+  .material-time-picker__selector[data-selected='true'], .material-time-picker__period-button[data-selected='true'] { background: Highlight; color: HighlightText; }
+  .material-time-picker__dial-art { forced-color-adjust: none; }
+  .material-time-picker__scroll-item { color: CanvasText; }
+}

@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.22.0
+
+- Added `TimePicker`, `TimeInput`, `TimeScroll`, `TimePickerDialog`, `VibrantTimePickerDialog`, and `TimePickerModeToggle`, with Material-prefixed exports and controlled or uncontrolled time state.
+- Ported the pinned AndroidX baseline and vibrant layouts, current AM/PM shape morphing, dial geometry, generated color and typography tokens, 12/24-hour formats, text validation, and uncontained mode-switch slots.
+- Added analytic dial and label springs, shortest-path hand rotation, keyboard navigation, live reduced motion, RTL, forced colors, source documentation, and interactive gallery examples.
+
 ## 0.21.1
 
 - Kept list content and trailing controls in their intended columns when the leading slot is empty, including expandable-list disclosure icons. Preserved checkbox-list column layouts.

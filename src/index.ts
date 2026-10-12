@@ -203,3 +203,9 @@ export {
   useMaterialSearchBarWithGapState as useSearchBarWithGapState,
   useMaterialSearchBarScrollBehavior as useSearchBarScrollBehavior,
 } from './components/MaterialSearchBar'
+export * from './components/MaterialTimePicker'
+export {
+  MaterialTimePicker as TimePicker, MaterialTimeInput as TimeInput, MaterialTimeScroll as TimeScroll,
+  MaterialTimePickerDialog as TimePickerDialog, MaterialVibrantTimePickerDialog as VibrantTimePickerDialog,
+  MaterialTimePickerModeToggle as TimePickerModeToggle,
+} from './components/MaterialTimePicker'

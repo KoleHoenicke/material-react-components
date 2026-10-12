@@ -1,5 +1,7 @@
 # Component fidelity audit
 
+Time pickers have a separate [source audit](time-pickers.md) covering the pinned AndroidX dial, text and scroll families, baseline and vibrant variants, tokens, layout geometry, motion, and browser adaptations.
+
 Snackbars have a separate [source audit](snackbars.md) for their pinned AndroidX layouts, baseline and padding rules, styling-fix flag, inverse color tokens, queue behavior, spring motion, and browser adaptations.
 
 Radio buttons have a separate [source audit](radio-buttons.md) for their pinned AndroidX geometry, enabled/selected color resolution, spring motion, parent selection, and browser adaptations.
