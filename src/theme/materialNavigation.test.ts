@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { getMaterialNavigationKeyframes, runMaterialNavigationTransition } from './materialNavigation'
 
@@ -12,6 +13,10 @@ function environment(reduce = false) {
   return { target, animate }
 }
 describe('Material navigation', () => {
+  it('hides incoming snapshots before JavaScript playback begins', () => {
+    const css = readFileSync('src/theme/motion.css', 'utf8')
+    expect(css).toMatch(/html\[data-material-navigation\]::view-transition-new\(material-navigation-page\)\s*\{\s*opacity:\s*0;?\s*\}/)
+  })
   it('reverses shared Z depth and X direction, including RTL', () => {
     expect(getMaterialNavigationKeyframes('shared-axis-z').incoming[0].transform).toBe('scale(0.8)')
     expect(getMaterialNavigationKeyframes('shared-axis-z', 'back').incoming[0].transform).toBe('scale(1.1)')
@@ -24,6 +29,11 @@ describe('Material navigation', () => {
     expect(frames.outgoing[2].transform).toBe('none')
     expect(frames.incoming[1]).toEqual({ opacity: 0, offset: 0.35 })
     expect(frames.outgoing[1]).toEqual({ opacity: 0, offset: 0.35 })
+  })
+  it('overlaps peer content without an empty opacity handoff', () => {
+    const frames = getMaterialNavigationKeyframes('crossfade')
+    expect(frames.incoming).toEqual([{ transform: 'scale(0.92)', opacity: 0 }, { transform: 'none', opacity: 1 }])
+    expect(frames.outgoing).toEqual([{ transform: 'none', opacity: 1 }, { transform: 'none', opacity: 0 }])
   })
   it('retains a short fade without movement for reduced motion', async () => {
     const { target, animate } = environment(true)

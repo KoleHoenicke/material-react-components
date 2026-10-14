@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.23.4
+
+- Add an overlapping crossfade for peer pages that need continuous content visibility instead of the sequential fade-through dip.
+
+- Hide incoming navigation snapshots before JavaScript playback begins, preventing a full-opacity flash while the browser prepares the transition.
+
 ## 0.23.3
 
 - Preserve the outgoing page snapshot at its original position and dimensions when the next page changes header height, columns, or content size.

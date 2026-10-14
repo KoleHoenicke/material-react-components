@@ -1,4 +1,4 @@
-export type MaterialNavigationPattern = 'shared-axis-z' | 'shared-axis-x' | 'fade-through'
+export type MaterialNavigationPattern = 'shared-axis-z' | 'shared-axis-x' | 'fade-through' | 'crossfade'
 export type MaterialNavigationDirection = 'forward' | 'back'
 
 /** MaterialSharedAxis, MaterialFadeThrough, ScaleProvider and FadeThroughProvider. */
@@ -24,6 +24,10 @@ export function getMaterialNavigationKeyframes(
       enter = `translateX(${distance}px)`
       exit = `translateX(${-distance}px)`
     } else enter = `scale(${fadeThroughScale})`
+  }
+  if (pattern === 'crossfade') return {
+    incoming: [{ transform: enter, opacity: 0 }, { transform: 'none', opacity: 1 }],
+    outgoing: [{ transform: 'none', opacity: 1 }, { transform: 'none', opacity: 0 }],
   }
   return {
     incoming: [{ transform: enter, opacity: 0, offset: 0 }, { opacity: 0, offset: fadeThreshold }, { transform: 'none', opacity: 1, offset: 1 }],

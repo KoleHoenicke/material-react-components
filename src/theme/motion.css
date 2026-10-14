@@ -557,3 +557,11 @@ html[data-material-navigation]::view-transition-old(material-navigation-page) {
   right: auto;
   bottom: auto;
 }
+
+/* Snapshot pseudo-elements exist before ViewTransition.ready settles. Never let
+   the incoming image paint at its default full opacity before WAAPI takes over. */
+html[data-material-navigation]::view-transition-new(material-navigation-page) { opacity: 0; }
+
+/* Add the two complementary fades instead of darkening their overlap. */
+html[data-material-navigation="crossfade"]::view-transition-old(material-navigation-page),
+html[data-material-navigation="crossfade"]::view-transition-new(material-navigation-page) { mix-blend-mode: plus-lighter; }
