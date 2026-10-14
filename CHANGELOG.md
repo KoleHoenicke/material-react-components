@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.23.2
+
+- Read computed duration tokens in either seconds or milliseconds so navigation retains its intended duration after CSS serialization.
+- Capture only navigation content, keeping app bars and navigation selection animations live outside the transition instead of replaying them through a root snapshot.
+
 ## 0.23.1
 
 - Keep snapshot overrides until the browser finishes the transition, and hide the old root snapshot to prevent a trailing window crossfade or ghosted app-bar title.

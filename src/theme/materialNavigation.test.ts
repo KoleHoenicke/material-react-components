@@ -39,6 +39,12 @@ describe('Material navigation', () => {
     expect(animate).toHaveBeenCalledOnce()
     expect(target.style.viewTransitionName).toBe('')
   })
+  it.each([['0.45s', 450], ['450ms', 450], [' 0.65s ', 650], ['0ms', 0], ['', 450], ['-10ms', 450]])('reads CSS time %s as %i milliseconds', async (token, expected) => {
+    const { target, animate } = environment()
+    target.style.setProperty('--md-sys-motion-duration-long1', token)
+    await runMaterialNavigationTransition({ target: () => target, update: vi.fn() })
+    expect((animate.mock.calls[0][1] as KeyframeAnimationOptions).duration).toBe(expected)
+  })
   it('a late snapshot cannot overwrite a newer navigation or clear its name', async () => {
     const { target } = environment()
     const callbacks: (() => Promise<void>)[] = []
@@ -79,11 +85,14 @@ describe('Material navigation', () => {
       const navigation = runMaterialNavigationTransition({ target: () => target, update: vi.fn() })
       await new Promise(resolve => setTimeout(resolve, 0))
       expect(document.documentElement.dataset.materialNavigation).toBe('shared-axis-z')
+      expect(document.documentElement.style.viewTransitionName).toBe('none')
+
       expect(target.style.viewTransitionName).toBe('material-navigation-page')
       finish()
       await navigation
       expect(document.documentElement.dataset.materialNavigation).toBeUndefined()
       expect(target.style.viewTransitionName).toBe('')
+      expect(document.documentElement.style.viewTransitionName).toBe('')
     } finally { Reflect.deleteProperty(document, 'startViewTransition') }
   })
   it('reacquires replaced content after an async router commit', async () => {

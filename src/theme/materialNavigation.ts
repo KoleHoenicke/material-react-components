@@ -40,6 +40,14 @@ export interface MaterialNavigationTransitionOptions {
   direction?: MaterialNavigationDirection
 }
 
+/** Computed CSS <time> values can be serialized as seconds, including typed tokens. */
+function navigationDurationMs(value: string): number {
+  const time = value.trim()
+  if (!/^(?:\d+(?:\.\d*)?|\.\d+)(?:ms|s)$/.test(time)) return MATERIAL_NAVIGATION_MOTION.durationMs
+  const duration = Number.parseFloat(time) * (time.endsWith('ms') ? 1 : 1000)
+  return Number.isFinite(duration) ? duration : MATERIAL_NAVIGATION_MOTION.durationMs
+}
+
 type Running = { cancel: () => void }
 const running = new WeakMap<Document, Running>()
 
@@ -72,7 +80,7 @@ export async function runMaterialNavigationTransition({ update, target, pattern 
   running.set(doc, current)
   const reduce = doc.defaultView?.matchMedia('(prefers-reduced-motion: reduce)').matches ?? false
   const style = oldTarget && doc.defaultView?.getComputedStyle(oldTarget)
-  const duration = reduce ? 150 : Number.parseFloat(style?.getPropertyValue('--md-sys-motion-duration-long1') || '') || MATERIAL_NAVIGATION_MOTION.durationMs
+  const duration = reduce ? 150 : navigationDurationMs(style?.getPropertyValue('--md-sys-motion-duration-long1') || '')
   const easing = style?.getPropertyValue('--md-sys-motion-easing-emphasized').trim() || 'cubic-bezier(0.2, 0, 0, 1)'
   const frames = getMaterialNavigationKeyframes(pattern, direction, reduce, style?.direction === 'rtl')
   const assignName = (element: HTMLElement | null) => {
@@ -91,6 +99,10 @@ export async function runMaterialNavigationTransition({ update, target, pattern 
       }
       return
     }
+    // Only the content is captured. A root snapshot would replay or freeze live
+    // component animations in persistent chrome, including navigation selection.
+    named.set(root, root.style.viewTransitionName)
+    root.style.viewTransitionName = 'none'
     assignName(oldTarget)
     root.dataset.materialNavigation = pattern
     transition = doc.startViewTransition(async () => {
