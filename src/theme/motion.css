@@ -544,3 +544,6 @@ html[data-material-navigation]::view-transition-new(material-navigation-page) { 
 html[data-material-navigation]::view-transition-group(material-navigation-page) { overflow: clip; }
 html[data-material-navigation]::view-transition-old(material-navigation-page),
 html[data-material-navigation]::view-transition-new(material-navigation-page) { mix-blend-mode: normal; }
+
+html[data-material-navigation]::view-transition-old(root) { opacity: 0; }
+html[data-material-navigation]::view-transition-new(root) { opacity: 1; }

@@ -111,6 +111,9 @@ export async function runMaterialNavigationTransition({ update, target, pattern 
       transition.skipTransition()
     }
     await transition.updateCallbackDone
+    // Keep root overrides until the browser removes the snapshot tree. Removing
+    // them earlier restarts the UA crossfade and briefly ghosts persistent chrome.
+    await transition.finished
   } catch (error) {
     // Cancellation rejects Animation.finished, but application update failures remain observable.
     if (!(error instanceof Error && error.name === 'AbortError')) throw error

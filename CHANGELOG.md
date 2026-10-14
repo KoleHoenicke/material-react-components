@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.23.1
+
+- Keep snapshot overrides until the browser finishes the transition, and hide the old root snapshot to prevent a trailing window crossfade or ghosted app-bar title.
+
 ## 0.23.0
 
 - Added shared-axis Z transitions for navigation depth, shared-axis X transitions for ordered tabs, and fade-through transitions for peer destinations.

@@ -67,6 +67,25 @@ describe('Material navigation', () => {
       expect(document.documentElement.dataset.materialNavigation).toBeUndefined()
     } finally { Reflect.deleteProperty(document, 'startViewTransition') }
   })
+  it('keeps snapshot styles until the browser removes the transition tree', async () => {
+    const { target } = environment()
+    let finish!: () => void
+    const finished = new Promise<void>(resolve => { finish = resolve })
+    Object.defineProperty(document, 'startViewTransition', { configurable: true, value: (update: () => Promise<void>) => {
+      const committed = update()
+      return { ready: committed, updateCallbackDone: committed, finished, skipTransition: finish }
+    } })
+    try {
+      const navigation = runMaterialNavigationTransition({ target: () => target, update: vi.fn() })
+      await new Promise(resolve => setTimeout(resolve, 0))
+      expect(document.documentElement.dataset.materialNavigation).toBe('shared-axis-z')
+      expect(target.style.viewTransitionName).toBe('material-navigation-page')
+      finish()
+      await navigation
+      expect(document.documentElement.dataset.materialNavigation).toBeUndefined()
+      expect(target.style.viewTransitionName).toBe('')
+    } finally { Reflect.deleteProperty(document, 'startViewTransition') }
+  })
   it('reacquires replaced content after an async router commit', async () => {
     const { target, animate } = environment()
     let current = target
