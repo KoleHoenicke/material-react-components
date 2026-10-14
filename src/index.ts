@@ -209,3 +209,5 @@ export {
   MaterialTimePickerDialog as TimePickerDialog, MaterialVibrantTimePickerDialog as VibrantTimePickerDialog,
   MaterialTimePickerModeToggle as TimePickerModeToggle,
 } from './components/MaterialTimePicker'
+
+export * from './theme/materialNavigation'

@@ -533,3 +533,14 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* Only content receives motion. Keep persistent chrome out of the named snapshot. */
+html[data-material-navigation]::view-transition { pointer-events: none; }
+html[data-material-navigation]::view-transition-old(root),
+html[data-material-navigation]::view-transition-new(root),
+html[data-material-navigation]::view-transition-group(material-navigation-page),
+html[data-material-navigation]::view-transition-old(material-navigation-page),
+html[data-material-navigation]::view-transition-new(material-navigation-page) { animation: none; }
+html[data-material-navigation]::view-transition-group(material-navigation-page) { overflow: clip; }
+html[data-material-navigation]::view-transition-old(material-navigation-page),
+html[data-material-navigation]::view-transition-new(material-navigation-page) { mix-blend-mode: normal; }

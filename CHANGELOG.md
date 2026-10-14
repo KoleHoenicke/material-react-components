@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.23.0
+
+- Added shared-axis Z transitions for navigation depth, shared-axis X transitions for ordered tabs, and fade-through transitions for peer destinations.
+- Added content-only snapshot transitions, async router commits, interruption handling, RTL, reduced motion, and incoming-motion fallback for older webviews.
+
 ## 0.22.0
 
 - Added `TimePicker`, `TimeInput`, `TimeScroll`, `TimePickerDialog`, `VibrantTimePickerDialog`, and `TimePickerModeToggle`, with Material-prefixed exports and controlled or uncontrolled time state.

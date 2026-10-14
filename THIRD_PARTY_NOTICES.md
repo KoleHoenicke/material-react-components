@@ -1,5 +1,7 @@
 # Third-party notices
 
+The navigation pattern geometry and fade thresholds in `src/theme/materialNavigation.ts` are adapted from Material Components for Android `MaterialSharedAxis`, `MaterialFadeThrough`, `ScaleProvider`, `SlideDistanceProvider`, and `FadeThroughProvider`. Copyright 2019-2026 The Android Open Source Project. Licensed under Apache License 2.0. See `docs/navigation.md` for sources and web adaptations.
+
 The snackbar geometry, colors, queue behavior, durations and animation specifications in `MaterialSnackbar.tsx`, `MaterialSnackbar.css`, `MaterialSnackbarHost.tsx`, `MaterialSnackbarState.ts`, `src/internal/useSnackbarLayout.ts` and `src/internal/useSnackbarAnimation.ts` are adapted from AndroidX Material 3 and animation-core. Copyright 2021-2026 The Android Open Source Project. Licensed under the Apache License 2.0. The pinned revision and browser adaptations are documented in `docs/snackbars.md`. The default close SVG path follows AndroidX's Apache-2.0 Material filled Close icon.
 
 ## AndroidX Material 3

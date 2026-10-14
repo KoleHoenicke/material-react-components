@@ -1,6 +1,6 @@
 {
   "name": "@kolehoenicke/material-react-components",
-  "version": "0.22.0",
+  "version": "0.23.0",
   "description": "Independent Material Design components for React on the web, currently implementing Material 3 Expressive.",
   "license": "Apache-2.0",
   "packageManager": "pnpm@11.24.0",
@@ -30,7 +30,8 @@
     "docs/search.md",
     "docs/snackbars.md",
     "docs/time-pickers.md",
-    "docs/component-fidelity.md"
+    "docs/component-fidelity.md",
+    "docs/navigation.md"
   ],
   "sideEffects": [
     "**/*.css"
