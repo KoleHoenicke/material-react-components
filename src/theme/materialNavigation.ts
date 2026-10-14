@@ -62,14 +62,20 @@ export async function runMaterialNavigationTransition({ update, target, pattern 
   let transition: ViewTransition | undefined
   const animations: Animation[] = []
   const named = new Map<HTMLElement, string>()
+  const geometryStyles = new Map<string, { value: string; priority: string }>()
   const name = 'material-navigation-page'
   const root = doc.documentElement
   const oldTarget = target()
+  const oldBounds = oldTarget?.getBoundingClientRect()
   let cleaned = false
   const cleanup = () => {
     if (cleaned) return
     cleaned = true
     for (const [element, original] of named) element.style.viewTransitionName = original
+    for (const [property, original] of geometryStyles) {
+      if (original.value) root.style.setProperty(property, original.value, original.priority)
+      else root.style.removeProperty(property)
+    }
     animations.forEach(animation => animation.cancel())
     if (running.get(doc) === current) {
       delete root.dataset.materialNavigation
@@ -87,6 +93,12 @@ export async function runMaterialNavigationTransition({ update, target, pattern 
     if (!element || named.has(element)) return
     named.set(element, element.style.viewTransitionName)
     element.style.viewTransitionName = name
+  }
+  const setGeometry = (property: string, value: number) => {
+    if (!geometryStyles.has(property)) geometryStyles.set(property, {
+      value: root.style.getPropertyValue(property), priority: root.style.getPropertyPriority(property),
+    })
+    root.style.setProperty(property, `${value}px`)
   }
   try {
     if (!oldTarget || !doc.startViewTransition) {
@@ -108,7 +120,19 @@ export async function runMaterialNavigationTransition({ update, target, pattern 
     transition = doc.startViewTransition(async () => {
       if (superseded) return
       await update()
-      if (!superseded) assignName(target())
+      if (!superseded) {
+        const incoming = target()
+        assignName(incoming)
+        if (oldBounds && incoming) {
+          const incomingBounds = incoming.getBoundingClientRect()
+          // The group is placed at the destination's bounds. Keep the old bitmap
+          // at its own size and origin when headers, columns or page heights differ.
+          setGeometry('--m3-navigation-old-width', oldBounds.width)
+          setGeometry('--m3-navigation-old-height', oldBounds.height)
+          setGeometry('--m3-navigation-old-left', oldBounds.left - incomingBounds.left)
+          setGeometry('--m3-navigation-old-top', oldBounds.top - incomingBounds.top)
+        }
+      }
     })
     try {
       await transition.ready

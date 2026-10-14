@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.23.3
+
+- Preserve the outgoing page snapshot at its original position and dimensions when the next page changes header height, columns, or content size.
+- Restore temporary snapshot geometry on completion, cancellation, and superseding navigation.
+
 ## 0.23.2
 
 - Read computed duration tokens in either seconds or milliseconds so navigation retains its intended duration after CSS serialization.

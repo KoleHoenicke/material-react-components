@@ -95,6 +95,36 @@ describe('Material navigation', () => {
       expect(document.documentElement.style.viewTransitionName).toBe('')
     } finally { Reflect.deleteProperty(document, 'startViewTransition') }
   })
+  it('preserves outgoing geometry when the next page has a taller header and different width', async () => {
+    const { target } = environment()
+    const bounds = vi.spyOn(target, 'getBoundingClientRect').mockReturnValue({ left: 96, top: 64, width: 1184, height: 656 } as DOMRect)
+    const root = document.documentElement
+    root.style.setProperty('--m3-navigation-old-top', '3px')
+    let finish!: () => void
+    const finished = new Promise<void>(resolve => { finish = resolve })
+    Object.defineProperty(document, 'startViewTransition', { configurable: true, value: (update: () => Promise<void>) => {
+      const committed = update()
+      return { ready: committed, updateCallbackDone: committed, finished, skipTransition: finish }
+    } })
+    try {
+      const navigation = runMaterialNavigationTransition({ target: () => target, update: () => {
+        bounds.mockReturnValue({ left: 128, top: 136, width: 1120, height: 584 } as DOMRect)
+      } })
+      await new Promise(resolve => setTimeout(resolve, 0))
+      expect(root.style.getPropertyValue('--m3-navigation-old-width')).toBe('1184px')
+      expect(root.style.getPropertyValue('--m3-navigation-old-height')).toBe('656px')
+      expect(root.style.getPropertyValue('--m3-navigation-old-left')).toBe('-32px')
+      expect(root.style.getPropertyValue('--m3-navigation-old-top')).toBe('-72px')
+      finish()
+      await navigation
+      expect(root.style.getPropertyValue('--m3-navigation-old-width')).toBe('')
+      expect(root.style.getPropertyValue('--m3-navigation-old-top')).toBe('3px')
+    } finally {
+      finish()
+      root.style.removeProperty('--m3-navigation-old-top')
+      Reflect.deleteProperty(document, 'startViewTransition')
+    }
+  })
   it('reacquires replaced content after an async router commit', async () => {
     const { target, animate } = environment()
     let current = target

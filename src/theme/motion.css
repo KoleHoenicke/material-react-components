@@ -547,3 +547,13 @@ html[data-material-navigation]::view-transition-new(material-navigation-page) { 
 
 html[data-material-navigation]::view-transition-old(root) { opacity: 0; }
 html[data-material-navigation]::view-transition-new(root) { opacity: 1; }
+
+/* Fixed capture geometry, set once before playback. Only transform/opacity animate. */
+html[data-material-navigation]::view-transition-old(material-navigation-page) {
+  width: var(--m3-navigation-old-width);
+  height: var(--m3-navigation-old-height);
+  left: var(--m3-navigation-old-left);
+  top: var(--m3-navigation-old-top);
+  right: auto;
+  bottom: auto;
+}
